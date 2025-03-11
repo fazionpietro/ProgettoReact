@@ -11,7 +11,7 @@ app.listen(5000, () => {
 });
 
 
-const db = new sqlite3.Database("./Fitness.db", sqlite3.OPEN_READWRITE, (err) => {
+const db = new sqlite3.Database("./data/Fitness.db", sqlite3.OPEN_READWRITE, (err) => {
     if (err) return console.error(err);
     console.log("Succesfully connected to the database");
 })
