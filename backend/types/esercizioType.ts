@@ -3,7 +3,7 @@ type esercizioData = {
     nome: string,
     descrizione: string,
     muscolo_targhet: string,
-    difficoltà: string,
+    difficolta: string,
 
 }
 export default esercizioData;

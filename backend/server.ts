@@ -7,10 +7,6 @@ import esercizioData from './types/esercizioType'
 import schedaData from './types/schedaType'
 import schedaEserciziData from './types/schedaEserciziType'
 
-
-
-
-
 const app = express()
 const secretKey = 'triceratops-are-the-best-2025@1234'
 
@@ -31,10 +27,24 @@ app.get("/", (req: Request, res: Response)=> {
     res.send("Hello from server")
 })
 
+const authenticateToken = (req, res, next) => {
+    const token = req.headers['authorization'];
+    console.log(token)
+
+    //const token = authHeader && authHeader.split(' ')[1];
+    
+    if (!token) return res.status(401).send('Token required');
+  
+    jwt.verify(token, secretKey, (err, user) => {
+      if (err) return res.status(403).send('Invalid or expired token');
+      req.user = user;
+      next();
+    });
+  };
 
 
 
-app.get("/api/esercizi", async (req, res)=> {
+app.get("/api/esercizi",authenticateToken, async (req, res)=> {
    
     try {
         res.header("Access-Control-Allow-Origin", "*");
@@ -44,14 +54,14 @@ app.get("/api/esercizi", async (req, res)=> {
         res.status(200).json(all)
         
     } catch (err) {
-        res.status(400).json({"error":err.message});
+        res.status(500).json({"error":err.message});
         console.error(err.message);
     }
          
 })
 
 
-app.get("/api/schede", async (req, res)=> {
+app.get("/api/schede",authenticateToken, async (req, res)=> {
    
     try {
         res.header("Access-Control-Allow-Origin", "*");
@@ -67,7 +77,7 @@ app.get("/api/schede", async (req, res)=> {
          
 })
 
-app.get("/api/schedeEsercizi", async (req, res)=> {
+app.get("/api/schedeEsercizi",authenticateToken, async (req, res)=> {
    
     try {
         res.header("Access-Control-Allow-Origin", "*");
@@ -77,14 +87,29 @@ app.get("/api/schedeEsercizi", async (req, res)=> {
         res.status(200).json(all)
         
     } catch (err) {
-        res.status(400).json({"error":err.message});
+        res.status(500).json({"error":err.message});
         console.error(err.message);
     }
          
 })
 
+type emailType = {
+    email: string
+}
+app.get('/api/schedeEserciziUtente',authenticateToken, async (req: Request<{},{},{},emailType>, res: Response)=> {
+    try {
+        if(!checkEmail(req.query.email)) throw new Error('invalid email');
 
+        res.header("Access-Control-Allow-Origin", "*");
+        res.set({'Content-type': 'application/json'})
+        const data = await getUserSchedeEsercizi(req.query.email)
+        res.status(200).json({data})
+    } catch (error) {
 
+        res.status(500).json({"error":error.message});
+        
+    }
+})
 
 
 app.post('/api/signup', async (req: Request<{},{},{}, userData>, res: Response)=> {
@@ -111,9 +136,9 @@ app.post('/api/signup', async (req: Request<{},{},{}, userData>, res: Response)=
                 
             }
             const hashedPsw = await bcrypt.hash(query.password,8)
-            await addUser(query.email, hashedPsw, query.role)
+            await addUser(query.email, hashedPsw, query.ruolo)
             const token = jwt.sign({ id: query.email }, secretKey, { expiresIn: '1h' });
-            res.status(200).json({token})
+            res.status(200).json({'email':query.email, token})
     } catch (err) {
         res.status(400).json({"error":err.message});
     }
@@ -135,11 +160,12 @@ app.post('/api/login', async (req: Request<{},{},{}, userData>, res: Response)=>
 
             }
         }
-        if(flag)
-            res.status(200).json({})
-        else
-        res.status(400).json({"error":'Invalid credentials'});
-
+        if(flag){
+            const token = jwt.sign({ id: query.email }, secretKey, { expiresIn: '1h' });
+            res.status(200).json({'email':query.email, token})
+        }else{
+            res.status(400).json({"error":'Invalid credentials'});
+        }
         
 
 
@@ -151,6 +177,61 @@ app.post('/api/login', async (req: Request<{},{},{}, userData>, res: Response)=>
     }
     
 })
+
+
+
+
+type newSchedaEsercizi = {
+    id: number,
+    scheda_id: number,
+    esercizio_id: number[],
+    user_email: string,
+    serie: number[],
+    ripetizioni: number[]   
+}
+
+app.post('/api/addSchedaEsercizi',authenticateToken, async (req: Request<{},{},{}, newSchedaEsercizi>, res: Response)=> {
+    const query: newSchedaEsercizi = req.query;
+    try {
+        if(!checkEmail(query.user_email)) throw new Error('invalid email');
+        const newD = await addExerciziScheda(query)
+        res.status(200).json({'success': newD})
+    } catch (err) {
+        res.status(400).json({"error":err.message});
+        
+    }
+    
+})
+
+app.post('/api/addEsercizi',authenticateToken, async (req: Request<{},{},{}, esercizioData>, res: Response)=> {
+    const query: esercizioData = req.query;
+    
+    try {
+        const newD = await addEsercizio(query)
+        res.status(200).json({'success': newD})
+
+    } catch (err) {
+        res.status(400).json({"error":err.message});
+        
+    }
+    
+})
+
+app.post('/api/addScheda',authenticateToken, async (req: Request<{},{},{}, schedaData>, res: Response)=> {
+    const query: schedaData = req.query;
+    
+    try {
+        const newD = await addScheda(query)
+        res.status(200).json({'success': newD})
+
+    } catch (err) {
+        res.status(400).json({"error":err.message});
+        
+    }
+    
+})
+
+
 
 function checkEmail(email){
     return String(email)
@@ -203,9 +284,9 @@ async function getAllIdenty() {
 }
 
 
-function addUser(email,psw, role) {
+function addUser(email,psw, ruolo) {
     return new Promise((resolve, reject) => {
-        db.run('INSERT INTO users(email, password, role) VALUES(?,?,?)', [email, psw, role], (err) => {
+        db.run('INSERT INTO users(email, password, ruolo) VALUES(?,?,?)', [email, psw, ruolo], (err) => {
 
             if(err)
                 reject(err);
@@ -213,4 +294,58 @@ function addUser(email,psw, role) {
                 resolve(true);
         });
     });
+}
+async function getUserSchedeEsercizi(email: string){
+    return new Promise<schedaEserciziData[]>((resolve, reject)=>{
+        db.all(`SELECT * FROM schedaEsercizi INNER JOIN schede ON schedaEsercizi.scheda_id=schede.id WHERE user_email='${email}'`, (err, res: schedaEserciziData[])=>{
+            if(err) reject(err);
+            else resolve(res);
+        })
+    })
+}
+
+async function addExerciziScheda(data : newSchedaEsercizi){
+    return new Promise((resolve, reject)=>{
+        for (let index = 0; index < data.esercizio_id.length; index++) {
+            db.run('INSERT INTO schedaEsercizi(scheda_id,esercizio_id,user_email,serie, ripetizioni) VALUES(?,?,?,?,?)', 
+                [   data.scheda_id, 
+                    data.esercizio_id[index], 
+                    data.user_email,
+                    data.serie[index],
+                    data.ripetizioni[index]
+                ],
+                (err) => {
+                    if(err) reject(err);
+                });
+            
+        }
+        resolve(true)
+    })
+}
+
+
+async function addEsercizio(data : esercizioData){
+    return new Promise((resolve, reject)=>{
+        db.run('INSERT INTO esercizi(nome,descrizione,muscolo_targhet,difficolta) VALUES(?,?,?,?)', 
+            [   data.nome,
+                data.descrizione,
+                data.muscolo_targhet,
+                data.difficolta
+            ], 
+            (err, res)=>{
+                if(err) reject(err);
+                resolve(true)
+            })
+    })
+}
+
+async function addScheda(data : schedaData){
+    return new Promise((resolve, reject)=>{
+        db.run('INSERT INTO esercizi(nome) VALUES(?)', 
+            [data.nome], 
+            (err, res)=>{
+                if(err) reject(err);
+                resolve(true)
+            })
+    })
 }
