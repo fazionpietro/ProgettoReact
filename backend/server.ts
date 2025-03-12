@@ -3,6 +3,9 @@ import express, { Request, Response } from 'express';
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken'
 import userData from './types/userType'
+import esercizioData from './types/esercizioType'
+import schedaData from './types/schedaType'
+import schedaEserciziData from './types/schedaEserciziType'
 
 
 
@@ -30,15 +33,14 @@ app.get("/", (req: Request, res: Response)=> {
 
 
 
-/*
-app.get("/api/prova", async (req, res)=> {
+
+app.get("/api/esercizi", async (req, res)=> {
    
     try {
         res.header("Access-Control-Allow-Origin", "*");
-        res.set({
-            'Content-type': 'application/json', 
-        })
-        
+        res.set({'Content-type': 'application/json'})
+        const all = await getAllExcercise()
+        console.log(all)
         res.status(200).json(all)
         
     } catch (err) {
@@ -46,13 +48,46 @@ app.get("/api/prova", async (req, res)=> {
         console.error(err.message);
     }
          
-})*/
+})
+
+
+app.get("/api/schede", async (req, res)=> {
+   
+    try {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.set({'Content-type': 'application/json'})
+        const all = await getAllSchede()
+        console.log(all)
+        res.status(200).json(all)
+        
+    } catch (err) {
+        res.status(400).json({"error":err.message});
+        console.error(err.message);
+    }
+         
+})
+
+app.get("/api/schedeEsercizi", async (req, res)=> {
+   
+    try {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.set({'Content-type': 'application/json'})
+        const all = await getAllSchedaEsercizi()
+        console.log(all)
+        res.status(200).json(all)
+        
+    } catch (err) {
+        res.status(400).json({"error":err.message});
+        console.error(err.message);
+    }
+         
+})
 
 
 
 
 
-app.post('/signup', async (req: Request<{},{},{}, userData>, res: Response)=> {
+app.post('/api/signup', async (req: Request<{},{},{}, userData>, res: Response)=> {
     const query: userData = req.query;
 
 
@@ -86,7 +121,7 @@ app.post('/signup', async (req: Request<{},{},{}, userData>, res: Response)=> {
 })
 
 
-app.post('/login', async (req: Request<{},{},{}, userData>, res: Response)=> {
+app.post('/api/login', async (req: Request<{},{},{}, userData>, res: Response)=> {
     const query: userData = req.query;
     let flag = false;
     
@@ -117,15 +152,6 @@ app.post('/login', async (req: Request<{},{},{}, userData>, res: Response)=> {
     
 })
 
-
-
-
-
-
-
-
-
-
 function checkEmail(email){
     return String(email)
     .toLowerCase()
@@ -134,15 +160,36 @@ function checkEmail(email){
     );
 }
 
+async function getAllSchedaEsercizi(){
+    return new Promise<schedaEserciziData[]>((resolve, reject)=>{
+        db.all('SELECT * FROM schedaEsercizi', (err, res: schedaEserciziData[])=>{
+            if(err) reject(err);
+            else resolve(res);
+        })
+    })
+}
+async function getAllSchede(){
+    return new Promise<schedaData[]>((resolve, reject)=>{
+        db.all('SELECT * FROM schede', (err, res: schedaData[])=>{
+            if(err) reject(err);
+            else resolve(res);
+        })
+    })
+}
 
-/*
+async function getAllExcercise(){
+    return new Promise<esercizioData[]>((resolve, reject)=>{
+        db.all('SELECT * FROM esercizi', (err, res: esercizioData[])=>{
+            if(err) 
+                reject(err);
+            else 
+                resolve(res);
+            
+        })
+    })
+}
 
 
-
-
-
-
-*/
 async function getAllIdenty() {
         
         return new Promise<userData[]>((resolve, reject) => {
