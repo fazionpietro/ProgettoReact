@@ -49,3 +49,30 @@ input{
   background:white;
 }
 
+.container{
+  display: grid;
+  grid-template-columns: 2fr 1fr;   
+  border: 1px solid rgb(5, 150, 247);
+}
+
+.dashboard{
+  background-color: black;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.home{
+  display: grid;
+  grid-template-columns: 0.20fr 1fr;
+}
+
+.containerecord{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid rgb(247, 5, 227);
+}
+
+.item{
+  border: 1px solid rgb(105, 16, 36);
+}
