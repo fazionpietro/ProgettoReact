@@ -24,6 +24,9 @@ function AppLogin() {
         <NavLink to="/Register" end>
           <button>Register</button>
         </NavLink>
+        <NavLink to="/HomePage" end>
+          <button>Home</button>
+        </NavLink>
       </form>
     </div>
   )
