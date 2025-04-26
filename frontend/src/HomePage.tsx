@@ -4,12 +4,9 @@ import axios, {isCancel, AxiosError, Axios} from 'axios';
 import { Card } from 'react-bootstrap';
 import { NavLink } from "react-router";
 
+
 function HomePage(){
     return(
-        <div className='home'>
-            <div className='dashboard'>
-                    <p>akfakfnsdkvnsd</p>
-            </div>
             <div className='card'>
                 <div className='container'>
                     <div className='item'>
@@ -21,6 +18,7 @@ function HomePage(){
                     <div className='item'>
                         <p>storico calorie</p>
                     </div>
+
                     <div className='containerecord'>
                         <div className='item'>
                             <p>obbiettivo calorie</p>
@@ -37,7 +35,6 @@ function HomePage(){
                     </div>
                 </div>
             </div>
-        </div>
     )
 }
 

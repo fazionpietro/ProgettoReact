@@ -12,7 +12,6 @@
   background: #248d44;
   box-shadow:  10px 10px 20px #9e9a9a,
              10px 10px 20px #9e9a9a;
-  padding: 30px;
 }
 
 p{
@@ -25,9 +24,6 @@ label{
   font-size: 24px;
 }
 
-div{
-  margin: 30px;
-}
 
 button {
   border-radius: 8px;
@@ -75,4 +71,8 @@ input{
 
 .item{
   border: 1px solid rgb(105, 16, 36);
+  background-color: aliceblue;
+  box-shadow:  5px 5px 5px #9e9a9a,
+             5px 5px 5px #9e9a9a;
+  border-radius: 10px;
 }
