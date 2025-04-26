@@ -19,14 +19,12 @@ function AppLogin() {
         <div>
           <input type='text' name='password'/>
         </div>
-        <button type='submit'>invia</button>
+        <button type='submit'>Login</button>
         
         <NavLink to="/Register" end>
-          <button>Register</button>
+          <a>Register</a>
         </NavLink>
-        <NavLink to="/HomePage" end>
-          <button>Home</button>
-        </NavLink>
+        
       </form>
     </div>
   )
