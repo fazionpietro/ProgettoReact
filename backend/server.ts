@@ -1,11 +1,12 @@
-import sqlite3 from 'sqlite3'
-import express, { Request, Response } from 'express';
-import bcrypt from "bcryptjs";
-import jwt from 'jsonwebtoken'
+import express from "express"
+
 import userData from './types/userType'
 import esercizioData from './types/esercizioType'
 import schedaData from './types/schedaType'
 import schedaEserciziData from './types/schedaEserciziType'
+import * as sqlite3 from 'sqlite3';
+import * as bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken'
 
 const app = express()
 const secretKey = 'triceratops-are-the-best-2025@1234'
@@ -22,20 +23,20 @@ const db = new sqlite3.Database("./data/Fitness.db", sqlite3.OPEN_READWRITE, (er
     console.log("Succesfully connected to the database");
 })
 
-app.get("/", (req: Request, res: Response)=> {
+app.get("/", (req: express.Request, res: express.Response)=> {
     console.log(req.headers) 
     res.send("Hello from server")
 })
 
-const authenticateToken = (req, res, next) => {
-    const token = req.headers['authorization'];
-    console.log(token)
-
-    //const token = authHeader && authHeader.split(' ')[1];
+const authenticateToken = (req: any, res: any, next: any) => {
+    const bearerToken = req.headers['authorization'];
+    console.log(bearerToken)
     
-    if (!token) return res.status(401).send('Token required');
-  
-    jwt.verify(token, secretKey, (err, user) => {
+
+    
+    if (!bearerToken) return res.status(401).send('Token required');
+    const token = bearerToken.slice(7)
+    jwt.verify(token, secretKey, (err: any, user: any) => {
       if (err) return res.status(403).send('Invalid or expired token');
       req.user = user;
       next();
@@ -53,7 +54,7 @@ app.get("/api/esercizi",authenticateToken, async (req, res)=> {
         console.log(all)
         res.status(200).json(all)
         
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({"error":err.message});
         console.error(err.message);
     }
@@ -70,7 +71,7 @@ app.get("/api/schede",authenticateToken, async (req, res)=> {
         console.log(all)
         res.status(200).json(all)
         
-    } catch (err) {
+    } catch (err: any) {
         res.status(400).json({"error":err.message});
         console.error(err.message);
     }
@@ -86,7 +87,7 @@ app.get("/api/schedeEsercizi",authenticateToken, async (req, res)=> {
         console.log(all)
         res.status(200).json(all)
         
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({"error":err.message});
         console.error(err.message);
     }
@@ -96,7 +97,7 @@ app.get("/api/schedeEsercizi",authenticateToken, async (req, res)=> {
 type emailType = {
     email: string
 }
-app.get('/api/schedeEserciziUtente',authenticateToken, async (req: Request<{},{},{},emailType>, res: Response)=> {
+app.get('/api/schedeEserciziUtente',authenticateToken, async (req: express.Request<{},{},{},emailType>, res: express.Response)=> {
     try {
         if(!checkEmail(req.query.email)) throw new Error('invalid email');
 
@@ -104,15 +105,15 @@ app.get('/api/schedeEserciziUtente',authenticateToken, async (req: Request<{},{}
         res.set({'Content-type': 'application/json'})
         const data = await getUserSchedeEsercizi(req.query.email)
         res.status(200).json({data})
-    } catch (error) {
+    } catch (err: any) {
 
-        res.status(500).json({"error":error.message});
+        res.status(500).json({"error":err.message});
         
     }
 })
 
 
-app.post('/api/signup', async (req: Request<{},{},{}, userData>, res: Response)=> {
+app.post('/api/signup', async (req: express.Request<{},{},{}, userData>, res: express.Response)=> {
     const query: userData = req.query;
 
 
@@ -139,18 +140,19 @@ app.post('/api/signup', async (req: Request<{},{},{}, userData>, res: Response)=
             await addUser(query.email, hashedPsw, query.ruolo)
             const token = jwt.sign({ id: query.email }, secretKey, { expiresIn: '1h' });
             res.status(200).json({'email':query.email, token})
-    } catch (err) {
+    } catch (err: any) {
         res.status(400).json({"error":err.message});
     }
      
 })
 
 
-app.post('/api/login', async (req: Request<{},{},{}, userData>, res: Response)=> {
+app.post('/api/login', async (req: express.Request<{},{},{}, userData>, res: express.Response)=> {
     const query: userData = req.query;
     let flag = false;
     
     try {
+        res.header("Access-Control-Allow-Origin", "*");
         if(!checkEmail(query.email)) throw new Error('invalid email');
         const all: userData []= await getAllIdenty()
         for(let i = 0; i < all.length; i++){
@@ -171,7 +173,7 @@ app.post('/api/login', async (req: Request<{},{},{}, userData>, res: Response)=>
 
 
 
-    } catch (err) {
+    } catch (err: any) {
         res.status(400).json({"error":err.message});
         
     }
@@ -190,41 +192,41 @@ type newSchedaEsercizi = {
     ripetizioni: number[]   
 }
 
-app.post('/api/addSchedaEsercizi',authenticateToken, async (req: Request<{},{},{}, newSchedaEsercizi>, res: Response)=> {
+app.post('/api/addSchedaEsercizi',authenticateToken, async (req: express.Request<{},{},{}, newSchedaEsercizi>, res: express.Response)=> {
     const query: newSchedaEsercizi = req.query;
     try {
         if(!checkEmail(query.user_email)) throw new Error('invalid email');
         const newD = await addExerciziScheda(query)
         res.status(200).json({'success': newD})
-    } catch (err) {
+    } catch (err: any) {
         res.status(400).json({"error":err.message});
         
     }
     
 })
 
-app.post('/api/addEsercizi',authenticateToken, async (req: Request<{},{},{}, esercizioData>, res: Response)=> {
+app.post('/api/addEsercizi',authenticateToken, async (req: express.Request<{},{},{}, esercizioData>, res: express.Response)=> {
     const query: esercizioData = req.query;
     
     try {
         const newD = await addEsercizio(query)
         res.status(200).json({'success': newD})
 
-    } catch (err) {
+    } catch (err: any) {
         res.status(400).json({"error":err.message});
         
     }
     
 })
 
-app.post('/api/addScheda',authenticateToken, async (req: Request<{},{},{}, schedaData>, res: Response)=> {
+app.post('/api/addScheda',authenticateToken, async (req: express.Request<{},{},{}, schedaData>, res: express.Response)=> {
     const query: schedaData = req.query;
     
     try {
         const newD = await addScheda(query)
         res.status(200).json({'success': newD})
 
-    } catch (err) {
+    } catch (err: any) {
         res.status(400).json({"error":err.message});
         
     }
@@ -233,7 +235,7 @@ app.post('/api/addScheda',authenticateToken, async (req: Request<{},{},{}, sched
 
 
 
-function checkEmail(email){
+function checkEmail(email: string){
     return String(email)
     .toLowerCase()
     .match(
@@ -284,7 +286,7 @@ async function getAllIdenty() {
 }
 
 
-function addUser(email,psw, ruolo) {
+function addUser(email: string,psw: string, ruolo: string) {
     return new Promise((resolve, reject) => {
         db.run('INSERT INTO users(email, password, ruolo) VALUES(?,?,?)', [email, psw, ruolo], (err) => {
 
@@ -332,7 +334,7 @@ async function addEsercizio(data : esercizioData){
                 data.muscolo_targhet,
                 data.difficolta
             ], 
-            (err, res)=>{
+            (err: any, )=>{
                 if(err) reject(err);
                 resolve(true)
             })
@@ -343,7 +345,7 @@ async function addScheda(data : schedaData){
     return new Promise((resolve, reject)=>{
         db.run('INSERT INTO esercizi(nome) VALUES(?)', 
             [data.nome], 
-            (err, res)=>{
+            (err: any )=>{
                 if(err) reject(err);
                 resolve(true)
             })

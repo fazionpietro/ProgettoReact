@@ -1,15 +1,22 @@
 #root {
-  max-width: 1280px;
+  max-width: 720px;
   margin: 0 auto;
   padding: 2rem;
+
   text-align: center;
 }
-
-
-
+.loginButton{
+  margin: 0.5em;
+  font-size:20px;
+  width:530px;
+  padding:15px;
+  text-align:center;
+  background:white;
+}
 .card {
-  border-radius: 50px;
-  background: #248d44;
+  padding: 40px 0px 40px 0px;
+  border-radius: 25px;
+  background: #146cd8;
   box-shadow:  10px 10px 20px #9e9a9a,
              10px 10px 20px #9e9a9a;
 }
@@ -21,14 +28,15 @@ p{
 }
 
 label{
-  font-size: 24px;
+  padding: 1% 1% 1% 1%;
+  font-size: 1.5em ;
+  text-align: left;
 }
 
 
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -38,6 +46,7 @@ button {
 }
 
 input{
+  margin: 0.5em;
   font-size:20px;
   width:500px;
   padding:15px;
