@@ -1,0 +1,14 @@
+{
+"compilerOptions": {
+    "outDir": "./dist",         // dove vanno i file js
+    "rootDir": ".",              // da dove parte a cercare i .ts
+    "module": "commonjs",
+    "target": "es6",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["**/*.ts"],         // includi tutti i file .ts
+  "exclude": ["node_modules", "dist"]
+}
