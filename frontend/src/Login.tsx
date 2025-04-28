@@ -30,6 +30,7 @@ function AppLogin() {
       const response: response = await axios.post(`http://localhost:5000/api/login?email=${email}&password=${password}`)  
       console.log(response.data)
       localStorage.setItem('access_token', response.data.token)
+      localStorage.setItem('email', response.data.email)
       navigate('/')
 
     }catch (error) {

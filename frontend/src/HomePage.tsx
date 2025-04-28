@@ -1,7 +1,7 @@
 import { use, useState, useEffect } from 'react';
-import './LoginRegister.css';
+import './stylesheets/LoginRegister.css';
 import axios, {isCancel, AxiosError, Axios} from 'axios';
-import { Card } from 'react-bootstrap';
+//import { Card } from 'react-bootstrap';
 import { NavLink } from "react-router";
 
 

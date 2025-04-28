@@ -1,20 +1,25 @@
-import express from "express"
-
-import userData from './types/userType'
-import esercizioData from './types/esercizioType'
-import schedaData from './types/schedaType'
-import schedaEserciziData from './types/schedaEserciziType'
+import express from "express";
+import userData from './types/userType';
+import esercizioData from './types/esercizioType';
+import schedaData from './types/schedaType';
+import schedaEserciziData from './types/schedaEserciziType';
 import * as sqlite3 from 'sqlite3';
 import * as bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import cors from 'cors'
 
 const app = express()
 const secretKey = 'triceratops-are-the-best-2025@1234'
 
+app.use(cors());
 
-app.listen(5000, () => {
+const server = app.listen(5000, () => {
     console.log("Server starded at http://localhost:5000")
     
+});
+
+process.on('SIGINT',function(){
+    server.close();
 });
 
 
@@ -37,13 +42,49 @@ const authenticateToken = (req: any, res: any, next: any) => {
     if (!bearerToken) return res.status(401).send('Token required');
     const token = bearerToken.slice(7)
     jwt.verify(token, secretKey, (err: any, user: any) => {
-      if (err) return res.status(403).send('Invalid or expired token');
-      req.user = user;
-      next();
+        if (err) return res.status(403).send('Invalid or expired token');
+        req.user = user;
+        next();
     });
   };
 
 
+
+
+
+
+  app.get('/api/checkAuth', (req: express.Request, res: express.Response)=> {
+    try{
+        res.header("Access-Control-Allow-Origin", "*");
+
+        const bearerToken = req.headers['authorization'];
+
+        if (bearerToken) {
+            const token  = bearerToken.slice(7)
+            console.log(token)
+            jwt.verify(token, secretKey, (err: any, user: any) => {
+                if (err) throw new Error('Invalid or expired token');
+                
+            });
+            res.status(200).send("");
+
+        }else{
+            res.status(401).send("Token Required");
+        }
+
+    }catch(err: any){
+        res.status(401).json({"error":err.message});
+        console.error(err.message);
+    }
+
+  }) 
+
+
+
+
+
+
+  
 
 app.get("/api/esercizi",authenticateToken, async (req, res)=> {
    
