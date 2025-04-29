@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Router, Routes } from "react-router";
 import { useState } from 'react';
 import ReactDOM from "react-dom/client";
 import PrivateRoute from './PrivateRoute.tsx';
-
+import Table from './Table.tsx';
 import AppLogin from './Login.tsx';
 import AppRegister from './Register.tsx';
 import HomePage from './HomePage.tsx';
@@ -18,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
         <Route element={<PrivateRoute />}>
           <Route path='/' element={<HomePage />}></Route>
+          <Route path='/schede' element={<Table />}></Route>
         </Route>
         
 

@@ -9,7 +9,7 @@ function PrivateRoute() {
 
 
   useEffect(() => {
-    console.log(token);
+
     const validateToken = async () => {
       if (!token) {
         setIsValid(false);
