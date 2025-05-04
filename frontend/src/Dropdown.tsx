@@ -15,9 +15,9 @@ function Dropdown( {selectedValue, setSelectedValue }: DropdownProps) {
 
   return (
     <select value={selectedValue} onChange={handleChange}>
-    <option value="Utente">Utente</option>
-    <option value="Personal Trainer">Personal Trainer</option>
-    <option value="Medico">Medico</option>
+    <option value="utente">utente</option>
+    <option value="personalTrainer">personalTrainer</option>
+    <option value="medico">medico</option>
     </select>
     );
 }

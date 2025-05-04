@@ -16,18 +16,18 @@ function AppRegister() {
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
-    const [ruolo, setRuolo]= useState("Utente");
+    const [ruolo, setRuolo]= useState("utente");
     const [registerError, setRegisterError] = useState<any>("");
 
     async function handleRegister(e: React.FormEvent) {
         e.preventDefault();
-        console.log(ruolo);
+        
         const AxiosResponse = await axios
             .post(
                 `http://localhost:5000/api/signup?email=${email}&password=${password}&ruolo=${ruolo}`
             )
-            .then((res) => {
-                console.log(res.data);
+            .then((res: AxiosResponse) => {
+                console.log(res);
                 localStorage.setItem("access_token", res.data.token);
                 localStorage.setItem("email", res.data.email);
                 navigate("/");
