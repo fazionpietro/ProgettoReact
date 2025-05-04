@@ -8,6 +8,7 @@ import Table from './Table.tsx';
 import AppLogin from './Login.tsx';
 import AppRegister from './Register.tsx';
 import HomePage from './HomePage.tsx';
+import Dropdown from "./Dropdown.tsx"
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>

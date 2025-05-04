@@ -84,7 +84,7 @@ function AppLogin() {
           <label className="loginError">{logInError}</label>
         </div>
         <div>
-          <NavLink to="/Register" ></NavLink>
+          <NavLink to="/Register" >Register</NavLink>
         </div>
         
 
