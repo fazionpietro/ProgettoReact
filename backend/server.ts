@@ -169,7 +169,7 @@ app.post('/api/signup', async (req: express.Request<{},{},{}, userData>, res: ex
                 
                 if(all[i].email === query.email){
                     
-                    throw new Error('email already exis')
+                    throw new Error('email already exist')
                 }
                 if(await bcrypt.compare(query.password, all[i].password)){
                     

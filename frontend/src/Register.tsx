@@ -1,33 +1,88 @@
-import { use, useState, useEffect } from 'react';
-import './stylesheets/LoginRegister.css';
-import axios, {isCancel, AxiosError, Axios} from 'axios';
-import { Card } from 'react-bootstrap';
-import { NavLink } from "react-router";
+import { use, useState, useEffect } from "react";
+import "./stylesheets/LoginRegister.css";
+import axios, { isCancel, AxiosError, Axios, AxiosResponse } from "axios";
+import { Card} from "react-bootstrap";
+import { useNavigate, NavLink } from "react-router";
+import Dropdown from "./Dropdown";
 
+type response = {
+    status: number;
+    data: {
+        email: string;
+        token: string;
+    };
+};
 function AppRegister() {
-    return(
-      <div className="card">
-        <form>
-          <label>mail:</label>
-          <div>
-            <input type='text' name='mail' />
-          </div>
-          <label>Password:</label>
-          <div>
-            <input type='text' name='password'/>
-          </div>
-          <label>Ripeti Password:</label>
-          <div>
-            <input type='text' name='password'/>
-          </div>
-          <button type='submit'>invia</button>
+    const navigate = useNavigate();
+    const [email, setEmail] = useState<string>();
+    const [password, setPassword] = useState<string>();
+    const [ruolo, setRuolo]= useState("utente");
+    const [registerError, setRegisterError] = useState<any>("");
 
-          <NavLink to="/" end>
-            <button>Login</button>
-          </NavLink>
-        </form>
-      </div>
-    )
-  }
+    async function handleRegister(e: React.FormEvent) {
+        e.preventDefault();
+        
+        const AxiosResponse = await axios
+            .post(
+                `http://localhost:5000/api/signup?email=${email}&password=${password}&ruolo=${ruolo}`
+            )
+            .then((res: AxiosResponse) => {
+                console.log(res);
+                localStorage.setItem("access_token", res.data.token);
+                localStorage.setItem("email", res.data.email);
+                navigate("/");
+            })
+            .catch((error: AxiosError<string>) => {
+                console.error(error.response);
+                setRegisterError("L'email o la password esistono");
+                setEmail("");
+                setRuolo("");
+                setPassword("");
+                localStorage.clear();
+            });
+    }
 
-  export default AppRegister;
+    return (
+        <div className="card">
+            <form onSubmit={handleRegister}>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Email"
+                        name="email"
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            setRegisterError("");
+                        }}
+                    />
+                </div>
+                <div>
+                    <Dropdown selectedValue={ruolo} setSelectedValue={setRuolo}/>
+                </div>
+                <div>
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            setRegisterError("");
+                        }}
+                    />
+                </div>
+                <div>
+                    <button className='loginButton' type="submit">invia</button>
+                </div>
+                <div>
+                    <label className="loginError">{registerError}</label>
+                </div>
+                <div>
+                    <NavLink to="/login" end>Login</NavLink>
+                </div>
+            </form>
+        </div>
+    );
+}
+
+export default AppRegister;
