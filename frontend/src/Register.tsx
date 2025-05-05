@@ -18,6 +18,10 @@ function AppRegister() {
     const [password, setPassword] = useState<string>();
     const [ruolo, setRuolo]= useState("utente");
     const [registerError, setRegisterError] = useState<any>("");
+    const roleList : string[]= ["utente", "personalTrainer", "medico"]
+
+
+
 
     async function handleRegister(e: React.FormEvent) {
         e.preventDefault();
@@ -58,7 +62,7 @@ function AppRegister() {
                     />
                 </div>
                 <div>
-                    <Dropdown selectedValue={ruolo} setSelectedValue={setRuolo}/>
+                    <Dropdown selectedValue={ruolo} setSelectedValue={setRuolo} itemList={roleList}/>
                 </div>
                 <div>
                     <input
