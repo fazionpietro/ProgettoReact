@@ -28,7 +28,7 @@ function AppRegister() {
         
         const AxiosResponse = await axios
             .post(
-                `http://localhost:5000/api/signup?email=${email}&password=${password}&ruolo=${ruolo}`
+                `${import.meta.env.VITE_API_KEY}/signup?email=${email}&password=${password}&ruolo=${ruolo}`
             )
             .then((res: AxiosResponse) => {
                 console.log(res);
