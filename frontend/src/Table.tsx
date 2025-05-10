@@ -16,7 +16,7 @@ function Table(){
     const getTable= async () => {
         setIsLoading(true)
         try {
-            const res = await axios.get("http://localhost:5000/api/schede", {
+            const res = await axios.get(`${import.meta.env.VITE_API_KEY}/schede`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }

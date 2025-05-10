@@ -4,6 +4,7 @@ import axios, { isCancel, AxiosError, Axios, AxiosResponse } from "axios";
 import { Card } from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router";
 
+
 type response = {
     status: number;
     data: {
@@ -11,6 +12,7 @@ type response = {
         token: string;
     };
 };
+
 function AppLogin() {
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
@@ -20,11 +22,8 @@ function AppLogin() {
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        await axios
-            .post(
-                `http://localhost:5000/api/login?email=${email}&password=${password}`
-            )
-            .then((res: AxiosResponse) => {
+        await axios.post(`${import.meta.env.VITE_API_KEY}/login?email=${email}&password=${password}`
+            ).then((res: AxiosResponse) => {
                 console.log(res.data);
                 localStorage.setItem("access_token", res.data.token);
                 localStorage.setItem("email", res.data.email);

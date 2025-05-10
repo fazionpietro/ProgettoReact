@@ -7,14 +7,19 @@ import * as sqlite3 from 'sqlite3';
 import * as bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import cors from 'cors'
+import * as dotenv from 'dotenv'
 
+
+
+dotenv.config();
 const app = express()
-const secretKey = 'triceratops-are-the-best-2025@1234'
+const secretKey = process.env.SECRET_KEY || ""
+const database = process.env.DATABASE || ""
 
 app.use(cors());
 
 const server = app.listen(5000, () => {
-    console.log("Server starded at http://localhost:5000")
+    console.log("Server starded at http://localhost:5000 ")
     
 });
 
@@ -23,7 +28,7 @@ process.on('SIGINT',function(){
 });
 
 
-const db = new sqlite3.Database("./data/Fitness.db", sqlite3.OPEN_READWRITE, (err) => {
+const db = new sqlite3.Database( database, sqlite3.OPEN_READWRITE, (err) => {
     if (err) return console.error(err);
     console.log("Succesfully connected to the database");
 })

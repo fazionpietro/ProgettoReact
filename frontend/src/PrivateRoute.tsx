@@ -17,7 +17,7 @@ function PrivateRoute() {
       }
 
       try {
-        const response = await axios.get("http://localhost:5000/api/checkAuth", {
+        const response = await axios.get(`${import.meta.env.VITE_API_KEY}/checkAuth`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
