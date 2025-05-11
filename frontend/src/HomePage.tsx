@@ -1,9 +1,6 @@
-import { use, useState, useEffect } from 'react';
+import { useState } from 'react';
 import './stylesheets/LoginRegister.css';
-import axios, {isCancel, AxiosError, Axios} from 'axios';
 //import { Card } from 'react-bootstrap';
-import { NavLink } from "react-router";
-import {Chart as ChartJS} from "chart.js/auto";
 import Papa from 'papaparse';
 import StoricoPassiGiornaliero from './StoricoPassiGiornaliero';
 import StoricoPassiSettimanale from './StoricoPassiSettimanale';
@@ -11,6 +8,10 @@ import StoricoPassiMensile from './StoricoPassiMensile';
 import StoricoCalorieGiornaliero from './StoricoCalorieGiornaliero';
 import StoricoCalorieSettimanale from './StoricoCalorieSettimanale';
 import StoricoCalorieMensile from './StoricoCalorieMensile';
+import GraficoTorta from './GraficoTorta';
+import GraficoDistGiornaliero from './GraficoDistGiornaliero';
+import GraficoDistSettimanale from './GraficoDistSettimanale';
+import GraficoDistMensile from './GraficoDistMensile';
 
 function HomePage(){
 
@@ -19,7 +20,10 @@ function HomePage(){
     const [stoMaxSteps, stoSetMaxSteps] = useState<number | null>(null);
     const [graficoAttivo, setGraficoAttivo] = useState(1);
     const [graficoCal, setGraficoCal] = useState(1);
+    const [graficoDistanza, setGraficoDistanza] = useState(1);
     const [stoData, setStoData] = useState<any[]>([]);
+    const [gDistance, setGDistance] = useState<number | null>(null);
+    const [totDistance, setTotDistance] = useState<number | null>(null);
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) =>{
         const file = e.target.files?.[0];
@@ -30,15 +34,19 @@ function HomePage(){
             header : true,
             skipEmptyLines : true,
             dynamicTyping : true,
-            complete: (results) => {
+            complete: (results: any) => {
                 setData(results.data);
-                const time = results.data.map((el:any) => el.time).filter((s:any) => typeof s==='number' && !isNaN(s));
-                const steps = results.data.map((el:any) => el.steps).filter((s:any) => typeof s==='number' && !isNaN(s));
-                const distance = results.data.map((el:any) => el.distance).filter((s:any) => typeof s==='number' && !isNaN(s));;
-                const calories = results.data.map((el:any) => el.calories).filter((s:any) => typeof s==='number' && !isNaN(s));
-                const maxs = Math.max(...steps.map(Number));
-                setMaxSteps(maxs); 
-                
+                console.log(results.data);
+                const dat =results.data.filter((el:any) => typeof el.time ==='number' && !isNaN(el.time));
+                const tempoMassimo = Math.max(...dat.map((el:any)=> el.time));
+                const limiteT = (tempoMassimo-24*60*60);
+                const tFiltrato = dat.filter((el:any) => el.time >= limiteT);
+                const distance = tFiltrato.map((el:any) => el.distance).filter((s:any) => typeof s === 'number' && !isNaN(s));
+                const maxDistance = distance.length>0 ? Math.max(...distance.map(Number)) : null;
+                const steps = tFiltrato.map((el:any) => el.steps).filter((s:any) => typeof s === 'number' && !isNaN(s));
+                const maxS = steps.length>0 ? Math.max(...steps.map(Number)): null;
+                setMaxSteps(maxS);
+                setGDistance(maxDistance);
             },
         });
     };
@@ -53,14 +61,13 @@ function HomePage(){
             skipEmptyLines : true,
             dynamicTyping : true,
             complete: (results) => {
-                const end_time = results.data.map((el:any) => el.end_time).filter((s:any) => typeof s==='number' && !isNaN(s));
-                const start_time = results.data.map((el:any) => el.start_time).filter((s:any) => typeof s==='number' && !isNaN(s));
                 const sto_steps = results.data.map((el:any) => el.steps).filter((s:any) => typeof s==='number' && !isNaN(s));
-                const sto_distance = results.data.map((el:any) => el.distance).filter((s:any) => typeof s==='number' && !isNaN(s));
-                const sto_calories = results.data.map((el:any) => el.calories).filter((s:any) => typeof s==='number' && !isNaN(s));
-                const startTimeInDay =start_time.map((s:number) => s/(60*60*24));
-                const endTimeInDay =end_time.map((s:number) => s/(60*60*24));
                 const sto_maxs = Math.max(...sto_steps.map(Number));
+                const distanza = results.data.map((el:any) => el.distance).filter((s:any) => typeof s==='number' && !isNaN(s));
+                console.log(results.data.filter((el:any) => el.distance));
+                console.log(distanza);
+                const maxTotDistance = distanza.length>0 ? Math.max(...distanza.map(Number)): null;
+                setTotDistance(maxTotDistance);
                 stoSetMaxSteps(sto_maxs);
                 setStoData(results.data);
             },
@@ -93,44 +100,85 @@ function HomePage(){
         }
     }
 
+    const storicoDistanza = () =>{
+        switch (graficoDistanza){
+            case 1:
+                return <GraficoDistGiornaliero dati={stoData}/>
+            case 2:
+                return <GraficoDistSettimanale dati={stoData}/>
+            case 3:
+                return <GraficoDistMensile dati={stoData}/>
+            default:
+                return null;
+        }
+    }
+
     return(
             <div className='card'>
                 <div className='container'>
                     <div className='item'>
-                        <p>grafico storico dei passi</p>
+                        <p>Grafico Storico dei Passi</p>
                         <button onClick={() => setGraficoAttivo(1)}>grafico giornaliero</button>
                         <button onClick={() => setGraficoAttivo(2)}>grafico settimanale</button>
                         <button onClick={() => setGraficoAttivo(3)}>grafico mensile</button>
                         {stoData.length > 0 ? storicoPassiPlot(): <p>nessun dato</p>};
                     </div>
                     <div className='item'>
-                        <p>grafico torta</p>
+                        <p>Tipologia di Cardio</p>
+                        {stoData.length > 0 ? <GraficoTorta dati={stoData}/>: <p>nessun dato</p>};
                     </div>  
                     <div className='item'>
-                        <p>grafico storico calorie</p>
+                        <p>Grafico Storico delle Calorie</p>
                         <button onClick={() => setGraficoCal(1)}>grafico giornaliero</button>
                         <button onClick={() => setGraficoCal(2)}>grafico settimanale</button>
                         <button onClick={() => setGraficoCal(3)}>grafico mensile</button>
                         {stoData.length > 0 ? storicoCalPlot(): <p>nessun dato</p>};                       
                     </div>
+                    
+                    
 
                     <div className='containerecord'>
                         <div className='item'>
-                            <p>obbiettivo calorie</p>
+                            <p>Obbiettivo Calorie</p>
                             <input type= "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
                         </div>
                         <div className='item'>
-                            <p>record passi</p>
+                            <p>Record Passi</p>
                             {stoMaxSteps !==null ? stoMaxSteps : 'nessun dato'}
                         </div>
                         <div className='item'>
-                            <p>obbiettivo passi</p>
+                            <p>Obbiettivo Passi</p>
                             <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
                         </div>
                         <div className='item'>
-                            <p>record passi</p>
+                            <p>Record Passi Giornaliero</p>
+                            {maxSteps !==null ? maxSteps : 'nessun dato'}
                         </div>
                     </div>
+
+                    <div className='item'>
+                        <p>Grafico Storico della Distanza</p>
+                        <button onClick={() => setGraficoDistanza(1)}>grafico giornaliero</button>
+                        <button onClick={() => setGraficoDistanza(2)}>grafico settimanale</button>
+                        <button onClick={() => setGraficoDistanza(3)}>grafico mensile</button>
+                        {stoData.length > 0 ? storicoDistanza(): <p>nessun dato</p>};                       
+                    </div>
+
+                    <div className='conainerecord'>
+                        <div className='item'>
+                            <p>Obbiettivo Distanza</p>
+                            <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
+                        </div>
+                        <div className='item'>
+                            <p>Record Distanza</p>
+                            {totDistance !==null ? totDistance : 'nessun dato'}
+                        </div>
+                        <div className='item'>
+                            <p>Record Distanza Giornaliero</p>
+                            {gDistance !==null ? gDistance : 'nessun dato'}
+                        </div>
+                    </div>
+                    
                 </div>
                 <br/>
                 <label>

@@ -1,7 +1,7 @@
 import { LineChart } from "@mui/x-charts";
 
 const StoricoCalorieGiornaliero = ({ dati } : { dati : any }) => {
-    const start_time = dati.map((el:any) => el.start_time).filter((s:any) => typeof s==='number' && !isNaN(s));;
+    const start_time = dati.map((el:any) => el.start_time).filter((s:any) => typeof s==='number' && !isNaN(s));
     const tempoMassimo = Math.max(...start_time.map(Number));
     const limiteTempo = (tempoMassimo-3*24*60*60);
     const tempoOrdine = dati.sort((a:any ,b:any) => a.start_time - b.start_time);
