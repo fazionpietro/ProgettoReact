@@ -5,9 +5,10 @@ import schedaData from './types/schedaType';
 import schedaEserciziData from './types/schedaEserciziType';
 import * as sqlite3 from 'sqlite3';
 import * as bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import cors from 'cors'
 import * as dotenv from 'dotenv'
+import { get } from "http";
 
 
 
@@ -55,6 +56,38 @@ const authenticateToken = (req: any, res: any, next: any) => {
 
 
 
+  app.get('/api/getDatiUtente',authenticateToken, async (req: express.Request, res: express.Response)=>{
+    try {
+        const bearerToken = req.headers['authorization'];
+      
+        if(bearerToken){
+            const decodedToken : any= jwt.decode(bearerToken.slice(7))
+            if(decodedToken){
+                const email : string = decodedToken.id
+                const datiUtente : userData= await getDatiUtente(email)
+                console.log(datiUtente)
+                res.status(200).send({
+                    "email": datiUtente.email,
+                    "ruolo": datiUtente.ruolo               
+                });
+            }else{
+                res.status(401).send("Invalid or expired token");
+            }
+
+            
+
+        }else{
+            res.status(401).send("Token Required");
+
+        }
+    } catch (error: any) {
+        res.status(401).json({"error":error.message});
+        console.error(error.message);
+    }
+    
+        
+    })
+
 
 
 
@@ -67,10 +100,12 @@ const authenticateToken = (req: any, res: any, next: any) => {
         if (bearerToken) {
             const token  = bearerToken.slice(7)
             console.log(token)
-            jwt.verify(token, secretKey, (err: any, user: any) => {
+            jwt.verify(token, secretKey, (err: any) => {
                 if (err) throw new Error('Invalid or expired token');
                 
             });
+
+            
             res.status(200).send("");
 
         }else{
@@ -185,7 +220,7 @@ app.post('/api/signup', async (req: express.Request<{},{},{}, userData>, res: ex
             const hashedPsw = await bcrypt.hash(query.password,8)
             await addUser(query.email, hashedPsw, query.ruolo)
             const token = jwt.sign({ id: query.email }, secretKey, { expiresIn: '1h' });
-            res.status(200).json({'email':query.email, token})
+            res.status(200).json({"token": token})
     } catch (err: any) {
         res.status(400).json({"error":err.message});
     }
@@ -210,7 +245,7 @@ app.post('/api/login', async (req: express.Request<{},{},{}, userData>, res: exp
         }
         if(flag){
             const token = jwt.sign({ id: query.email }, secretKey, { expiresIn: '1h' });
-            res.status(200).json({'email':query.email, token})
+            res.status(200).json({'token':token})
         }else{
             res.status(400).json({"error":'Invalid credentials'});
         }
@@ -395,5 +430,19 @@ async function addScheda(data : schedaData){
                 if(err) reject(err);
                 resolve(true)
             })
+    })
+}
+
+
+
+
+
+async function getDatiUtente(email:string){
+    return new Promise<userData>((resolve, reject)=>{
+        
+        db.get(`SELECT * FROM users WHERE email='${email}'`, (err:any, res : userData)=>{
+            if(err) reject(err);
+            resolve(res);
+        })
     })
 }
