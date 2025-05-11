@@ -55,6 +55,10 @@ const authenticateToken = (req: any, res: any, next: any) => {
   };
 
 
+  app.get('/api/getPazienti',authenticateToken, async (req: express.Request, res: express.Response)=>{})
+
+
+
 
   app.get('/api/getDatiUtente',authenticateToken, async (req: express.Request, res: express.Response)=>{
     try {
@@ -390,8 +394,9 @@ async function getUserSchedeEsercizi(email: string){
 async function addExerciziScheda(data : newSchedaEsercizi){
     return new Promise((resolve, reject)=>{
         for (let index = 0; index < data.esercizio_id.length; index++) {
-            db.run('INSERT INTO schedaEsercizi(scheda_id,esercizio_id,user_email,serie, ripetizioni) VALUES(?,?,?,?,?)', 
-                [   data.scheda_id, 
+            db.run('INSERT INTO schedaEsercizi(esercizio_id,user_email,serie, ripetizioni) VALUES(?,?,?,?,?)', 
+                [   
+                    data.scheda_id, 
                     data.esercizio_id[index], 
                     data.user_email,
                     data.serie[index],

@@ -33,7 +33,6 @@ function AppRegister() {
             .then((res: AxiosResponse) => {
                 console.log(res);
                 localStorage.setItem("access_token", res.data.token);
-                localStorage.setItem("email", res.data.email);
                 navigate("/");
             })
             .catch((error: AxiosError<string>) => {
@@ -62,7 +61,8 @@ function AppRegister() {
                     />
                 </div>
                 <div>
-                    <Dropdown selectedValue={ruolo} setSelectedValue={setRuolo} itemList={roleList}/>
+                    <Dropdown setSelectedValue={setRuolo} itemList={roleList}/>
+                    
                 </div>
                 <div>
                     <input

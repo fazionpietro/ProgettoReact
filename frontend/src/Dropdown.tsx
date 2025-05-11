@@ -3,13 +3,11 @@ import "./stylesheets/Dropdown.css";
 
 type DropdownProps = {
     itemList: string[];
-    selectedValue: string;
     setSelectedValue: (value: string) => void;
 };
 
 function Dropdown({
     itemList,
-    selectedValue,
     setSelectedValue,
 }: DropdownProps) {
     const handleChange = (event: any) => {
@@ -17,7 +15,8 @@ function Dropdown({
     };
 
     return (
-        <select value={selectedValue} onChange={handleChange}>
+        <select onChange={handleChange}>
+            
             {itemList.map((option) => (
                 <option key={option} value={option}>
                     {option}

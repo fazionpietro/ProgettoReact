@@ -26,7 +26,6 @@ function AppLogin() {
             ).then((res: AxiosResponse) => {
                 console.log(res.data);
                 localStorage.setItem("access_token", res.data.token);
-                localStorage.setItem("email", res.data.email);
                 navigate("/");
             })
             .catch((error: AxiosError<string>) => {
@@ -39,6 +38,7 @@ function AppLogin() {
     }
 
     return (
+        
         <div className="card">
             <form onSubmit={onSubmit}>
                 <div>
