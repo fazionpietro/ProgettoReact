@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "nodemon ./dist/server.js",
+    "dev": "npx tsc && nodemon ./dist/server.js",
     "build": "npx tsc",
     "lint": "eslint .",
     "preview": "vite preview"

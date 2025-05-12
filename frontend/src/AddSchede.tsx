@@ -2,16 +2,16 @@ import { useState, useEffect, useRef, use, ChangeEvent } from "react";
 import axios, { isCancel, AxiosError, Axios, AxiosResponse } from "axios";
 import { Card } from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router";
-import Dropdown from "./Dropdown";
+import PatientSelector from "./PatientSelectionComponent"
 
 type esercizioData = {
-    id: number;
-    nome: string;
-    descrizione: string;
-    muscolo_targhet: string;
-    difficolta: string;
+    esercizio_id: string;
+    serie: string;
+    ripetizioni: string;
+    [key: string]: string; // Index signature allows dynamic property access with strings
 };
 type schedaEserciziData = {
+    
     esercizio_id: number[];
     user_email_id: string;
     nome_scheda: string;
@@ -21,8 +21,8 @@ type schedaEserciziData = {
 
 function AddSchede() {
     
-    const [ruolo, setRuolo] = useState<string>();
-    const [pazienti, setPazienti] = useState();
+    const [email, setEmail] = useState("");
+    const [pazienti, setPazienti] = useState<{paziente:string}[]>();
     const [esercizi, setEsercizi] = useState<esercizioData[]>();
     const isInitialized = useRef(false);
     const [s, setS] = useState<string[]>();
@@ -37,14 +37,8 @@ function AddSchede() {
         ripetizioni: [],
     };
 
-    type EsercizioData = {
-        esercizio_id: string;
-        serie: string;
-        ripetizioni: string;
-        [key: string]: string; // Index signature allows dynamic property access with strings
-    };
 
-    const [listaEsercizi, setListaEsercizi] = useState<EsercizioData[]>([
+    const [listaEsercizi, setListaEsercizi] = useState<esercizioData[]>([
         {
             esercizio_id: "",
             serie: "",
@@ -53,27 +47,8 @@ function AddSchede() {
     ]);
 
 
-    const getRuolo = async () => {
-        try {
-            await axios.get(`${import.meta.env.VITE_API_KEY}/getDatiUtente`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "access_token"
-                        )}`,
-                    },
-                })
-                .then((resp) => {
-                    if (resp.status === 200) setRuolo(resp.data.ruolo); 
-                });
-        } catch (error) {
-            console.error(error);
-            
-        }
-    }
-
-
-
     const getEsercizi = async () => {
+        
         
         try {
             await axios.get(`${import.meta.env.VITE_API_KEY}/esercizi`, {
@@ -86,12 +61,36 @@ function AddSchede() {
                 .then((resp) => {
                     if (resp.status === 200) setEsercizi(resp.data);
                     const r: esercizioData[] = resp.data;
+                    
                     setS(r.map((eser) => eser.nome));
                 });
+
+                
+
         } catch (error) {
             console.error(error);
         }
     };
+
+
+    
+
+
+    function createScheda(){
+        if(selectedPatient) scheda.user_email_id=selectedPatient
+        else scheda.user_email_id=email
+
+
+        listaEsercizi.map((eser) => {
+            scheda.esercizio_id.push(Number(eser.esercizio_id))
+            scheda.serie.push(Number(eser.serie))
+            scheda.ripetizioni.push(Number(eser.ripetizioni))
+
+        })
+
+        console.log(scheda)
+    }
+
 
     useEffect(() => {
         console.log(listaEsercizi);
@@ -99,7 +98,6 @@ function AddSchede() {
         
         isInitialized.current = true;
         getEsercizi();
-        getRuolo();
     }, [listaEsercizi]);
 
     const handleFormChange = (
@@ -127,25 +125,27 @@ function AddSchede() {
         data.splice(index, 1);
         setListaEsercizi(data); 
     }
-    
 
+    const handleEmailFetch = (email: string) => {
+        console.log("Email received from child:", email);
+        setEmail(email);
+       
+    };
 
     return (
         <>
             <div>
-                <h2>Aggiungi Scheda</h2>
+                <h2>Aggiungi Scheda</h2>       
                 <input
                     className="nameInput"
                     type="text"
                     placeholder="Nome scheda"
                     onChange={(e) => {
-                        scheda ? (scheda.nome_scheda = e.target.value) : "";
+                        scheda.nome_scheda=e.target.value;
                     }}
                 />
                 <div>
-                    <h4>Paziente: </h4>
-                    {ruolo != "utente" ? <Dropdown setSelectedValue={setSelectedPatient} itemList={["1","2","3"]}/> : "no"}
-
+                    <PatientSelector onEmailFetch={handleEmailFetch}  setSelectedPatient={setSelectedPatient} currentSelectedPatient={selectedPatient}/>
                 </div>
                 {scheda ? null : ""}
                 <form>
@@ -207,6 +207,10 @@ function AddSchede() {
 
             <div>
                 <button onClick={addFields}>Aggiungi Esercizio</button>
+            </div>
+            <div>
+                <button type="button" onClick={createScheda} >Crea</button>
+
             </div>
         </>
     );

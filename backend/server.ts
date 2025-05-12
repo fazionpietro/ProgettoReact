@@ -55,7 +55,19 @@ const authenticateToken = (req: any, res: any, next: any) => {
   };
 
 
-  app.get('/api/getPazienti',authenticateToken, async (req: express.Request, res: express.Response)=>{})
+  app.get('/api/getPazienti',authenticateToken, async (req: express.Request<{},{},{},{email :string}>, res: express.Response)=>{
+    try {
+        
+
+        const response = await getPazienti(req.query.email)
+        res.status(200).json(response);
+
+
+    } catch (error:any) {
+        res.status(401).json({"error":error.message});
+        console.error(error.message);
+    }
+  })
 
 
 
@@ -179,10 +191,8 @@ app.get("/api/schedeEsercizi",authenticateToken, async (req, res)=> {
          
 })
 
-type emailType = {
-    email: string
-}
-app.get('/api/schedeEserciziUtente',authenticateToken, async (req: express.Request<{},{},{},emailType>, res: express.Response)=> {
+
+app.get('/api/schedeEserciziUtente',authenticateToken, async (req: express.Request<{},{},{},{email: string}>, res: express.Response)=> {
     try {
         if(!checkEmail(req.query.email)) throw new Error('invalid email');
 
@@ -446,6 +456,16 @@ async function getDatiUtente(email:string){
     return new Promise<userData>((resolve, reject)=>{
         
         db.get(`SELECT * FROM users WHERE email='${email}'`, (err:any, res : userData)=>{
+            if(err) reject(err);
+            resolve(res);
+        })
+    })
+}
+
+async function getPazienti(email:string){
+    return new Promise<userData>((resolve, reject)=>{
+        
+        db.all(`SELECT paziente FROM medicopaziente WHERE medico='${email}'`, (err:any, res : userData)=>{
             if(err) reject(err);
             resolve(res);
         })
