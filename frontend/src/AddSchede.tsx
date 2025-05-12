@@ -20,11 +20,15 @@ type schedaEserciziData = {
 };
 
 function AddSchede() {
-    const [isValid, setIsValid] = useState<boolean | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [ruolo, setRuolo] = useState<string>("");
+    
+    const [ruolo, setRuolo] = useState<string>();
     const [pazienti, setPazienti] = useState();
     const [esercizi, setEsercizi] = useState<esercizioData[]>();
+    const isInitialized = useRef(false);
+    const [s, setS] = useState<string[]>();
+    const [selectedPatient , setSelectedPatient] = useState<string>()
+
+
     const scheda: schedaEserciziData = {
         esercizio_id: [],
         user_email_id: "",
@@ -48,14 +52,31 @@ function AddSchede() {
         },
     ]);
 
-    const isInitialized = useRef(false);
-    const [s, setS] = useState<string[]>();
+
+    const getRuolo = async () => {
+        try {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/getDatiUtente`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "access_token"
+                        )}`,
+                    },
+                })
+                .then((resp) => {
+                    if (resp.status === 200) setRuolo(resp.data.ruolo); 
+                });
+        } catch (error) {
+            console.error(error);
+            
+        }
+    }
+
+
 
     const getEsercizi = async () => {
-        setIsLoading(true);
+        
         try {
-            const response = await axios
-                .get(`${import.meta.env.VITE_API_KEY}/esercizi`, {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/esercizi`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem(
                             "access_token"
@@ -68,16 +89,17 @@ function AddSchede() {
                     setS(r.map((eser) => eser.nome));
                 });
         } catch (error) {
-        } finally {
-            setIsLoading(false);
+            console.error(error);
         }
     };
 
     useEffect(() => {
         console.log(listaEsercizi);
         if (isInitialized.current) return;
+        
         isInitialized.current = true;
         getEsercizi();
+        getRuolo();
     }, [listaEsercizi]);
 
     const handleFormChange = (
@@ -120,6 +142,11 @@ function AddSchede() {
                         scheda ? (scheda.nome_scheda = e.target.value) : "";
                     }}
                 />
+                <div>
+                    <h4>Paziente: </h4>
+                    {ruolo != "utente" ? <Dropdown setSelectedValue={setSelectedPatient} itemList={["1","2","3"]}/> : "no"}
+
+                </div>
                 {scheda ? null : ""}
                 <form>
                     {listaEsercizi.map((input, index) => {

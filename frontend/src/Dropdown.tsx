@@ -6,17 +6,14 @@ type DropdownProps = {
     setSelectedValue: (value: string) => void;
 };
 
-function Dropdown({
-    itemList,
-    setSelectedValue,
-}: DropdownProps) {
+function Dropdown({ itemList, setSelectedValue }: DropdownProps) {
     const handleChange = (event: any) => {
         setSelectedValue(event.target.value);
     };
 
     return (
         <select onChange={handleChange}>
-            
+            <option value="">Select Option</option>
             {itemList.map((option) => (
                 <option key={option} value={option}>
                     {option}
