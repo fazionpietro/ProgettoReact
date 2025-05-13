@@ -173,7 +173,7 @@ function AddSchede() {
 
         })
 
-        //addScheda()
+        addScheda()
         
     }
 
