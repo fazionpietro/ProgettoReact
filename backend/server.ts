@@ -18,6 +18,7 @@ const secretKey = process.env.SECRET_KEY || ""
 const database = process.env.DATABASE || ""
 
 app.use(cors());
+app.use(express.json());
 
 const server = app.listen(5000, () => {
     console.log("Server starded at http://localhost:5000 ")
@@ -35,13 +36,13 @@ const db = new sqlite3.Database( database, sqlite3.OPEN_READWRITE, (err) => {
 })
 
 app.get("/", (req: express.Request, res: express.Response)=> {
-    console.log(req.headers) 
+    
     res.send("Hello from server")
 })
 
 const authenticateToken = (req: any, res: any, next: any) => {
     const bearerToken = req.headers['authorization'];
-    console.log(bearerToken)
+    //console.log(bearerToken)
     
 
     
@@ -55,7 +56,19 @@ const authenticateToken = (req: any, res: any, next: any) => {
   };
 
 
-  app.get('/api/getPazienti',authenticateToken, async (req: express.Request, res: express.Response)=>{})
+  app.get('/api/getPazienti',authenticateToken, async (req: express.Request, res: express.Response)=>{
+    try {
+        
+
+        const response= await getPazienti()
+        res.status(200).json(response);
+
+
+    } catch (error:any) {
+        res.status(401).json({"error":error.message});
+        console.error(error.message);
+    }
+  })
 
 
 
@@ -69,7 +82,7 @@ const authenticateToken = (req: any, res: any, next: any) => {
             if(decodedToken){
                 const email : string = decodedToken.id
                 const datiUtente : userData= await getDatiUtente(email)
-                console.log(datiUtente)
+                //console.log(datiUtente)
                 res.status(200).send({
                     "email": datiUtente.email,
                     "ruolo": datiUtente.ruolo               
@@ -103,7 +116,7 @@ const authenticateToken = (req: any, res: any, next: any) => {
 
         if (bearerToken) {
             const token  = bearerToken.slice(7)
-            console.log(token)
+            //console.log(token)
             jwt.verify(token, secretKey, (err: any) => {
                 if (err) throw new Error('Invalid or expired token');
                 
@@ -136,7 +149,7 @@ app.get("/api/esercizi",authenticateToken, async (req, res)=> {
         res.header("Access-Control-Allow-Origin", "*");
         res.set({'Content-type': 'application/json'})
         const all = await getAllExcercise()
-        console.log(all)
+        //console.log(all)
         res.status(200).json(all)
         
     } catch (err: any) {
@@ -153,7 +166,7 @@ app.get("/api/schede",authenticateToken, async (req, res)=> {
         res.header("Access-Control-Allow-Origin", "*");
         res.set({'Content-type': 'application/json'})
         const all = await getAllSchede()
-        console.log(all)
+        //console.log(all)
         res.status(200).json(all)
         
     } catch (err: any) {
@@ -169,7 +182,7 @@ app.get("/api/schedeEsercizi",authenticateToken, async (req, res)=> {
         res.header("Access-Control-Allow-Origin", "*");
         res.set({'Content-type': 'application/json'})
         const all = await getAllSchedaEsercizi()
-        console.log(all)
+        //console.log(all)
         res.status(200).json(all)
         
     } catch (err: any) {
@@ -179,10 +192,8 @@ app.get("/api/schedeEsercizi",authenticateToken, async (req, res)=> {
          
 })
 
-type emailType = {
-    email: string
-}
-app.get('/api/schedeEserciziUtente',authenticateToken, async (req: express.Request<{},{},{},emailType>, res: express.Response)=> {
+
+app.get('/api/schedeEserciziUtente',authenticateToken, async (req: express.Request<{},{},{},{email: string}>, res: express.Response)=> {
     try {
         if(!checkEmail(req.query.email)) throw new Error('invalid email');
 
@@ -269,20 +280,19 @@ app.post('/api/login', async (req: express.Request<{},{},{}, userData>, res: exp
 
 
 type newSchedaEsercizi = {
-    id: number,
-    scheda_id: number,
-    esercizio_id: number[],
-    user_email: string,
-    serie: number[],
-    ripetizioni: number[]   
+    esercizio_id: number[];
+    user_email_id: string;
+    nome_scheda: string;
+    serie: number[];
+    ripetizioni: number[];
 }
 
-app.post('/api/addSchedaEsercizi',authenticateToken, async (req: express.Request<{},{},{}, newSchedaEsercizi>, res: express.Response)=> {
-    const query: newSchedaEsercizi = req.query;
+app.post('/api/addSchedaEsercizi',authenticateToken, async (req: express.Request, res: express.Response)=> {
+    
     try {
-        if(!checkEmail(query.user_email)) throw new Error('invalid email');
-        const newD = await addExerciziScheda(query)
-        res.status(200).json({'success': newD})
+        console.log(req.body);
+        console.log(await addEserciziScheda(req.body))
+        res.status(200).json()
     } catch (err: any) {
         res.status(400).json({"error":err.message});
         
@@ -338,7 +348,7 @@ async function getAllSchedaEsercizi(){
 }
 async function getAllSchede(){
     return new Promise<schedaData[]>((resolve, reject)=>{
-        db.all('SELECT * FROM schede', (err, res: schedaData[])=>{
+        db.all('SELECT nome FROM schede', (err, res: schedaData[])=>{
             if(err) reject(err);
             else resolve(res);
         })
@@ -391,18 +401,44 @@ async function getUserSchedeEsercizi(email: string){
     })
 }
 
-async function addExerciziScheda(data : newSchedaEsercizi){
+
+function getScheda(nome:string){
     return new Promise((resolve, reject)=>{
+        db.get(`SELECT id FROM schede WHERE nome="${nome}"`, (err, res: {id: number}) => {  
+            if(err) reject(err);
+            
+            resolve(res.id)
+        });
+    })
+}
+
+async function addEserciziScheda(data : newSchedaEsercizi){
+
+    return new Promise(async (resolve, reject)=>{
+        console.log("", data);
+        
+        await db.run('INSERT INTO schede(nome) VALUES(?)', [data.nome_scheda])
+        let scheda_id = await getScheda(data.nome_scheda)
+        console.log("", scheda_id)
         for (let index = 0; index < data.esercizio_id.length; index++) {
-            db.run('INSERT INTO schedaEsercizi(esercizio_id,user_email,serie, ripetizioni) VALUES(?,?,?,?,?)', 
+            console.log([   
+                scheda_id,
+                data.esercizio_id[index], 
+                data.user_email_id,
+                data.serie[index],
+                data.ripetizioni[index]
+            ])
+            
+            db.run('INSERT INTO SchedaEsercizi(scheda_id,esercizio_id,user_email,serie, ripetizioni) VALUES(?,?,?,?,?)', 
                 [   
-                    data.scheda_id, 
+                    scheda_id,
                     data.esercizio_id[index], 
-                    data.user_email,
+                    data.user_email_id,
                     data.serie[index],
                     data.ripetizioni[index]
                 ],
-                (err) => {
+                (err:any , res:any) => {
+                    console.log("ok")
                     if(err) reject(err);
                 });
             
@@ -414,6 +450,8 @@ async function addExerciziScheda(data : newSchedaEsercizi){
 
 async function addEsercizio(data : esercizioData){
     return new Promise((resolve, reject)=>{
+        
+        
         db.run('INSERT INTO esercizi(nome,descrizione,muscolo_targhet,difficolta) VALUES(?,?,?,?)', 
             [   data.nome,
                 data.descrizione,
@@ -446,6 +484,16 @@ async function getDatiUtente(email:string){
     return new Promise<userData>((resolve, reject)=>{
         
         db.get(`SELECT * FROM users WHERE email='${email}'`, (err:any, res : userData)=>{
+            if(err) reject(err);
+            resolve(res);
+        })
+    })
+}
+
+async function getPazienti(){
+    return new Promise<userData>((resolve, reject)=>{
+        
+        db.all(`SELECT email FROM users WHERE ruolo="utente"`, (err:any, res : userData)=>{
             if(err) reject(err);
             resolve(res);
         })

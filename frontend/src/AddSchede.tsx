@@ -1,17 +1,15 @@
-import { useState, useEffect, useRef, use, ChangeEvent } from "react";
-import axios, { isCancel, AxiosError, Axios, AxiosResponse } from "axios";
-import { Card } from "react-bootstrap";
-import { useNavigate, NavLink } from "react-router";
-import Dropdown from "./Dropdown";
+import { useState, useEffect, useRef} from "react";
+import axios from "axios";
+import PatientSelector from "./PatientSelectionComponent"
 
 type esercizioData = {
-    id: number;
-    nome: string;
-    descrizione: string;
-    muscolo_targhet: string;
-    difficolta: string;
+    esercizio_id: string;
+    serie: string;
+    ripetizioni: string;
+    [key: string]: string; 
 };
 type schedaEserciziData = {
+    
     esercizio_id: number[];
     user_email_id: string;
     nome_scheda: string;
@@ -20,27 +18,24 @@ type schedaEserciziData = {
 };
 
 function AddSchede() {
-    const [isValid, setIsValid] = useState<boolean | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [ruolo, setRuolo] = useState<string>("");
-    const [pazienti, setPazienti] = useState();
+
+    const [allSchedeName, setAlleSchedeName] = useState<{nome: string}[]>();
+    const [ruolo, setRuolo] = useState("");
+    const [email, setEmail] = useState("");
+    const [schedaError, setSchedaError] = useState("");
     const [esercizi, setEsercizi] = useState<esercizioData[]>();
-    const scheda: schedaEserciziData = {
+    const isInitialized = useRef(false);
+    const [s, setS] = useState<string[]>();
+    const [selectedPatient , setSelectedPatient] = useState<string>()
+    const [scheda, setScheda] = useState<schedaEserciziData>({
         esercizio_id: [],
         user_email_id: "",
         nome_scheda: "",
         serie: [],
         ripetizioni: [],
-    };
+    });
 
-    type EsercizioData = {
-        esercizio_id: string;
-        serie: string;
-        ripetizioni: string;
-        [key: string]: string; // Index signature allows dynamic property access with strings
-    };
-
-    const [listaEsercizi, setListaEsercizi] = useState<EsercizioData[]>([
+    const [listaEsercizi, setListaEsercizi] = useState<esercizioData[]>([
         {
             esercizio_id: "",
             serie: "",
@@ -48,14 +43,12 @@ function AddSchede() {
         },
     ]);
 
-    const isInitialized = useRef(false);
-    const [s, setS] = useState<string[]>();
 
     const getEsercizi = async () => {
-        setIsLoading(true);
+        
+        
         try {
-            const response = await axios
-                .get(`${import.meta.env.VITE_API_KEY}/esercizi`, {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/esercizi`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem(
                             "access_token"
@@ -65,19 +58,133 @@ function AddSchede() {
                 .then((resp) => {
                     if (resp.status === 200) setEsercizi(resp.data);
                     const r: esercizioData[] = resp.data;
+                    
                     setS(r.map((eser) => eser.nome));
                 });
+
+                
+
         } catch (error) {
-        } finally {
-            setIsLoading(false);
+            console.error(error);
         }
     };
+
+    async function getAllSchede() {
+        try {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/schede`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "access_token"
+                        )}`,
+                    },
+                })
+                .then((resp) => {
+                    if (resp.status === 200){
+                        const all : {nome: string}[] = resp.data;
+                        setAlleSchedeName(all)
+                        
+                    }else{
+                        throw new Error(resp.data);
+                    }
+                
+                });
+
+                
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function addScheda() {
+        try {
+            await axios.post(`${import.meta.env.VITE_API_KEY}/addSchedaEsercizi`, JSON.stringify(scheda), {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                    )}`,
+                    "Content-Type": "application/json",
+                },
+            })
+
+
+        } catch (error) {
+            console.log(error)
+        }finally{
+            console.log(JSON.stringify(scheda))
+            window.location.reload();
+        }
+    }
+
+    function createScheda(){
+
+        console.log(listaEsercizi)
+        
+
+        if(allSchedeName?.some((item) => item.nome == scheda.nome_scheda)){
+            setSchedaError("scheda già presente")
+            return
+        }
+        if(scheda.nome_scheda === ""){
+            setSchedaError("la scheda deve avere un nome")
+            return
+        }
+        if(ruolo == "utente"){
+            scheda.user_email_id = email
+        }else{
+            if(selectedPatient) {
+                if(selectedPatient === ""){ 
+                    setSchedaError("devi selezionare un paziente")
+                    return
+                }
+                else
+                    scheda.user_email_id=selectedPatient
+            }else {
+                setSchedaError("devi selezionare un paziente")
+                return
+            }
+        }
+        
+
+        
+        
+        listaEsercizi.map((eser) => {
+            const serie = Number(eser.serie)
+            const ripetizioni = Number(eser.ripetizioni)
+            const esercizio_id = Number(eser.esercizio_id)
+            
+
+            if(esercizio_id==0){
+                setSchedaError("devi selezionare un esercizio")
+                return 
+            }
+
+            if(!Number.isNaN(serie) && !Number.isNaN(ripetizioni) && esercizio_id!=0){
+                scheda.esercizio_id.push(esercizio_id)
+                scheda.serie.push(serie)
+                scheda.ripetizioni.push(ripetizioni)
+                setSchedaError("")
+            }else{
+                setSchedaError("le serie e le ripetizioni devono essere un numero")
+                return
+            }
+
+            
+
+        })
+
+        //addScheda()
+        
+    }
+
 
     useEffect(() => {
         console.log(listaEsercizi);
         if (isInitialized.current) return;
+        
         isInitialized.current = true;
         getEsercizi();
+        getAllSchede()
     }, [listaEsercizi]);
 
     const handleFormChange = (
@@ -105,22 +212,30 @@ function AddSchede() {
         data.splice(index, 1);
         setListaEsercizi(data); 
     }
-    
 
+    const handleRuoloFetch = (ruolo: string , email: string) => {
+        setEmail(email);
+        setRuolo(ruolo);
+       
+    };
 
     return (
         <>
             <div>
-                <h2>Aggiungi Scheda</h2>
-                <input
+                <h2>Aggiungi Scheda</h2>       
+                <input            
+                          
                     className="nameInput"
                     type="text"
                     placeholder="Nome scheda"
                     onChange={(e) => {
-                        scheda ? (scheda.nome_scheda = e.target.value) : "";
+                        scheda.nome_scheda=e.target.value;
                     }}
                 />
-                {scheda ? null : ""}
+                <div>
+                    <PatientSelector onDataFetch={handleRuoloFetch}  setSelectedPatient={setSelectedPatient} currentSelectedPatient={selectedPatient}/>
+                </div>
+                
                 <form>
                     {listaEsercizi.map((input, index) => {
                         return (
@@ -180,6 +295,12 @@ function AddSchede() {
 
             <div>
                 <button onClick={addFields}>Aggiungi Esercizio</button>
+            </div>
+            <div>
+                <button type="button" onClick={createScheda} >Crea</button>
+            </div>
+            <div>
+                <h4 className="schedaError">{schedaError}</h4>
             </div>
         </>
     );
