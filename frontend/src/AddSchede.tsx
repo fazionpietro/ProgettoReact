@@ -1,14 +1,12 @@
-import { useState, useEffect, useRef, use, ChangeEvent } from "react";
-import axios, { isCancel, AxiosError, Axios, AxiosResponse } from "axios";
-import { Card } from "react-bootstrap";
-import { useNavigate, NavLink } from "react-router";
+import { useState, useEffect, useRef} from "react";
+import axios from "axios";
 import PatientSelector from "./PatientSelectionComponent"
 
 type esercizioData = {
     esercizio_id: string;
     serie: string;
     ripetizioni: string;
-    [key: string]: string; // Index signature allows dynamic property access with strings
+    [key: string]: string; 
 };
 type schedaEserciziData = {
     
@@ -20,23 +18,22 @@ type schedaEserciziData = {
 };
 
 function AddSchede() {
-    
+
+    const [allSchedeName, setAlleSchedeName] = useState<{nome: string}[]>();
+    const [ruolo, setRuolo] = useState("");
     const [email, setEmail] = useState("");
-    const [pazienti, setPazienti] = useState<{paziente:string}[]>();
+    const [schedaError, setSchedaError] = useState("");
     const [esercizi, setEsercizi] = useState<esercizioData[]>();
     const isInitialized = useRef(false);
     const [s, setS] = useState<string[]>();
     const [selectedPatient , setSelectedPatient] = useState<string>()
-
-
-    const scheda: schedaEserciziData = {
+    const [scheda, setScheda] = useState<schedaEserciziData>({
         esercizio_id: [],
         user_email_id: "",
         nome_scheda: "",
         serie: [],
         ripetizioni: [],
-    };
-
+    });
 
     const [listaEsercizi, setListaEsercizi] = useState<esercizioData[]>([
         {
@@ -72,23 +69,112 @@ function AddSchede() {
         }
     };
 
+    async function getAllSchede() {
+        try {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/schede`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "access_token"
+                        )}`,
+                    },
+                })
+                .then((resp) => {
+                    if (resp.status === 200){
+                        const all : {nome: string}[] = resp.data;
+                        setAlleSchedeName(all)
+                        
+                    }else{
+                        throw new Error(resp.data);
+                    }
+                
+                });
 
-    
+                
 
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function addScheda() {
+        try {
+            await axios.post(`${import.meta.env.VITE_API_KEY}/addSchedaEsercizi`, JSON.stringify(scheda), {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                    )}`,
+                    "Content-Type": "application/json",
+                },
+            })
+
+
+        } catch (error) {
+            console.log(error)
+        }finally{
+            console.log(JSON.stringify(scheda))
+            window.location.reload();
+        }
+    }
 
     function createScheda(){
-        if(selectedPatient) scheda.user_email_id=selectedPatient
-        else scheda.user_email_id=email
 
+        console.log(listaEsercizi)
+        
 
+        if(allSchedeName?.some((item) => item.nome == scheda.nome_scheda)){
+            setSchedaError("scheda già presente")
+            return
+        }
+        if(scheda.nome_scheda === ""){
+            setSchedaError("la scheda deve avere un nome")
+            return
+        }
+        if(ruolo == "utente"){
+            scheda.user_email_id = email
+        }else{
+            if(selectedPatient) {
+                if(selectedPatient === ""){ 
+                    setSchedaError("devi selezionare un paziente")
+                    return
+                }
+                else
+                    scheda.user_email_id=selectedPatient
+            }else {
+                setSchedaError("devi selezionare un paziente")
+                return
+            }
+        }
+        
+
+        
+        
         listaEsercizi.map((eser) => {
-            scheda.esercizio_id.push(Number(eser.esercizio_id))
-            scheda.serie.push(Number(eser.serie))
-            scheda.ripetizioni.push(Number(eser.ripetizioni))
+            const serie = Number(eser.serie)
+            const ripetizioni = Number(eser.ripetizioni)
+            const esercizio_id = Number(eser.esercizio_id)
+            
+
+            if(esercizio_id==0){
+                setSchedaError("devi selezionare un esercizio")
+                return 
+            }
+
+            if(!Number.isNaN(serie) && !Number.isNaN(ripetizioni) && esercizio_id!=0){
+                scheda.esercizio_id.push(esercizio_id)
+                scheda.serie.push(serie)
+                scheda.ripetizioni.push(ripetizioni)
+                setSchedaError("")
+            }else{
+                setSchedaError("le serie e le ripetizioni devono essere un numero")
+                return
+            }
+
+            
 
         })
 
-        console.log(scheda)
+        //addScheda()
+        
     }
 
 
@@ -98,6 +184,7 @@ function AddSchede() {
         
         isInitialized.current = true;
         getEsercizi();
+        getAllSchede()
     }, [listaEsercizi]);
 
     const handleFormChange = (
@@ -126,9 +213,9 @@ function AddSchede() {
         setListaEsercizi(data); 
     }
 
-    const handleEmailFetch = (email: string) => {
-        console.log("Email received from child:", email);
+    const handleRuoloFetch = (ruolo: string , email: string) => {
         setEmail(email);
+        setRuolo(ruolo);
        
     };
 
@@ -136,7 +223,8 @@ function AddSchede() {
         <>
             <div>
                 <h2>Aggiungi Scheda</h2>       
-                <input
+                <input            
+                          
                     className="nameInput"
                     type="text"
                     placeholder="Nome scheda"
@@ -145,9 +233,9 @@ function AddSchede() {
                     }}
                 />
                 <div>
-                    <PatientSelector onEmailFetch={handleEmailFetch}  setSelectedPatient={setSelectedPatient} currentSelectedPatient={selectedPatient}/>
+                    <PatientSelector onDataFetch={handleRuoloFetch}  setSelectedPatient={setSelectedPatient} currentSelectedPatient={selectedPatient}/>
                 </div>
-                {scheda ? null : ""}
+                
                 <form>
                     {listaEsercizi.map((input, index) => {
                         return (
@@ -210,7 +298,9 @@ function AddSchede() {
             </div>
             <div>
                 <button type="button" onClick={createScheda} >Crea</button>
-
+            </div>
+            <div>
+                <h4 className="schedaError">{schedaError}</h4>
             </div>
         </>
     );

@@ -7,14 +7,14 @@ type PatientSelectionComponentProps = {
     
     setSelectedPatient: (value: string) => void;
     currentSelectedPatient?: string;
-    onEmailFetch?: (email: string) => void
+    onDataFetch?: (ruolo: string , email: string) => void
 };
 
-function PatientSelectionComponent({ setSelectedPatient, currentSelectedPatient, onEmailFetch }: PatientSelectionComponentProps){
+function PatientSelectionComponent({ setSelectedPatient, currentSelectedPatient, onDataFetch }: PatientSelectionComponentProps){
     
-    const [email, setEmail] = useState()
     const [ruolo, setRuolo] = useState<string>();
-    const [pazienti, setPazienti] = useState<{paziente:string}[]>();
+  
+    const [pazienti, setPazienti] = useState<{email:string}[]>();
     const isInitialized = useRef(false);
 
 
@@ -22,13 +22,15 @@ function PatientSelectionComponent({ setSelectedPatient, currentSelectedPatient,
     useEffect(() => {
         if (isInitialized.current) return;
         isInitialized.current = true;
-        getData()
+        getRuolo()
+        getPazienti()
+        
     }, []);
 
 
 
-    const getData = async () => {
-        let fetchedEmail: string | undefined
+    const getRuolo = async () => {
+        let fetchedData: {ruolo: string , email: string} | undefined
         try {
             await axios.get(`${import.meta.env.VITE_API_KEY}/getDatiUtente`, {
                     headers: {
@@ -40,32 +42,38 @@ function PatientSelectionComponent({ setSelectedPatient, currentSelectedPatient,
                 .then((resp) => {
                     if (resp.status === 200){
                         setRuolo(resp.data.ruolo); 
-                        // setEmail(resp.data.email); // You might not need this state anymore
-                        fetchedEmail = resp.data.email; // Store email locally
                         
-                        // Call the callback function if it was provided
-                        if (fetchedEmail && onEmailFetch) {
-                            onEmailFetch(fetchedEmail);
+                        fetchedData = {
+                            ruolo : resp.data.ruolo,
+                            email : resp.data.email
+                        }
+                        
+                        
+                        if (fetchedData && onDataFetch) {
+                            onDataFetch(fetchedData.ruolo, fetchedData.email);
                         }
                     }  
                 });
-
-                if (!fetchedEmail) {
-                    console.error("Email non trovato per recuperare i pazienti.");
-                    return; 
-                 }
-                await axios.get(`${import.meta.env.VITE_API_KEY}/getPazienti?email=${fetchedEmail}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "access_token"
-                        )}`,
-                    },
-                }).then((resp) => {
-                    if (resp.status === 200) setPazienti(resp.data)
-                })
         } catch (error) {
             console.error(error);
             
+        }
+    }
+
+    async function getPazienti(){
+        try {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/getPazienti`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                    )}`,
+                },
+            }).then((resp) => {
+                if (resp.status === 200) setPazienti(resp.data)
+            })
+            
+        } catch (error) {
+            console.error(error)
         }
     }
 
@@ -75,7 +83,7 @@ function PatientSelectionComponent({ setSelectedPatient, currentSelectedPatient,
                 <div>
                     <h4>Paziente: </h4>
                     {pazienti ? <Dropdown setSelectedValue={setSelectedPatient} 
-                                            itemList={pazienti.map((item) => item.paziente)} 
+                                            itemList={pazienti.map((item) => item.email)} 
                                             value={currentSelectedPatient}/> : ""}
                 </div>
             )
@@ -83,6 +91,7 @@ function PatientSelectionComponent({ setSelectedPatient, currentSelectedPatient,
 
 
         }else{
+            
             return null
         }
     }
