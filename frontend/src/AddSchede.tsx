@@ -171,8 +171,6 @@ function AddSchede() {
             }
         })
         if(!flag.includes(false)) addScheda()
-
-        
         
     }
 
