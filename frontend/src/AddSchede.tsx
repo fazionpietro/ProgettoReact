@@ -118,7 +118,7 @@ function AddSchede() {
 
     function createScheda(){
 
-        console.log(listaEsercizi)
+        
         
 
         if(allSchedeName?.some((item) => item.nome == scheda.nome_scheda)){
@@ -173,7 +173,7 @@ function AddSchede() {
 
         })
 
-        //addScheda()
+        addScheda()
         
     }
 
