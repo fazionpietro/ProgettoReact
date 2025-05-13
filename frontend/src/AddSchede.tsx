@@ -118,7 +118,7 @@ function AddSchede() {
 
     function createScheda(){
 
-  
+        
         
 
         if(allSchedeName?.some((item) => item.nome == scheda.nome_scheda)){
@@ -148,7 +148,7 @@ function AddSchede() {
 
         
         
-        listaEsercizi.map((eser) => {
+        const flag  = listaEsercizi.map((eser) => {
             const serie = Number(eser.serie)
             const ripetizioni = Number(eser.ripetizioni)
             const esercizio_id = Number(eser.esercizio_id)
@@ -156,24 +156,23 @@ function AddSchede() {
 
             if(esercizio_id==0){
                 setSchedaError("devi selezionare un esercizio")
-                return 
+                return false
             }
 
-            if(!Number.isNaN(serie) && !Number.isNaN(ripetizioni) && esercizio_id!=0){
+            if(!Number.isNaN(serie) && !Number.isNaN(ripetizioni)){
                 scheda.esercizio_id.push(esercizio_id)
                 scheda.serie.push(serie)
                 scheda.ripetizioni.push(ripetizioni)
                 setSchedaError("")
+                return true
             }else{
                 setSchedaError("le serie e le ripetizioni devono essere un numero")
-                return
+                return false
             }
-
-            
-
         })
+        if(!flag.includes(false)) addScheda()
 
-        addScheda()
+        
         
     }
 
