@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import NavbarItem from "./NavbarItem";
 
 const navbarElements = [
-    {label: 'Home', href: '/HomePage'},
+    {label: 'Home', href: '/'},
     {label: 'Pazienti', href: '/Patience'},
     {label: 'Utente', href: '/Profile'},
     {label: 'Schede Allenamento', href: '/Exercise'}

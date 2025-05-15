@@ -84,3 +84,8 @@ input{
              5px 5px 5px #9e9a9a;
   border-radius: 10px;
 }
+
+.inputObbiettivo{
+  width: 50px;
+  height: 5px;
+}
