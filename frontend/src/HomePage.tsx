@@ -12,6 +12,7 @@ import GraficoTorta from './GraficoTorta';
 import GraficoDistGiornaliero from './GraficoDistGiornaliero';
 import GraficoDistSettimanale from './GraficoDistSettimanale';
 import GraficoDistMensile from './GraficoDistMensile';
+import Navbar from './Navbar';
 
 function HomePage(){
 
@@ -114,82 +115,85 @@ function HomePage(){
     }
 
     return(
-            <div className='card'>
-                <div className='container'>
-                    <div className='item'>
-                        <p>Grafico Storico dei Passi</p>
-                        <button onClick={() => setGraficoAttivo(1)}>grafico giornaliero</button>
-                        <button onClick={() => setGraficoAttivo(2)}>grafico settimanale</button>
-                        <button onClick={() => setGraficoAttivo(3)}>grafico mensile</button>
-                        {stoData.length > 0 ? storicoPassiPlot(): <p>nessun dato</p>};
-                    </div>
-                    <div className='item'>
-                        <p>Tipologia di Cardio</p>
-                        {stoData.length > 0 ? <GraficoTorta dati={stoData}/>: <p>nessun dato</p>};
-                    </div>  
-                    <div className='item'>
-                        <p>Grafico Storico delle Calorie</p>
-                        <button onClick={() => setGraficoCal(1)}>grafico giornaliero</button>
-                        <button onClick={() => setGraficoCal(2)}>grafico settimanale</button>
-                        <button onClick={() => setGraficoCal(3)}>grafico mensile</button>
-                        {stoData.length > 0 ? storicoCalPlot(): <p>nessun dato</p>};                       
-                    </div>
-                    
-                    
+            <div>
+                <Navbar/>
+                <div className='card'>
+                    <div className='container'>
+                        <div className='item'>
+                            <p>Grafico Storico dei Passi</p>
+                            <button onClick={() => setGraficoAttivo(1)}>grafico giornaliero</button>
+                            <button onClick={() => setGraficoAttivo(2)}>grafico settimanale</button>
+                            <button onClick={() => setGraficoAttivo(3)}>grafico mensile</button>
+                            {stoData.length > 0 ? storicoPassiPlot(): <p>nessun dato</p>};
+                        </div>
+                        <div className='item'>
+                            <p>Tipologia di Cardio</p>
+                            {stoData.length > 0 ? <GraficoTorta dati={stoData}/>: <p>nessun dato</p>};
+                        </div>  
+                        <div className='item'>
+                            <p>Grafico Storico delle Calorie</p>
+                            <button onClick={() => setGraficoCal(1)}>grafico giornaliero</button>
+                            <button onClick={() => setGraficoCal(2)}>grafico settimanale</button>
+                            <button onClick={() => setGraficoCal(3)}>grafico mensile</button>
+                            {stoData.length > 0 ? storicoCalPlot(): <p>nessun dato</p>};                       
+                        </div>
+                        
+                        
 
-                    <div className='containerecord'>
-                        <div className='item'>
-                            <p>Obbiettivo Calorie</p>
-                            <input type= "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
+                        <div className='containerecord'>
+                            <div className='item'>
+                                <p>Obbiettivo Calorie</p>
+                                <input type= "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
+                            </div>
+                            <div className='item'>
+                                <p>Record Passi</p>
+                                {stoMaxSteps !==null ? stoMaxSteps : 'nessun dato'}
+                            </div>
+                            <div className='item'>
+                                <p>Obbiettivo Passi</p>
+                                <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
+                            </div>
+                            <div className='item'>
+                                <p>Record Passi Giornaliero</p>
+                                {maxSteps !==null ? maxSteps : 'nessun dato'}
+                            </div>
                         </div>
-                        <div className='item'>
-                            <p>Record Passi</p>
-                            {stoMaxSteps !==null ? stoMaxSteps : 'nessun dato'}
-                        </div>
-                        <div className='item'>
-                            <p>Obbiettivo Passi</p>
-                            <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
-                        </div>
-                        <div className='item'>
-                            <p>Record Passi Giornaliero</p>
-                            {maxSteps !==null ? maxSteps : 'nessun dato'}
-                        </div>
-                    </div>
 
-                    <div className='item'>
-                        <p>Grafico Storico della Distanza</p>
-                        <button onClick={() => setGraficoDistanza(1)}>grafico giornaliero</button>
-                        <button onClick={() => setGraficoDistanza(2)}>grafico settimanale</button>
-                        <button onClick={() => setGraficoDistanza(3)}>grafico mensile</button>
-                        {stoData.length > 0 ? storicoDistanza(): <p>nessun dato</p>};                       
-                    </div>
+                        <div className='item'>
+                            <p>Grafico Storico della Distanza</p>
+                            <button onClick={() => setGraficoDistanza(1)}>grafico giornaliero</button>
+                            <button onClick={() => setGraficoDistanza(2)}>grafico settimanale</button>
+                            <button onClick={() => setGraficoDistanza(3)}>grafico mensile</button>
+                            {stoData.length > 0 ? storicoDistanza(): <p>nessun dato</p>};                       
+                        </div>
 
-                    <div className='conainerecord'>
-                        <div className='item'>
-                            <p>Obbiettivo Distanza</p>
-                            <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
+                        <div className='conainerecord'>
+                            <div className='item'>
+                                <p>Obbiettivo Distanza</p>
+                                <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
+                            </div>
+                            <div className='item'>
+                                <p>Record Distanza</p>
+                                {totDistance !==null ? totDistance : 'nessun dato'}
+                            </div>
+                            <div className='item'>
+                                <p>Record Distanza Giornaliero</p>
+                                {gDistance !==null ? gDistance : 'nessun dato'}
+                            </div>
                         </div>
-                        <div className='item'>
-                            <p>Record Distanza</p>
-                            {totDistance !==null ? totDistance : 'nessun dato'}
-                        </div>
-                        <div className='item'>
-                            <p>Record Distanza Giornaliero</p>
-                            {gDistance !==null ? gDistance : 'nessun dato'}
-                        </div>
+                        
                     </div>
-                    
+                    <br/>
+                    <label>
+                        inserire il file di dati 
+                        <input type='file' accept='.csv' onChange={handleFileUpload}></input>
+                    </label>
+                    <br/><br/>
+                    <label>
+                        inserire lo storico
+                        <input type='file' accept='.csv' onChange={handleStorico}></input>
+                    </label>
                 </div>
-                <br/>
-                <label>
-                    inserire il file di dati 
-                    <input type='file' accept='.csv' onChange={handleFileUpload}></input>
-                </label>
-                <br/><br/>
-                <label>
-                    inserire lo storico
-                    <input type='file' accept='.csv' onChange={handleStorico}></input>
-                </label>
             </div>
     )
 }
