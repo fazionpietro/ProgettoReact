@@ -16,11 +16,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Routes>
       
-        <Route path='/Login' element={<AppLogin />} />
+        <Route path='/login' element={<AppLogin />} />
         <Route path='/Register' element={<AppRegister />} />
 
         <Route element={<PrivateRoute />}>
           <Route path='/' element={<HomePage />}></Route>
+
           <Route path='/Exercise' element={<Exercise />}></Route>
           <Route path='/Patience' element={<Patience />}></Route>
           <Route path='/Profile' element={<Profile />}></Route>
