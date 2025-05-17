@@ -1,0 +1,23 @@
+#patienttable td{
+    border: 1px solid #ddd;
+    padding: 8px;
+    background-color: white;
+}
+
+#patienttable th{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04aa6d;
+    color: white;
+}
+
+#patienttable tr{
+    background-color: white;
+}
+
+#patienttable{
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+}

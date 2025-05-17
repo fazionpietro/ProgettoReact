@@ -12,8 +12,6 @@ import Patience from './Patience.tsx';
 import Profile from './Profile.tsx';
 import AddSchede from './AddSchede.tsx';
 
-import AddSchede from './AddSchede.tsx';
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Routes>
