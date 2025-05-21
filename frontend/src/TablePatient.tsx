@@ -4,27 +4,27 @@ import './stylesheets/table.css';
 
 interface Paziente {
     email: string;
-    role: string
+    name: string;
+    cognome: string
 }
 
 const TablePatient: React.FC=() => {
     const [patient, setPatient] = useState<Paziente[]>([]);
 
     const dati = async () => {
+        const headers = {Authorization: `Bearer ${localStorage.getItem("access_token")}`};
             try {
-                await axios.get(`${import.meta.env.VITE_API_KEY}/getPazienti`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem(
-                    "access_token"
-                    )}`,
-                },
-                }).then((resp) => {
-                    if (resp.status === 200) setPatient(resp.data)
-                })
-                        
+                const [paziente] = await Promise.all([
+                    axios.get(`${import.meta.env.VITE_API_KEY}/getPazientiNome`, {headers}),
+                    //axios.get(`${import.meta.env.VITE_API_KEY}/getPazientiCognome`, {headers}),
+                    //axios.get(`${import.meta.env.VITE_API_KEY}/getPazienti`, {headers}),
+                ])
+                //const pazienti = [...nome.data, ...cognome.data, ...email.data];
+
+                setPatient(paziente.data);
                 } catch (error) {
                     console.error(error)
-                }
+                }            
         }
 
     useEffect(() =>{
@@ -37,15 +37,17 @@ const TablePatient: React.FC=() => {
             <table id='patienttable'>
                 <thead>
                     <tr>
+                        <th>nome</th>
+                        <th>cognome</th>
                         <th>email</th>
-                        <th>role</th>
                     </tr>
                 </thead>
                 <tbody>
                     {patient.map((p)=> (
                         <tr key={p.email}>
+                            <td>{p.name}</td>
+                            <td>{p.cognome}</td>
                             <td>{p.email}</td>
-                            <td>{p.role}</td>
                         </tr>
                     ))}
                 </tbody>
