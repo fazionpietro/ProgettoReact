@@ -25,7 +25,7 @@ function AddSchede() {
     const [schedaError, setSchedaError] = useState("");
     const [esercizi, setEsercizi] = useState<esercizioData[]>();
     const isInitialized = useRef(false);
-    const [s, setS] = useState<string[]>();
+    const [eserciziDisponibili, setEserciziDisponibili] = useState<string[]>();
     const [selectedPatient , setSelectedPatient] = useState<string>()
     const [scheda, setScheda] = useState<schedaEserciziData>({
         esercizio_id: [],
@@ -59,7 +59,7 @@ function AddSchede() {
                     if (resp.status === 200) setEsercizi(resp.data);
                     const r: esercizioData[] = resp.data;
                     
-                    setS(r.map((eser) => eser.nome));
+                    setEserciziDisponibili(r.map((eser) => eser.nome));
                 });
 
                 
@@ -238,7 +238,8 @@ function AddSchede() {
                         return (
                             <div key={index}>
                                 <h4>Esercizio: </h4>
-                                {s ? (
+
+                                {eserciziDisponibili ? (
                                     <select
                                     value={
                                         esercizi?.find((item) => item.id.toString() === input.esercizio_id)
@@ -258,7 +259,7 @@ function AddSchede() {
                                         <option value="" >
                                             Select Option
                                         </option>
-                                        {s.map((option) => (
+                                        {eserciziDisponibili.map((option) => (
                                             <option key={option} value={option}>
                                                 {option}
                                             </option>
