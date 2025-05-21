@@ -17,6 +17,8 @@ function AppRegister() {
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
     const [ruolo, setRuolo]= useState("utente");
+    const [name, setName] = useState<string>();
+    const [cognome, setCognome]= useState<string>();
     const [registerError, setRegisterError] = useState<any>("");
     const roleList : string[]= ["utente", "personalTrainer", "medico"]
 
@@ -28,7 +30,7 @@ function AppRegister() {
         
         const AxiosResponse = await axios
             .post(
-                `${import.meta.env.VITE_API_KEY}/signup?email=${email}&password=${password}&ruolo=${ruolo}`
+                `${import.meta.env.VITE_API_KEY}/signup?email=${email}&password=${password}&ruolo=${ruolo}&name=${name}&surname${cognome}`
             )
             .then((res: AxiosResponse) => {
                 console.log(res);
@@ -41,6 +43,8 @@ function AppRegister() {
                 setEmail("");
                 setRuolo("");
                 setPassword("");
+                setName("");
+                setCognome("");
                 localStorage.clear();
             });
     }
@@ -48,6 +52,30 @@ function AppRegister() {
     return (
         <div className="card">
             <form onSubmit={handleRegister}>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="nome"
+                        name="name"
+                        value={name}
+                        onChange={(e) => {
+                            setName(e.target.value);
+                            setRegisterError("");
+                        }}
+                    />
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="cognome"
+                        name="surname"
+                        value={cognome}
+                        onChange={(e) => {
+                            setCognome(e.target.value);
+                            setRegisterError("");
+                        }}
+                    />
+                </div>
                 <div>
                     <input
                         type="text"

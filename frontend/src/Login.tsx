@@ -18,6 +18,8 @@ function AppLogin() {
     const [password, setPassword] = useState<string>();
     const navigate = useNavigate();
     const [logInError, setlogInError] = useState<string>("");
+    const [nome, setNome] = useState<string>();
+    const [cognome, setCognome] = useState<string>();
 
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault();
