@@ -84,6 +84,7 @@ const authenticateToken = (req: any, res: any, next: any) => {
                 const datiUtente : userData= await getDatiUtente(email)
                 //console.log(datiUtente)
                 res.status(200).send({
+                    "username": `${datiUtente.name} ${datiUtente.surname}`,
                     "email": datiUtente.email,
                     "ruolo": datiUtente.ruolo               
                 });
@@ -232,8 +233,9 @@ app.post('/api/signup', async (req: express.Request<{},{},{}, userData>, res: ex
                 }
                 
             }
+            
             const hashedPsw = await bcrypt.hash(query.password,8)
-            await addUser(query.email, hashedPsw, query.ruolo)
+            await addUser(query.email, hashedPsw, query.ruolo, query.name, query.surname)
             const token = jwt.sign({ id: query.email }, secretKey, { expiresIn: '1h' });
             res.status(200).json({"token": token})
     } catch (err: any) {
@@ -381,9 +383,9 @@ async function getAllIdenty() {
 }
 
 
-function addUser(email: string,psw: string, ruolo: string) {
+function addUser(email: string,psw: string, ruolo: string, nome: string, cognome: string) {
     return new Promise((resolve, reject) => {
-        db.run('INSERT INTO users(email, password, ruolo) VALUES(?,?,?)', [email, psw, ruolo], (err) => {
+        db.run('INSERT INTO users(email, password, ruolo, name, surname) VALUES(?,?,?,?,?)', [email, psw, ruolo, nome, cognome], (err) => {
 
             if(err)
                 reject(err);

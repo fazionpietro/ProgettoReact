@@ -16,8 +16,8 @@ function AppRegister() {
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
-    const [ruolo, setRuolo]= useState("utente");
-    const [name, setName] = useState<string>();
+    const [ruolo, setRuolo]= useState("");
+    const [nome, setNome] = useState<string>();
     const [cognome, setCognome]= useState<string>();
     const [registerError, setRegisterError] = useState<any>("");
     const roleList : string[]= ["utente", "personalTrainer", "medico"]
@@ -27,10 +27,11 @@ function AppRegister() {
 
     async function handleRegister(e: React.FormEvent) {
         e.preventDefault();
+        console.log(email, password, ruolo, nome, cognome);
         
         const AxiosResponse = await axios
             .post(
-                `${import.meta.env.VITE_API_KEY}/signup?email=${email}&password=${password}&ruolo=${ruolo}&name=${name}&surname${cognome}`
+                `${import.meta.env.VITE_API_KEY}/signup?email=${email}&password=${password}&ruolo=${ruolo}&name=${nome}&surname=${cognome}`
             )
             .then((res: AxiosResponse) => {
                 console.log(res);
@@ -43,7 +44,7 @@ function AppRegister() {
                 setEmail("");
                 setRuolo("");
                 setPassword("");
-                setName("");
+                setNome("");
                 setCognome("");
                 localStorage.clear();
             });
@@ -52,14 +53,26 @@ function AppRegister() {
     return (
         <div className="card">
             <form onSubmit={handleRegister}>
+                 <div>
+                    <input
+                        type="text"
+                        placeholder="Email"
+                        name="email"
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            setRegisterError("");
+                        }}
+                    />
+                </div>
                 <div>
                     <input
                         type="text"
                         placeholder="nome"
                         name="name"
-                        value={name}
+                        value={nome}
                         onChange={(e) => {
-                            setName(e.target.value);
+                            setNome(e.target.value);
                             setRegisterError("");
                         }}
                     />
@@ -76,20 +89,9 @@ function AppRegister() {
                         }}
                     />
                 </div>
+               
                 <div>
-                    <input
-                        type="text"
-                        placeholder="Email"
-                        name="email"
-                        value={email}
-                        onChange={(e) => {
-                            setEmail(e.target.value);
-                            setRegisterError("");
-                        }}
-                    />
-                </div>
-                <div>
-                    <Dropdown setSelectedValue={setRuolo} itemList={roleList}/>
+                    <Dropdown setSelectedValue={setRuolo} itemList={roleList} value={ruolo}/>
                     
                 </div>
                 <div>
