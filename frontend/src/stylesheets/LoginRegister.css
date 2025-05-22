@@ -89,3 +89,53 @@ input{
   width: 50px;
   height: 5px;
 }
+
+.navbar{
+  border-radius: 50px;
+  padding-bottom: 20px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+}
+
+.navbar ul{
+  list-style-type: none;
+  background-color:#146cd8;
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.navbar a{
+  color: white;
+  text-decoration: none;
+  padding: 15px;
+  display: block;
+  text-align: center;
+}
+
+.navbar a:hover{
+  background-color: #0e4d9b;
+}
+
+.navbar li{
+  float: left;
+  text-align: center;
+}
+
+.profile{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.profile img{
+  width: 150px;
+  height: auto;
+  border-radius: 50%;
+  margin: 10px;
+}

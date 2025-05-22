@@ -5,30 +5,35 @@ import './stylesheets/table.css';
 interface Paziente {
     email: string;
     name: string;
-    cognome: string
+    surname : string;
+    ruolo : string;
 }
 
 const TablePatient: React.FC=() => {
     const [patient, setPatient] = useState<Paziente[]>([]);
 
-    const dati = async () => {
-        const headers = {Authorization: `Bearer ${localStorage.getItem("access_token")}`};
-            try {
-                const [paziente] = await Promise.all([
-                    axios.get(`${import.meta.env.VITE_API_KEY}/getPazientiNome`, {headers}),
-                    //axios.get(`${import.meta.env.VITE_API_KEY}/getPazientiCognome`, {headers}),
-                    //axios.get(`${import.meta.env.VITE_API_KEY}/getPazienti`, {headers}),
-                ])
-                //const pazienti = [...nome.data, ...cognome.data, ...email.data];
-
-                setPatient(paziente.data);
-                } catch (error) {
-                    console.error(error)
-                }            
+    const getDati = async () => {
+        try {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/getAllIdenty`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                    )}`,
+                },
+            })
+            .then((resp) => {
+                if (resp.status === 200){ 
+                    setPatient(resp.data)
+                }  
+            });
+        } catch (error) {
+            console.error(error);
+                
         }
+    }
 
     useEffect(() =>{
-        dati();
+        getDati();
     },[]);
 
 
@@ -37,16 +42,16 @@ const TablePatient: React.FC=() => {
             <table id='patienttable'>
                 <thead>
                     <tr>
-                        <th>nome</th>
-                        <th>cognome</th>
+                        <th>name</th>
+                        <th>username</th>
                         <th>email</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {patient.map((p)=> (
+                    {patient.filter((p)=> p.ruolo === "utente").map((p)=> (
                         <tr key={p.email}>
                             <td>{p.name}</td>
-                            <td>{p.cognome}</td>
+                            <td>{p.surname}</td>
                             <td>{p.email}</td>
                         </tr>
                     ))}
