@@ -106,6 +106,22 @@ const authenticateToken = (req: any, res: any, next: any) => {
         
     })
 
+    app.get('/api/getAllIdenty', authenticateToken, async (req: express.Request, res: express.Response)=>{
+        try{
+            const bearerToken = req.headers['authorization'];
+            if(bearerToken){
+                const decodedToken : any= jwt.decode(bearerToken.slice(7))
+                if(decodedToken){
+                    const utenti = await getAllIdenty();
+                    res.status(200).send(utenti);
+                }
+            }
+        }catch (error: any) {
+            res.status(401).json({"error": error.message});
+            console.error(error.message);
+        }
+    })
+
 
 
 

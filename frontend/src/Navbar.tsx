@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import NavbarItem from "./NavbarItem";
+import "./stylesheets/LoginRegister.css"
 
 const navbarElements = [
     {label: 'Home', href: '/'},
@@ -14,14 +15,14 @@ type NavbarProps = {
 
 function Navbar(props: NavbarProps) {
     return(
-        <nav>
+        <nav className="navbar">
             <ul>
                 {navbarElements.map(element=>{
                     return(
                         <NavbarItem
                             key={element.href}
                             href={element.href}
-                            label={element.href}
+                            label={element.label}
                         />
                     )
                 })}
