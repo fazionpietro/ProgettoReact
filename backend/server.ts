@@ -312,11 +312,11 @@ app.post('/api/addSchedaEsercizi',authenticateToken, async (req: express.Request
     
 })
 
-app.post('/api/addEsercizi',authenticateToken, async (req: express.Request<{},{},{}, esercizioData>, res: express.Response)=> {
-    const query: esercizioData = req.query;
+app.post('/api/addEsercizi',authenticateToken, async (req: express.Request, res: express.Response)=> {
+    const data: esercizioData = req.body;
     
     try {
-        const newD = await addEsercizio(query)
+        const newD = await addEsercizio(data)
         res.status(200).json({'success': newD})
 
     } catch (err: any) {
@@ -463,7 +463,7 @@ async function addEserciziScheda(data : schedaEserciziData){
 async function addEsercizio(data : esercizioData){
     return new Promise((resolve, reject)=>{
         
-        
+       
         db.run('INSERT INTO esercizi(nome,descrizione,muscolo_targhet,difficolta) VALUES(?,?,?,?)', 
             [   data.nome,
                 data.descrizione,
