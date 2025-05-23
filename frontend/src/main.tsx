@@ -1,7 +1,6 @@
-import React, { StrictMode } from 'react';
+
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Router, Routes } from "react-router";
-import { useState } from 'react';
 import ReactDOM from "react-dom/client";
 import PrivateRoute from './PrivateRoute.tsx';
 import AppLogin from './Login.tsx';
@@ -11,6 +10,8 @@ import Exercise from './Exercise.tsx';
 import Patience from './Patience.tsx';
 import Profile from './Profile.tsx';
 import AddSchede from './AddSchede.tsx';
+import AggiungiUtente from './AggiungiUtente.tsx';
+import AddEsercizio from "./AggiungiEsercizio.tsx";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -18,6 +19,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       
         <Route path='/login' element={<AppLogin />} />
         <Route path='/Register' element={<AppRegister />} />
+        <Route path='/utente' element={<AggiungiUtente/>}/>
+        <Route path='/addEsercizio' element={<AddEsercizio/>}/>
 
         <Route element={<PrivateRoute />}>
           <Route path='/' element={<HomePage />}></Route>

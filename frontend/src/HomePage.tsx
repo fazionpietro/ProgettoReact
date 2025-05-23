@@ -2,16 +2,16 @@ import { useState } from 'react';
 import './stylesheets/LoginRegister.css';
 //import { Card } from 'react-bootstrap';
 import Papa from 'papaparse';
-import StoricoPassiGiornaliero from './StoricoPassiGiornaliero';
-import StoricoPassiSettimanale from './StoricoPassiSettimanale';
-import StoricoPassiMensile from './StoricoPassiMensile';
-import StoricoCalorieGiornaliero from './StoricoCalorieGiornaliero';
-import StoricoCalorieSettimanale from './StoricoCalorieSettimanale';
-import StoricoCalorieMensile from './StoricoCalorieMensile';
-import GraficoTorta from './GraficoTorta';
-import GraficoDistGiornaliero from './GraficoDistGiornaliero';
-import GraficoDistSettimanale from './GraficoDistSettimanale';
-import GraficoDistMensile from './GraficoDistMensile';
+import StoricoPassiGiornaliero from './Grafici/StoricoPassiGiornaliero';
+import StoricoPassiSettimanale from './Grafici/StoricoPassiSettimanale';
+import StoricoPassiMensile from './Grafici/StoricoPassiMensile';
+import StoricoCalorieGiornaliero from './Grafici/StoricoCalorieGiornaliero';
+import StoricoCalorieSettimanale from './Grafici/StoricoCalorieSettimanale';
+import StoricoCalorieMensile from './Grafici/StoricoCalorieMensile';
+import GraficoTorta from './Grafici/GraficoTorta';
+import GraficoDistGiornaliero from './Grafici/GraficoDistGiornaliero';
+import GraficoDistSettimanale from './Grafici/GraficoDistSettimanale';
+import GraficoDistMensile from './Grafici/GraficoDistMensile';
 import Navbar from './Navbar';
 
 function HomePage(){

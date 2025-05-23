@@ -5,5 +5,6 @@ type schedaEserciziData = {
     nome_scheda: string;
     serie: number[];
     ripetizioni: number[];
+    note: string
 };
 export default schedaEserciziData
