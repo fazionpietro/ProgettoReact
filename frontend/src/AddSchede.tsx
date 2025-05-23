@@ -2,20 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import PatientSelector from "./Dropdown/PatientSelectionComponent";
 
+import schedaEserciziData from "./types/schedaEserciziType";
+
 type esercizioData = {
     esercizio_id: string;
     serie: string;
     ripetizioni: string;
     [key: string]: string;
 };
-type schedaEserciziData = {
-    esercizio_id: number[];
-    user_email_id: string;
-    nome_scheda: string;
-    serie: number[];
-    ripetizioni: number[];
-    note: string;
-};
+
 
 function AddSchede() {
     const [allSchedeName, setAlleSchedeName] = useState<{ nome: string }[]>();
