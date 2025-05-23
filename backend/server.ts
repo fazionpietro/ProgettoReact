@@ -297,13 +297,7 @@ app.post('/api/login', async (req: express.Request<{},{},{}, userData>, res: exp
 
 
 
-type newSchedaEsercizi = {
-    esercizio_id: number[];
-    user_email_id: string;
-    nome_scheda: string;
-    serie: number[];
-    ripetizioni: number[];
-}
+
 
 app.post('/api/addSchedaEsercizi',authenticateToken, async (req: express.Request, res: express.Response)=> {
     
@@ -430,12 +424,12 @@ function getScheda(nome:string){
     })
 }
 
-async function addEserciziScheda(data : newSchedaEsercizi){
+async function addEserciziScheda(data : schedaEserciziData){
 
     return new Promise(async (resolve, reject)=>{
         console.log("", data);
         
-        await db.run('INSERT INTO schede(nome) VALUES(?)', [data.nome_scheda])
+        await db.run('INSERT INTO schede(nome, note) VALUES(?,?)', [data.nome_scheda, data.note])
         let scheda_id = await getScheda(data.nome_scheda)
         console.log("", scheda_id)
         for (let index = 0; index < data.esercizio_id.length; index++) {

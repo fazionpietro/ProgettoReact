@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./stylesheets/Dropdown.css";
+import "../stylesheets/Dropdown.css";
 
 type DropdownProps = {
     itemList: string[];
