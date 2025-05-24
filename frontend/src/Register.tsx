@@ -3,7 +3,7 @@ import "./stylesheets/LoginRegister.css";
 import axios, { isCancel, AxiosError, Axios, AxiosResponse } from "axios";
 import { Card} from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router";
-import Dropdown from "./Dropdown";
+import Dropdown from "./Dropdown/Dropdown";
 
 type response = {
     status: number;
@@ -20,14 +20,21 @@ function AppRegister() {
     const [nome, setNome] = useState<string>();
     const [cognome, setCognome]= useState<string>();
     const [registerError, setRegisterError] = useState<any>("");
-    const roleList : string[]= ["utente", "personalTrainer", "medico"]
+    const roleList : string[]= ["Personal Trainer", "Medico"]
 
 
 
 
     async function handleRegister(e: React.FormEvent) {
         e.preventDefault();
-        console.log(email, password, ruolo, nome, cognome);
+        let realRole;
+        if(ruolo == "Personal Trainer")
+            realRole = "personalTrainer"
+        else
+            realRole = "medico"
+
+
+        
         
         const AxiosResponse = await axios
             .post(
@@ -40,7 +47,13 @@ function AppRegister() {
             })
             .catch((error: AxiosError<string>) => {
                 console.error(error.response);
-                setRegisterError("L'email o la password esistono");
+                
+                if(email != "" || password != "")
+                    setRegisterError("L'email o la password esistono");
+                else
+                    setRegisterError("Inserisci un email o la password");
+
+
                 setEmail("");
                 setRuolo("");
                 setPassword("");
