@@ -412,6 +412,7 @@ function addUser(email: string,psw: string, ruolo: string, nome: string, cognome
 }
 async function getUserSchedeEsercizi(email: string){
     return new Promise<schedaEserciziData[]>((resolve, reject)=>{
+        console.log(email)
         db.all(`SELECT * FROM schedaEsercizi INNER JOIN schede ON schedaEsercizi.scheda_id=schede.id WHERE user_email='${email}'`, (err, res: schedaEserciziData[])=>{
             if(err) reject(err);
             else resolve(res);
