@@ -10,6 +10,10 @@ interface exercise{
     serie: number;
 }
 
+interface nomeEsercizio{
+    nome: string;
+}
+
 interface user{
     username: string;
     email : string;
@@ -19,6 +23,7 @@ interface user{
 const TableExercise: React.FC=() =>{
     const [ex, setEx] = useState<exercise[]>([]);
     const [user, setUser] = useState<user>();
+    const [ne, setNE] = useState<nomeEsercizio[]>([]);
 
     //inserisci getdatiutente()
     const getUtente = async () =>{
@@ -33,6 +38,26 @@ const TableExercise: React.FC=() =>{
         .then((resp) => {
             if (resp.status === 200){ 
                 setUser(resp.data);
+            }  
+        });
+        } catch (error) {
+            console.error(error);        
+        }
+    }
+
+    const getNomeEsercizio = async () =>{
+        try {
+        await axios.get(`${import.meta.env.VITE_API_KEY}/getNomeEsercizio`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem(
+                "access_token"
+                )}`,
+            },
+        })
+        .then((resp) => {
+            if (resp.status === 200){ 
+                setNE(resp.data.data);
+                console.log(resp.data.data)
             }  
         });
         } catch (error) {
@@ -58,7 +83,6 @@ const TableExercise: React.FC=() =>{
             .then((resp) => {
                 if (resp.status === 200){ 
                     setEx(resp.data.data);
-                    console.log("dati: ", resp.data.data);
                 }  
             });
             } catch (error) {
@@ -69,6 +93,7 @@ const TableExercise: React.FC=() =>{
 
     useEffect(()=>{
         getUtente();
+        getNomeEsercizio();
     },[]);
 
     useEffect(()=>{
@@ -76,6 +101,10 @@ const TableExercise: React.FC=() =>{
             getEsercizi();
         }
     },[user]);
+
+    const handleClick = () =>{
+        console.log("ocio che elimina");
+    }
 
     return(
         <div>
@@ -86,15 +115,17 @@ const TableExercise: React.FC=() =>{
                         <th>esercizioId</th>
                         <th>serie</th>
                         <th>ripetizioni</th>
+                        <th>elimina esercizio</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {ex.map((e) => (
+                    {ex.map((e,i) => (
                         <tr>
                             <td>{e.scheda_id}</td>
-                            <td>{e.esercizio_id}</td>
+                            <td>{ne[i]?.nome}</td>
                             <td>{e.serie}</td>
                             <td>{e.ripetizioni}</td>
+                            <td><button onClick={handleClick}>elimina</button></td>
                         </tr>
                     ))}
                 </tbody>

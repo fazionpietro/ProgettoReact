@@ -1,47 +1,49 @@
-import { use, useState, useEffect, useRef } from 'react';
-import './stylesheets/LoginRegister.css';
-import axios, {isCancel, AxiosError, Axios} from 'axios';
-import { NavLink } from "react-router";
+import TablePatient from "./TablePatient";
+import TableExercise from "./TableExercise";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
+interface user{
+    username: string;
+    email : string;
+    ruolo: string;
+}
 
+function Table() {
+    const [user, setUser] = useState<user>();
 
-function Table(){
-    const [isLoading, setIsLoading] = useState(false)
-    const [response, setResponse] = useState<any | null>(null);
-    const token = localStorage.getItem("access_token");
-
-
-    const isInitialized = useRef(false)
-
-    const getTable= async () => {
-        setIsLoading(true)
+    const getUtente = async () =>{
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_KEY}/schede`, {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/getDatiUtente`, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            }).then((resp) => {
-                if (resp.status === 200) setResponse(resp.data);
-                console.log(resp.data);
+                    Authorization: `Bearer ${localStorage.getItem(
+                    "access_token"
+                    )}`,
+                },
             })
-
-           
+            .then((resp) => {
+                if (resp.status === 200){ 
+                    setUser(resp.data);
+                }  
+            });
         } catch (error) {
-            
-        } finally{
-            setIsLoading(false)
+            console.error(error);        
         }
     }
 
-    useEffect(() => {
-        if(isInitialized.current) return;
-        isInitialized.current = true;
-        getTable();
-    },[])
+    useEffect(()=>{
+        getUtente();
+    },[]);
 
-    return (
-        <>
-        </>
-    )
+    if(user ===null){
+        return <div>caricamento...</div>
+    }else{
+        if(user?.ruolo === "utente"){
+            return <TableExercise/>
+        }else{
+            return <TablePatient/>
+        }
+    }
 }
+
 export default Table;
