@@ -225,6 +225,19 @@ app.get('/api/schedeEserciziUtente',authenticateToken, async (req: express.Reque
     }
 })
 
+app.get('/api/getNomeEsercizio',authenticateToken, async (req, res)=> {
+    try {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.set({'Content-type': 'application/json'})
+        const data = await getNomeEsercizio(); 
+        res.status(200).json({data})
+    } catch (err: any) {
+
+        res.status(500).json({"error":err.message});
+        
+    }
+})
+
 
 app.post('/api/signup', async (req: express.Request<{},{},{}, userData>, res: express.Response)=> {
     const query: userData = req.query;
@@ -406,7 +419,17 @@ function addUser(email: string,psw: string, ruolo: string, nome: string, cognome
 }
 async function getUserSchedeEsercizi(email: string){
     return new Promise<schedaEserciziData[]>((resolve, reject)=>{
+        console.log(email)
         db.all(`SELECT * FROM schedaEsercizi INNER JOIN schede ON schedaEsercizi.scheda_id=schede.id WHERE user_email='${email}'`, (err, res: schedaEserciziData[])=>{
+            if(err) reject(err);
+            else resolve(res);
+        })
+    })
+}
+
+async function getNomeEsercizio(){
+    return new Promise<string[]>((resolve, reject)=>{
+        db.all(`SELECT nome FROM esercizi INNER JOIN schedaEsercizi ON esercizi.id=schedaEsercizi.esercizio_id`, (err, res: string[])=>{
             if(err) reject(err);
             else resolve(res);
         })

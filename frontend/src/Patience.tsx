@@ -1,6 +1,6 @@
 import './stylesheets/LoginRegister.css';
 import Navbar from './Navbar';
-import TablePatient from './TablePatient';
+import Table from './Table';
 
 function Patience(){
     return(
@@ -8,7 +8,7 @@ function Patience(){
             <Navbar/>
             <div className='card'>
                 <p>TABELLA PAZIENTI</p>
-                <TablePatient />
+                <Table/>
             </div>
         </div>
     )

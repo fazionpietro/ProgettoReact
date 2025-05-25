@@ -36,15 +36,19 @@ const TablePatient: React.FC=() => {
         getDati();
     },[]);
 
+    const handleClick = () =>{
+        console.log("ocio che elimina");
+    };
 
     return(
         <div>
             <table id='patienttable'>
                 <thead>
                     <tr>
-                        <th>name</th>
-                        <th>username</th>
+                        <th>nome</th>
+                        <th>cognome</th>
                         <th>email</th>
+                        <th>elimina utente</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,6 +57,7 @@ const TablePatient: React.FC=() => {
                             <td>{p.name}</td>
                             <td>{p.surname}</td>
                             <td>{p.email}</td>
+                            <td><button onClick={handleClick}>elimina</button></td>
                         </tr>
                     ))}
                 </tbody>
