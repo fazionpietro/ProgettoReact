@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 interface esercizio {
+    id: number;
     nome : string;
     descrizione: string;
     muscolo_targhet: string;
@@ -31,12 +32,31 @@ const ListaEsercizi = () =>{
     }
     }
 
+    async function addEsercizio(e : esercizio) {
+        try {
+            const resp =await axios.post(`${import.meta.env.VITE_API_KEY}/addEsercizi`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            if(resp.status === 200){
+                console.log("es aggiunto", e.nome)
+            }
+        } catch (error) {
+            console.error("errore", error);
+        }
+    }
+
     useEffect(()=>{
         getesercizi();
     },[]);
 
-    const handleClick = () => {
-        console.log("inserisci esercizio");
+    const handleClick = (e: esercizio) => {
+        console.log("inserisci esercizio: ", e);
+        addEsercizio(e);
     }
 
     return(
@@ -44,6 +64,7 @@ const ListaEsercizi = () =>{
             <table id='patienttable'>
                 <thead>
                     <tr>
+                        <th>id</th>
                         <th>nome</th>
                         <th>descrizione</th>
                         <th>muscolo</th>
@@ -54,11 +75,11 @@ const ListaEsercizi = () =>{
                 <tbody>
                     {exe.map((e)=>(
                         <tr key={e.nome}>
+                            <td>{e.id}</td>
                             <td>{e.nome}</td>
                             <td>{e.descrizione}</td>
                             <td>{e.muscolo_targhet}</td>
                             <td>{e.difficolta}</td>
-                            <td><button onClick={handleClick}>butta dentro</button></td>
                         </tr>
                     ))}
                 </tbody>

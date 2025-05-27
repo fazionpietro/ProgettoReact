@@ -9,6 +9,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 import { get } from "http";
+import { resolve } from "path";
 
 
 
@@ -209,6 +210,16 @@ app.get("/api/schedeEsercizi",authenticateToken, async (req, res)=> {
          
 })
 
+type prova = {
+    id: number;
+    esercizio_id: number;
+    user_email_id: string;
+    nome_scheda: string;
+    serie: number;
+    ripetizioni: number;
+    note: string
+}
+
 
 app.get('/api/schedeEserciziUtente',authenticateToken, async (req: express.Request<{},{},{},{email: string}>, res: express.Response)=> {
     try {
@@ -216,7 +227,8 @@ app.get('/api/schedeEserciziUtente',authenticateToken, async (req: express.Reque
 
         res.header("Access-Control-Allow-Origin", "*");
         res.set({'Content-type': 'application/json'})
-        const data = await getUserSchedeEsercizi(req.query.email)
+        const data : prova[]= await getUserSchedeEsercizi(req.query.email)
+        console.log(data)
         res.status(200).json({data})
     } catch (err: any) {
 
@@ -353,6 +365,28 @@ app.post('/api/addScheda',authenticateToken, async (req: express.Request<{},{},{
     
 })
 
+app.delete('/api/deleteEx/:idS/:id', authenticateToken, async (req, res) =>{
+    try{
+        const idS= parseInt(req.params.idS,10)
+        const id= parseInt(req.params.id,10)
+        await deleteEx(idS, id);
+        res.status(200).json({success : true})
+
+    }catch (err:any){
+        res.status(500).json({"error": err.message})
+    }
+})
+
+app.delete('/api/deleteUtente/:email', authenticateToken, async (req, res) =>{
+    try{
+        await deleteUtente(req.params.email);
+        res.status(200).json({success : true})
+
+    }catch (err:any){
+        res.status(500).json({"error": err.message})
+    }
+})
+
 
 
 function checkEmail(email: string){
@@ -361,6 +395,34 @@ function checkEmail(email: string){
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
+}
+
+async function deleteUtente(email : string){
+    return new Promise<void>((resolve, reject)=>{
+        db.run(`DELETE FROM users where email=?`, [email],function(err){
+            if(err){
+                reject(err);
+            }else if(this.changes === 0){
+                reject(new Error("non trovato"))
+            }else{
+                resolve();
+            }
+        })
+    })
+}
+
+async function deleteEx(idS: number, id: number){
+    return new Promise<void>((resolve, reject)=>{
+        db.run(`DELETE FROM schedaEsercizi where esercizio_id=? AND id=?`, [id,idS],function(err){
+            if(err){
+                reject(err);
+            }else if(this.changes === 0){
+                reject(new Error("non trovato"))
+            }else{
+                resolve();
+            }
+        })
+    })
 }
 
 async function getAllSchedaEsercizi(){
@@ -418,9 +480,21 @@ function addUser(email: string,psw: string, ruolo: string, nome: string, cognome
     });
 }
 async function getUserSchedeEsercizi(email: string){
-    return new Promise<schedaEserciziData[]>((resolve, reject)=>{
+    return new Promise<prova[]>((resolve, reject)=>{
         console.log(email)
-        db.all(`SELECT * FROM schedaEsercizi INNER JOIN schede ON schedaEsercizi.scheda_id=schede.id WHERE user_email='${email}'`, (err, res: schedaEserciziData[])=>{
+        db.all(`SELECT 
+                SchedaEsercizi.id,
+                SchedaEsercizi.scheda_id,
+                SchedaEsercizi.esercizio_id,
+                SchedaEsercizi.user_email,
+                SchedaEsercizi.serie,
+                SchedaEsercizi.ripetizioni,
+                Schede.nome AS nome_scheda,
+                Schede.Note AS note_scheda
+                FROM SchedaEsercizi
+                INNER JOIN Schede ON SchedaEsercizi.scheda_id = Schede.id
+                WHERE SchedaEsercizi.user_email = '${email}'`, (err, res: prova[])=>{
+            
             if(err) reject(err);
             else resolve(res);
         })
@@ -466,6 +540,7 @@ async function addEserciziScheda(data : schedaEserciziData){
             
             db.run('INSERT INTO SchedaEsercizi(scheda_id,esercizio_id,user_email,serie, ripetizioni) VALUES(?,?,?,?,?)', 
                 [   
+                    
                     scheda_id,
                     data.esercizio_id[index], 
                     data.user_email_id,
