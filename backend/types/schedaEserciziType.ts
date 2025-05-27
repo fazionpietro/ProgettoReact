@@ -1,5 +1,5 @@
 type schedaEserciziData = {
-    
+    id?: number;
     esercizio_id: number[];
     user_email_id: string;
     nome_scheda: string;

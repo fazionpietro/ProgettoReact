@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import './stylesheets/table.css';
+import { Prev } from "react-bootstrap/esm/PageItem";
 
 interface exercise{
-    esercizio_id: number;
     id : number;
-    ripetizioni: number;
     scheda_id: number;
+    esercizio_id: number;
     serie: number;
+    ripetizioni: number;
 }
 
 interface nomeEsercizio{
@@ -65,6 +66,27 @@ const TableExercise: React.FC=() =>{
         }
     }
 
+    const deleteEx = async (id: number, esercizio_id:number) =>{
+        try {
+        await axios.delete(`${import.meta.env.VITE_API_KEY}/deleteEx/${id}/${esercizio_id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem(
+                "access_token"
+                )}`,
+            },
+        })
+        .then((resp) => {
+            if (resp.status === 200){
+                console.log('eliminato')
+                setEx(prev => prev.filter(e => e.id !== id));
+                getEsercizi();
+            }  
+        });
+        } catch (error) {
+            console.error(error);        
+        }
+    }
+
     const getEsercizi = async() =>{
         const mail = user?.email;
         if(!mail){
@@ -83,6 +105,7 @@ const TableExercise: React.FC=() =>{
             .then((resp) => {
                 if (resp.status === 200){ 
                     setEx(resp.data.data);
+                    console.log(resp.data.data)
                 }  
             });
             } catch (error) {
@@ -102,8 +125,9 @@ const TableExercise: React.FC=() =>{
         }
     },[user]);
 
-    const handleClick = () =>{
-        console.log("ocio che elimina");
+    const handleClick = (id : number, esercizio_id :number) =>{
+        console.log("ocio che elimina: ", id,esercizio_id);
+        deleteEx(id, esercizio_id);
     }
 
     return(
@@ -120,12 +144,12 @@ const TableExercise: React.FC=() =>{
                 </thead>
                 <tbody>
                     {ex.map((e,i) => (
-                        <tr>
+                        <tr key={e.id}>
                             <td>{e.scheda_id}</td>
                             <td>{ne[i]?.nome}</td>
                             <td>{e.serie}</td>
                             <td>{e.ripetizioni}</td>
-                            <td><button onClick={handleClick}>elimina</button></td>
+                            <td><button onClick={()=>handleClick(e.id, e.esercizio_id)}>elimina</button></td>
                         </tr>
                     ))}
                 </tbody>

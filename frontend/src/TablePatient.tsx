@@ -32,12 +32,34 @@ const TablePatient: React.FC=() => {
         }
     }
 
+    const deleteUtente = async (email: string) =>{
+        try {
+        await axios.delete(`${import.meta.env.VITE_API_KEY}/deleteUtente/${email}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem(
+                "access_token"
+                )}`,
+            },
+        })
+        .then((resp) => {
+            if (resp.status === 200){
+                console.log('eliminato')
+                setPatient(prev => prev.filter(e => e.email !== email));
+                getDati();
+            }  
+        });
+        } catch (error) {
+            console.error(error);        
+        }
+    }
+
     useEffect(() =>{
         getDati();
     },[]);
 
-    const handleClick = () =>{
+    const handleClick = (e : string) =>{
         console.log("ocio che elimina");
+        deleteUtente(e);
     };
 
     return(
@@ -57,7 +79,7 @@ const TablePatient: React.FC=() => {
                             <td>{p.name}</td>
                             <td>{p.surname}</td>
                             <td>{p.email}</td>
-                            <td><button onClick={handleClick}>elimina</button></td>
+                            <td><button onClick={()=>handleClick(p.email)}>elimina</button></td>
                         </tr>
                     ))}
                 </tbody>
