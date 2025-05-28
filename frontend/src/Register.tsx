@@ -38,7 +38,7 @@ function AppRegister() {
         
         const AxiosResponse = await axios
             .post(
-                `${import.meta.env.VITE_API_KEY}/signup?email=${email}&password=${password}&ruolo=${ruolo}&name=${nome}&surname=${cognome}`
+                `${import.meta.env.VITE_API_KEY}/signup?email=${email}&password=${password}&ruolo=${realRole}&name=${nome}&surname=${cognome}`
             )
             .then((res: AxiosResponse) => {
                 console.log(res);
@@ -53,10 +53,8 @@ function AppRegister() {
                 else
                     setRegisterError("Inserisci un email o la password");
 
-
-                setEmail("");
+                
                 setRuolo("");
-                setPassword("");
                 setNome("");
                 setCognome("");
                 localStorage.clear();
