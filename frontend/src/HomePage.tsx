@@ -16,7 +16,7 @@ import Navbar from './Navbar';
 
 function HomePage(){
 
-    const [data, setData] = useState<any[]>([]);
+    const [_data, setData] = useState<any[]>([]);
     const [maxSteps, setMaxSteps] = useState<number | null>(null);
     const [stoMaxSteps, stoSetMaxSteps] = useState<number | null>(null);
     const [graficoAttivo, setGraficoAttivo] = useState(1);

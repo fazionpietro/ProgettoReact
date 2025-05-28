@@ -1,7 +1,7 @@
 import { LineChart } from "@mui/x-charts";
 
 function media(array : number[], punti : number): number[]{
-    return array.map((elemento,i) => {
+    return array.map((_elemento,i) => {
         const primo = Math.max(0, i - punti+1);
         const sottoGruppo =array.slice(primo, i+1);
         const somma = sottoGruppo.reduce((a,b) => a+b, 0);

@@ -1,25 +1,18 @@
-import { use, useState, useEffect } from "react";
+import {useState} from "react";
 import "./stylesheets/LoginRegister.css";
-import axios, { isCancel, AxiosError, Axios, AxiosResponse } from "axios";
-import { Card } from "react-bootstrap";
+import axios, {AxiosError,  AxiosResponse } from "axios";
+
 import { useNavigate, NavLink } from "react-router";
 
 
-type response = {
-    status: number;
-    data: {
-        email: string;
-        token: string;
-    };
-};
+
 
 function AppLogin() {
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
     const navigate = useNavigate();
     const [logInError, setlogInError] = useState<string>("");
-    const [nome, setNome] = useState<string>();
-    const [cognome, setCognome] = useState<string>();
+   
 
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault();

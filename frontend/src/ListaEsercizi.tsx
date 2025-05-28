@@ -54,10 +54,12 @@ const ListaEsercizi = () =>{
         getesercizi();
     },[]);
 
+    
     const handleClick = (e: esercizio) => {
         console.log("inserisci esercizio: ", e);
         addEsercizio(e);
     }
+    
 
     return(
         <div>

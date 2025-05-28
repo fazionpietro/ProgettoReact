@@ -23,7 +23,7 @@ function AddSchede() {
     const [selectedPatient, setSelectedPatient] = useState<string>();
     const [note, setNote] = useState<string>("");
 
-    const [scheda, setScheda] = useState<schedaEserciziData>({
+    const [scheda, _setScheda] = useState<schedaEserciziData>({
         esercizio_id: [],
         user_email_id: "",
         nome_scheda: "",

@@ -1,6 +1,6 @@
 
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Router, Routes } from "react-router";
+
+import { BrowserRouter, Route,Routes } from "react-router";
 import ReactDOM from "react-dom/client";
 import PrivateRoute from './PrivateRoute.tsx';
 import AppLogin from './Login.tsx';
@@ -19,10 +19,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       
         <Route path='/login' element={<AppLogin />} />
         <Route path='/Register' element={<AppRegister />} />
-        <Route path='/utente' element={<AggiungiUtente/>}/>
+        
         <Route path='/addEsercizio' element={<AddEsercizio/>}/>
 
         <Route element={<PrivateRoute />}>
+          <Route path='/utente' element={<AggiungiUtente/>}/>
           <Route path='/' element={<HomePage />}></Route>
           <Route path='/schede' element={<AddSchede/>}></Route>
           <Route path='/Exercise' element={<Exercise />}></Route>

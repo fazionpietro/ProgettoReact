@@ -1,17 +1,11 @@
-import { use, useState, useEffect } from "react";
+import {useState} from "react";
 import "./stylesheets/LoginRegister.css";
-import axios, { isCancel, AxiosError, Axios, AxiosResponse } from "axios";
-import { Card} from "react-bootstrap";
+import axios, {AxiosError, AxiosResponse } from "axios";
+
 import { useNavigate, NavLink } from "react-router";
 import Dropdown from "./Dropdown/Dropdown";
 
-type response = {
-    status: number;
-    data: {
-        email: string;
-        token: string;
-    };
-};
+
 function AppRegister() {
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>();
@@ -36,7 +30,7 @@ function AppRegister() {
 
         
         
-        const AxiosResponse = await axios
+        await axios
             .post(
                 `${import.meta.env.VITE_API_KEY}/signup?email=${email}&password=${password}&ruolo=${realRole}&name=${nome}&surname=${cognome}`
             )

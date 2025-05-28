@@ -1,7 +1,7 @@
 import { LineChart } from "@mui/x-charts";
 
 function media(array : number[], punti : number): number[]{
-    return array.map((elemento,i) => {
+    return array.map((_elemento,i) => {
         const primo = Math.max(0, i - punti+1);
         const sottoGruppo =array.slice(primo, i+1);
         const somma = sottoGruppo.reduce((a,b) => a+b, 0);
@@ -10,7 +10,7 @@ function media(array : number[], punti : number): number[]{
 }
 
 const StoricoPassiSettimanale = ({ dati } : { dati : any }) => {
-    const steps = dati.map((el:any) => el.steps).filter((s:any) => typeof s==='number' && !isNaN(s));
+    dati.map((el:any) => el.steps).filter((s:any) => typeof s==='number' && !isNaN(s));
     const start_time = dati.map((el:any) => el.start_time).filter((s:any) => typeof s==='number' && !isNaN(s));;
     const tempoMassimo = Math.max(...start_time.map(Number));
     const limiteTempo = (tempoMassimo-7*24*60*60);

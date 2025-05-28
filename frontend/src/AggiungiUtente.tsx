@@ -1,8 +1,8 @@
-import { use, useState, useEffect, FormEvent } from "react";
+import {useState} from "react";
 import "./stylesheets/LoginRegister.css";
-import axios, { isCancel, AxiosError, Axios, AxiosResponse } from "axios";
-import { Card } from "react-bootstrap";
-import { useNavigate, NavLink } from "react-router";
+import axios, {AxiosError, AxiosResponse } from "axios";
+
+import { useNavigate } from "react-router";
 
 function AggiungiUtente() {
     const navigate = useNavigate();
@@ -20,16 +20,19 @@ function AggiungiUtente() {
             )
             .then((res: AxiosResponse) => {
                 console.log(res);
-                localStorage.setItem("access_token", res.data.token);
-                navigate("/");
+                navigate("/Patience")
             })
             .catch((error: AxiosError<string>) => {
                 console.error(error.response);
 
 
-                if(email != "" || password != "")
-                    setRegisterError("L'email o la password esistono");
-                else
+                if(email != "" || password != ""){
+                    
+                    if(email && !email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+                        setRegisterError("L'email è errata");
+                    }else
+                        setRegisterError("L'email o la password esistono");
+                }else
                     setRegisterError("Inserisci un email o la password");
 
                 setEmail("");

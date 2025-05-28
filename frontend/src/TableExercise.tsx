@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import './stylesheets/table.css';
-import { Prev } from "react-bootstrap/esm/PageItem";
+
 
 interface exercise{
     id : number;

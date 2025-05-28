@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState} from "react";
 import axios from "axios";
 import "./stylesheets/LoginRegister.css";
 import Dropdown from "./Dropdown/Dropdown";
