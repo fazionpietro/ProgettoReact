@@ -119,64 +119,64 @@ function HomePage(){
                 <Navbar/>
                 <div className='card'>
                     <div className='container'>
-                        <div className='item'>
+                        <div className={`item ${stoData.length === 0?'hidden': ''}`}>
                             <p>Grafico Storico dei Passi</p>
                             <button onClick={() => setGraficoAttivo(1)}>grafico giornaliero</button>
                             <button onClick={() => setGraficoAttivo(2)}>grafico settimanale</button>
                             <button onClick={() => setGraficoAttivo(3)}>grafico mensile</button>
-                            {stoData.length > 0 ? storicoPassiPlot(): <p>nessun dato</p>};
+                            {stoData.length > 0 ? storicoPassiPlot(): <p>nessun dato</p>}
                         </div>
-                        <div className='item'>
+                        <div className={`item ${stoData.length === 0?'hidden': ''}`}>
                             <p>Tipologia di Cardio</p>
-                            {stoData.length > 0 ? <GraficoTorta dati={stoData}/>: <p>nessun dato</p>};
+                            {stoData.length > 0 ? <GraficoTorta dati={stoData}/>: <p>nessun dato</p>}
                         </div>  
-                        <div className='item'>
+                        <div className={`item ${stoData.length === 0?'hidden': ''}`}>
                             <p>Grafico Storico delle Calorie</p>
                             <button onClick={() => setGraficoCal(1)}>grafico giornaliero</button>
                             <button onClick={() => setGraficoCal(2)}>grafico settimanale</button>
                             <button onClick={() => setGraficoCal(3)}>grafico mensile</button>
-                            {stoData.length > 0 ? storicoCalPlot(): <p>nessun dato</p>};                       
+                            {stoData.length > 0 ? storicoCalPlot(): <p>nessun dato</p>}                      
                         </div>
                         
                         
 
                         <div className='containerecord'>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0 && data.length ===0? 'hidden': ''}`}>
                                 <p>Obbiettivo Calorie</p>
                                 <input type= "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
                             </div>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0?'hidden': ''}`}>
                                 <p>Record Passi</p>
                                 {stoMaxSteps !==null ? stoMaxSteps : 'nessun dato'}
                             </div>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0 && data.length ===0? 'hidden': ''}`}>
                                 <p>Obbiettivo Passi</p>
                                 <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
                             </div>
-                            <div className='item'>
+                            <div className={`item ${data.length === 0?'hidden': ''}`}>
                                 <p>Record Passi Giornaliero</p>
                                 {maxSteps !==null ? maxSteps : 'nessun dato'}
                             </div>
                         </div>
 
-                        <div className='item'>
+                        <div className={`item ${stoData.length === 0?'hidden': ''}`}>
                             <p>Grafico Storico della Distanza</p>
                             <button onClick={() => setGraficoDistanza(1)}>grafico giornaliero</button>
                             <button onClick={() => setGraficoDistanza(2)}>grafico settimanale</button>
                             <button onClick={() => setGraficoDistanza(3)}>grafico mensile</button>
-                            {stoData.length > 0 ? storicoDistanza(): <p>nessun dato</p>};                       
+                            {stoData.length > 0 ? storicoDistanza(): <p>nessun dato</p>}                       
                         </div>
 
                         <div className='conainerecord'>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0 && data.length ===0? 'hidden': ''}`}>
                                 <p>Obbiettivo Distanza</p>
                                 <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
                             </div>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0?'hidden': ''}`}>
                                 <p>Record Distanza</p>
                                 {totDistance !==null ? totDistance : 'nessun dato'}
                             </div>
-                            <div className='item'>
+                            <div className={`item ${data.length === 0?'hidden': ''}`}>
                                 <p>Record Distanza Giornaliero</p>
                                 {gDistance !==null ? gDistance : 'nessun dato'}
                             </div>

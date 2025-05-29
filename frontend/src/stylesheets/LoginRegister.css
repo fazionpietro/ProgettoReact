@@ -80,6 +80,13 @@ input{
   box-shadow:  5px 5px 5px #9e9a9a,
              5px 5px 5px #9e9a9a;
   border-radius: 10px;
+  border: 1px solid;
+  margin: 1px;
+  flex: 1;
+}
+
+.item.hidden{
+  display: none;
 }
 
 .inputObbiettivo{
