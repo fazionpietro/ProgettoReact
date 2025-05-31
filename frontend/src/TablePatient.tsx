@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './stylesheets/table.css';
+import { useNavigate } from 'react-router';
 
 interface Paziente {
     email: string;
@@ -11,6 +12,7 @@ interface Paziente {
 
 const TablePatient: React.FC=() => {
     const [patient, setPatient] = useState<Paziente[]>([]);
+    const navigate =useNavigate();
 
     const getDati = async () => {
         try {
@@ -58,9 +60,12 @@ const TablePatient: React.FC=() => {
     },[]);
 
     const handleClick = (e : string) =>{
-        console.log("ocio che elimina");
         deleteUtente(e);
     };
+
+    const handleOnClick =(e:string) =>{
+        navigate(`/paziente/${e}`);
+    }
 
     return(
         <div>
@@ -71,6 +76,7 @@ const TablePatient: React.FC=() => {
                         <th>cognome</th>
                         <th>email</th>
                         <th>elimina utente</th>
+                        <th>visualizza paziente</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,6 +86,7 @@ const TablePatient: React.FC=() => {
                             <td>{p.surname}</td>
                             <td>{p.email}</td>
                             <td><button onClick={()=>handleClick(p.email)}>elimina</button></td>
+                            <td><button onClick={()=>handleOnClick(p.email)}>visualizza</button></td>
                         </tr>
                     ))}
                 </tbody>

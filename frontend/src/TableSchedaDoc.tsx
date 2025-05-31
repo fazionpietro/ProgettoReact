@@ -14,40 +14,16 @@ interface nomeEsercizio{
     nome: string;
 }
 
-interface user{
-    username: string;
-    email : string;
-    role: string;
-}
-
-const TableScheda: React.FC = ()=>{
+const TableSchedaDoc: React.FC = ()=>{
     const {id}= useParams<{id:string}>();
     const schedaId = id? parseInt(id,10): null;
+    const {email} =useParams<{email: string}>();
     console.log("altra pagina: ", id)
 
     const [ex, setEx] = useState<exercise[]>([]);
-    const [user, setUser] = useState<user>();
     const [ne, setNE] = useState<nomeEsercizio[]>([]);
     
         //inserisci getdatiutente()
-    const getUtente = async () =>{
-        try {
-        await axios.get(`${import.meta.env.VITE_API_KEY}/getDatiUtente`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem(
-                "access_token"
-                )}`,
-            },
-        })
-        .then((resp) => {
-            if (resp.status === 200){ 
-                setUser(resp.data);
-            }  
-        });
-        } catch (error) {
-            console.error(error);        
-        }
-    }
     
     const getNomeEsercizio = async () =>{
         try {
@@ -91,14 +67,13 @@ const TableScheda: React.FC = ()=>{
     }
     
     const getEsercizi = async() =>{
-        const mail = user?.email;
-        if(!mail){
+        if(!email){
             console.error("email assente");
             return;
         }
     
         try {
-            await axios.get(`${import.meta.env.VITE_API_KEY}/schedeEserciziUtente?email=${mail}`, {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/schedeEserciziUtente?email=${email}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem(
                     "access_token"
@@ -118,15 +93,14 @@ const TableScheda: React.FC = ()=>{
     
     
         useEffect(()=>{
-            getUtente();
             getNomeEsercizio();
         },[]);
     
         useEffect(()=>{
-            if(user){
+            if(email){
                 getEsercizi();
             }
-        },[user]);
+        },[email]);
     
         const handleClick = (id : number, esercizio_id :number) =>{
             deleteEx(id, esercizio_id);
@@ -160,4 +134,4 @@ const TableScheda: React.FC = ()=>{
     )
 };
 
-export default TableScheda;
+export default TableSchedaDoc;

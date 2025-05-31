@@ -13,6 +13,8 @@ import AddSchede from './AddSchede.tsx';
 import AggiungiUtente from './AggiungiUtente.tsx';
 import AddEsercizio from "./AggiungiEsercizio.tsx";
 import TableScheda from "./TableScheda.tsx";
+import TablePaziente from "./TablePaziente.tsx";
+import TableSchedaDoc from "./TableSchedaDoc.tsx";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -31,6 +33,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path='/Patience' element={<Patience />}></Route>
           <Route path='/Profile' element={<Profile />}></Route>
           <Route path='/scheda/:id' element={<TableScheda />}></Route>
+          <Route path='/paziente/:email' element={<TablePaziente/>}></Route>
+          <Route path="/schedaDoc/:id/:email" element={<TableSchedaDoc />}></Route>
        
         </Route>
         
