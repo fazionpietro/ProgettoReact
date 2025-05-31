@@ -13,6 +13,7 @@ import GraficoDistGiornaliero from './Grafici/GraficoDistGiornaliero';
 import GraficoDistSettimanale from './Grafici/GraficoDistSettimanale';
 import GraficoDistMensile from './Grafici/GraficoDistMensile';
 import Navbar from './Navbar';
+import { data } from 'react-router';
 
 function HomePage(){
 
@@ -78,11 +79,11 @@ function HomePage(){
     const storicoPassiPlot = () => {
         switch (graficoAttivo){
             case 1:
-                return <StoricoPassiGiornaliero dati={stoData}/>;
+                return <StoricoPassiGiornaliero dati={stoData}/>
             case 2:
-                return <StoricoPassiSettimanale dati={stoData}/>;
+                return <StoricoPassiSettimanale dati={stoData}/>
             case 3:
-                return <StoricoPassiMensile dati={stoData}/>;
+                return <StoricoPassiMensile dati={stoData}/>
             default:
                 return null;
         }
@@ -91,11 +92,11 @@ function HomePage(){
     const storicoCalPlot = () => {
         switch (graficoCal){
             case 1:
-                return <StoricoCalorieGiornaliero dati={stoData}/>;
+                return <StoricoCalorieGiornaliero dati={stoData}/>
             case 2:
-                return <StoricoCalorieSettimanale dati={stoData}/>;
+                return <StoricoCalorieSettimanale dati={stoData}/>
             case 3:
-                return <StoricoCalorieMensile dati={stoData}/>;
+                return <StoricoCalorieMensile dati={stoData}/>
             default:
                 return null;
         }
@@ -119,64 +120,64 @@ function HomePage(){
                 <Navbar/>
                 <div className='card'>
                     <div className='container'>
-                        <div className='item'>
+                        <div className={`item ${stoData.length === 0? 'hidden':'' }`}>
                             <p>Grafico Storico dei Passi</p>
                             <button onClick={() => setGraficoAttivo(1)}>grafico giornaliero</button>
                             <button onClick={() => setGraficoAttivo(2)}>grafico settimanale</button>
                             <button onClick={() => setGraficoAttivo(3)}>grafico mensile</button>
-                            {stoData.length > 0 ? storicoPassiPlot(): <p>nessun dato</p>};
+                            {stoData.length > 0 ? storicoPassiPlot(): <p>nessun dato</p>}
                         </div>
-                        <div className='item'>
+                        <div className={`item ${stoData.length === 0? 'hidden':'' }`}>
                             <p>Tipologia di Cardio</p>
-                            {stoData.length > 0 ? <GraficoTorta dati={stoData}/>: <p>nessun dato</p>};
+                            {stoData.length > 0 ? <GraficoTorta dati={stoData}/>: <p>nessun dato</p>}
                         </div>  
-                        <div className='item'>
+                        <div className={`item ${stoData.length === 0? 'hidden':'' }`}>
                             <p>Grafico Storico delle Calorie</p>
                             <button onClick={() => setGraficoCal(1)}>grafico giornaliero</button>
                             <button onClick={() => setGraficoCal(2)}>grafico settimanale</button>
                             <button onClick={() => setGraficoCal(3)}>grafico mensile</button>
-                            {stoData.length > 0 ? storicoCalPlot(): <p>nessun dato</p>};                       
+                            {stoData.length > 0 ? storicoCalPlot(): <p>nessun dato</p>}                      
                         </div>
                         
                         
 
                         <div className='containerecord'>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0 && _data.length === 0? 'hidden':''}`}>
                                 <p>Obbiettivo Calorie</p>
                                 <input type= "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
                             </div>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0? 'hidden':'' }`}>
                                 <p>Record Passi</p>
                                 {stoMaxSteps !==null ? stoMaxSteps : 'nessun dato'}
                             </div>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0 && _data.length === 0? 'hidden':''}`}>
                                 <p>Obbiettivo Passi</p>
                                 <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
                             </div>
-                            <div className='item'>
+                            <div className={`item ${_data.length === 0? 'hidden':''}`}>
                                 <p>Record Passi Giornaliero</p>
                                 {maxSteps !==null ? maxSteps : 'nessun dato'}
                             </div>
                         </div>
 
-                        <div className='item'>
+                        <div className={`item ${stoData.length === 0? 'hidden':'' }`}>
                             <p>Grafico Storico della Distanza</p>
                             <button onClick={() => setGraficoDistanza(1)}>grafico giornaliero</button>
                             <button onClick={() => setGraficoDistanza(2)}>grafico settimanale</button>
                             <button onClick={() => setGraficoDistanza(3)}>grafico mensile</button>
-                            {stoData.length > 0 ? storicoDistanza(): <p>nessun dato</p>};                       
+                            {stoData.length > 0 ? storicoDistanza(): <p>nessun dato</p>}                     
                         </div>
 
                         <div className='conainerecord'>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0 && _data.length === 0? 'hidden':''}`}>
                                 <p>Obbiettivo Distanza</p>
                                 <input type = "number" placeholder="inserisci l'obbiettivo" className='inputObbiettivo'/>
                             </div>
-                            <div className='item'>
+                            <div className={`item ${stoData.length === 0? 'hidden':'' }`}>
                                 <p>Record Distanza</p>
                                 {totDistance !==null ? totDistance : 'nessun dato'}
                             </div>
-                            <div className='item'>
+                            <div className={`item ${_data.length === 0? 'hidden':''}`}>
                                 <p>Record Distanza Giornaliero</p>
                                 {gDistance !==null ? gDistance : 'nessun dato'}
                             </div>
