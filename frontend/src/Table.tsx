@@ -1,7 +1,7 @@
 import TablePatient from "./TablePatient";
-import TableExercise from "./TableExercise";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import TableSchede from "./TableSchede";
 
 interface user{
     username: string;
@@ -39,7 +39,7 @@ function Table() {
         return <div>caricamento...</div>
     }else{
         if(user?.ruolo === "utente"){
-            return <TableExercise/>
+            return <TableSchede/>
         }else{
             return <TablePatient/>
         }

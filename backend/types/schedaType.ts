@@ -1,4 +1,5 @@
 type schedaData = {
+    id:number
     nome: string
     note: string
 }

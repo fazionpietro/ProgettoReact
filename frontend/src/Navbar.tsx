@@ -6,7 +6,7 @@ const navbarElements = [
     {label: 'Home', href: '/'},
     {label: 'Pazienti', href: '/Patience'},
     {label: 'Utente', href: '/Profile'},
-    {label: 'Schede Allenamento', href: '/Exercise'}
+    {label: 'Lista Esercizi', href: '/Exercise'}
 ]
 
 type NavbarProps = {
