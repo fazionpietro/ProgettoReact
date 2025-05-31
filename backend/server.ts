@@ -10,6 +10,7 @@ import cors from 'cors'
 import * as dotenv from 'dotenv'
 import { get } from "http";
 import { resolve } from "path";
+import { rejects } from "assert";
 
 
 
@@ -242,6 +243,19 @@ app.get('/api/getNomeEsercizio',authenticateToken, async (req, res)=> {
         res.header("Access-Control-Allow-Origin", "*");
         res.set({'Content-type': 'application/json'})
         const data = await getNomeEsercizio(); 
+        res.status(200).json({data})
+    } catch (err: any) {
+
+        res.status(500).json({"error":err.message});
+        
+    }
+})
+
+app.get('/api/getSchedeUtente',authenticateToken, async (req, res)=> {
+    try {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.set({'Content-type': 'application/json'})
+        const data = await getSchedeUtente(); 
         res.status(200).json({data})
     } catch (err: any) {
 
@@ -519,6 +533,15 @@ function getScheda(nome:string){
             resolve(res.id)
         });
     })
+}
+
+async function getSchedeUtente(){
+    return new Promise ((resolve,rejects)=>{
+        db.get(`SELECT * FROM schede WHERE `, (err,res: schedaData)=>{
+            if(err) rejects(err);
+            resolve(res.id)
+        })
+    });
 }
 
 async function addEserciziScheda(data : schedaEserciziData){

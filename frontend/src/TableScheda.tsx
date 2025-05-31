@@ -1,7 +1,6 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import './stylesheets/table.css';
-
 
 interface exercise{
     id : number;
@@ -21,12 +20,15 @@ interface user{
     role: string;
 }
 
-const TableExercise: React.FC=() =>{
+const TableScheda: React.FC = ()=>{
+    const {id}= useParams<{id:string}>();
+    const schedaId = id? parseInt(id,10): null;
+
     const [ex, setEx] = useState<exercise[]>([]);
     const [user, setUser] = useState<user>();
     const [ne, setNE] = useState<nomeEsercizio[]>([]);
-
-    //inserisci getdatiutente()
+    
+        //inserisci getdatiutente()
     const getUtente = async () =>{
         try {
         await axios.get(`${import.meta.env.VITE_API_KEY}/getDatiUtente`, {
@@ -45,7 +47,7 @@ const TableExercise: React.FC=() =>{
             console.error(error);        
         }
     }
-
+    
     const getNomeEsercizio = async () =>{
         try {
         await axios.get(`${import.meta.env.VITE_API_KEY}/getNomeEsercizio`, {
@@ -65,7 +67,7 @@ const TableExercise: React.FC=() =>{
             console.error(error);        
         }
     }
-
+    
     const deleteEx = async (id: number, esercizio_id:number) =>{
         try {
         await axios.delete(`${import.meta.env.VITE_API_KEY}/deleteEx/${id}/${esercizio_id}`, {
@@ -86,14 +88,14 @@ const TableExercise: React.FC=() =>{
             console.error(error);        
         }
     }
-
+    
     const getEsercizi = async() =>{
         const mail = user?.email;
         if(!mail){
             console.error("email assente");
             return;
         }
-
+    
         try {
             await axios.get(`${import.meta.env.VITE_API_KEY}/schedeEserciziUtente?email=${mail}`, {
                 headers: {
@@ -111,26 +113,26 @@ const TableExercise: React.FC=() =>{
             } catch (error) {
                 console.error(error);        
             }
-    }
-
-
-    useEffect(()=>{
-        getUtente();
-        getNomeEsercizio();
-    },[]);
-
-    useEffect(()=>{
-        if(user){
-            getEsercizi();
         }
-    },[user]);
+    
+    
+        useEffect(()=>{
+            getUtente();
+            getNomeEsercizio();
+        },[]);
+    
+        useEffect(()=>{
+            if(user){
+                getEsercizi();
+            }
+        },[user]);
+    
+        const handleClick = (id : number, esercizio_id :number) =>{
+            console.log("ocio che elimina: ", id,esercizio_id);
+            deleteEx(id, esercizio_id);
+        }
 
-    const handleClick = (id : number, esercizio_id :number) =>{
-        console.log("ocio che elimina: ", id,esercizio_id);
-        deleteEx(id, esercizio_id);
-    }
-
-    return(
+    return (
         <div>
             <table id='patienttable'>
                 <thead>
@@ -143,7 +145,7 @@ const TableExercise: React.FC=() =>{
                     </tr>
                 </thead>
                 <tbody>
-                    {ex.map((e,i) => (
+                    {ex.filter((e) => e.scheda_id === schedaId).map((e,i) => (
                         <tr key={e.id}>
                             <td>{e.scheda_id}</td>
                             <td>{ne[i]?.nome}</td>
@@ -158,4 +160,4 @@ const TableExercise: React.FC=() =>{
     )
 };
 
-export default TableExercise;
+export default TableScheda;

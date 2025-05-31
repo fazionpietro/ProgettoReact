@@ -12,6 +12,7 @@ import Profile from './Profile.tsx';
 import AddSchede from './AddSchede.tsx';
 import AggiungiUtente from './AggiungiUtente.tsx';
 import AddEsercizio from "./AggiungiEsercizio.tsx";
+import TableScheda from "./TableScheda.tsx";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path='/Exercise' element={<Exercise />}></Route>
           <Route path='/Patience' element={<Patience />}></Route>
           <Route path='/Profile' element={<Profile />}></Route>
+          <Route path='/scheda/:id' element={<TableScheda />}></Route>
        
         </Route>
         
