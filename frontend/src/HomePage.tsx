@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './stylesheets/LoginRegister.css';
-//import { Card } from 'react-bootstrap';
+
 import Papa from 'papaparse';
 import StoricoPassiGiornaliero from './Grafici/StoricoPassiGiornaliero';
 import StoricoPassiSettimanale from './Grafici/StoricoPassiSettimanale';
@@ -13,7 +13,7 @@ import GraficoDistGiornaliero from './Grafici/GraficoDistGiornaliero';
 import GraficoDistSettimanale from './Grafici/GraficoDistSettimanale';
 import GraficoDistMensile from './Grafici/GraficoDistMensile';
 import Navbar from './Navbar';
-import { data } from 'react-router';
+
 
 function HomePage(){
 
