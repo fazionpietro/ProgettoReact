@@ -1,0 +1,317 @@
+
+
+body {
+  margin: 0;
+}
+
+.homeContainer {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 20px;
+  min-height: calc(100vh - 40px);
+  /* Occupa tutta l'altezza disponibile meno il padding */
+  box-sizing: border-box;
+}
+
+.item {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.item.hidden {
+  display: none;
+}
+
+.inputObbiettivo {
+  width: 70%;
+  height: 2vh;
+  padding: 8px;
+  font-size: 17px;
+  margin-top: 10px;
+}
+
+.div1 {
+  grid-column: 1 / 3;
+  /* Colonne 1-2 */
+  grid-row: 1 / 3;
+  /* Righe 1-2 */
+}
+
+.div2 {
+  grid-column: 3 / 5;
+  /* Colonne 3-4 */
+  grid-row: 1 / 3;
+  /* Righe 1-2 */
+}
+
+.div3 {
+  grid-column: 5 / 7;
+  /* Colonne 5-6 */
+  grid-row: 1 / 3;
+  /* Righe 1-2 */
+}
+
+.div4 {
+  grid-column: 1 / 3;
+  /* Colonne 1-2 */
+  grid-row: 3 / 5;
+  /* Righe 3-4 */
+}
+
+.div5 {
+  grid-column: 3 / 4;
+  /* Colonna 3 */
+  grid-row: 3 / 4;
+  /* Riga 3 */
+}
+
+.div6 {
+  grid-column: 4 / 5;
+  /* Colonna 4 */
+  grid-row: 3 / 4;
+  /* Riga 3 */
+}
+
+.div7 {
+  grid-column: 5 / 6;
+  /* Colonna 5 */
+  grid-row: 3 / 4;
+  /* Riga 3 */
+}
+
+.div8 {
+  grid-column: 6 / 7;
+  /* Colonna 6 */
+  grid-row: 3 / 4;
+  /* Riga 3 */
+}
+
+.div9 {
+  grid-column: 3 / 4;
+  /* Colonna 3 */
+  grid-row: 4 / 5;
+  /* Riga 4 */
+}
+
+.div10 {
+  grid-column: 4 / 5;
+  /* Colonna 4 */
+  grid-row: 4 / 5;
+  /* Riga 4 */
+}
+
+.div11 {
+  grid-column: 5 / 7;
+  /* Colonne 5-6 */
+  grid-row: 4 / 5;
+  /* Riga 4 */
+}
+
+/* Stili per i contenuti degli item */
+.item p {
+  margin: 0 0 15px 0;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.item button {
+  margin: 5px;
+  padding: 8px 12px;
+  border: 1px solid hsl(261deg 80% 48%);
+  ;
+  background-color: hsl(261deg 80% 48%);
+  ;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.item button:hover {
+  background-color: hsl(261deg 80% 48%);
+  ;
+}
+
+/* Layout responsivo per schermi più piccoli */
+@media (max-width: 1200px) {
+  .homeContainer {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+  }
+
+  .div1 {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+  }
+
+  .div2 {
+    grid-column: 3 / 5;
+    grid-row: 1 / 3;
+  }
+
+  .div3 {
+    grid-column: 1 / 3;
+    grid-row: 3 / 5;
+  }
+
+  .div4 {
+    grid-column: 3 / 5;
+    grid-row: 3 / 5;
+  }
+
+  .div5,
+  .div6,
+  .div7,
+  .div8 {
+    grid-column: span 1;
+    grid-row: 5 / 6;
+  }
+
+  .div9,
+  .div10 {
+    grid-column: span 1;
+    grid-row: 6 / 7;
+  }
+
+  .div11 {
+    grid-column: 3 / 5;
+    grid-row: 6 / 7;
+  }
+}
+
+@media (max-width: 768px) {
+  .homeContainer {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .div1,
+  .div2,
+  .div3,
+  .div4 {
+    grid-column: 1 / 3;
+    grid-row: span 1;
+  }
+
+  .div5,
+  .div6,
+  .div7,
+  .div8,
+  .div9,
+  .div10,
+  .div11 {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+}
+
+
+
+.homeContainer p {
+  font-size: 1.5em;
+}
+
+.record {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 80px;
+}
+
+.record h4 {
+  font-size: 3em;
+}
+
+/* Stili migliorati per gli input dei file */
+.fileInput {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  gap: 30px;
+
+}
+
+.fileInputItem {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: center;
+}
+
+.fileLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  border: 2px dashed hsl(261deg 80% 48%);
+  border-radius: 12px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 18px;
+  font-weight: 500;
+  color: hsl(261deg 80% 48%);
+  text-align: center;
+}
+
+.fileLabel:hover {
+  background-color: #e9ecef;
+  border-color: hsl(261deg 80% 40%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.fileInputField {
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+.fileInputField:focus {
+  outline: none;
+  border-color: hsl(261deg 80% 48%);
+  box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.25);
+}
+
+/* Responsive per gli input dei file */
+@media (max-width: 768px) {
+  .fileInput {
+    padding: 20px 10px;
+    gap: 20px;
+    min-height: 50vh;
+  }
+
+  .fileLabel {
+    padding: 20px;
+    font-size: 16px;
+  }
+
+  .fileInputField {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

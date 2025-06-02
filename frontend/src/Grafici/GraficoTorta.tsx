@@ -16,9 +16,9 @@ const GraficoTorta = ({ dati } : { dati : any }) => {
                         label : "Count",
                         data : [cammina,corri,bici],
                         backgroundColor: [
-                            'rgba(255,0,0)',
-                            'rgba(0,255,0)',
-                            'rgba(0,0,255)',
+                            'rgba(233,72,15)',
+                            'rgba(134,88,180)',
+                            'rgba(160,232,255)'
                         ]
                 }]
             }}

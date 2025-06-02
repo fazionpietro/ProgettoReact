@@ -1,8 +1,10 @@
-import './stylesheets/LoginRegister.css';
+import './stylesheets/Table.css';
+import './stylesheets/Profile.css'
 import Navbar from './Navbar';
-import Table from './Table';
+import Table from './Tabelle/Table';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 interface user{
     username: string;
@@ -12,6 +14,8 @@ interface user{
 
 function Profile(){
     const [user, setUser] = useState<user>();
+    const [ruolo, setRuolo] = useState<string>();
+    const navigate = useNavigate();
 
     const getUtente = async () =>{
         try {
@@ -25,6 +29,7 @@ function Profile(){
             .then((resp) => {
                 if (resp.status === 200){ 
                     setUser(resp.data);
+                    setRuolo(resp.data.ruolo);
                 }  
             });
         } catch (error) {
@@ -37,17 +42,29 @@ function Profile(){
     },[]);
 
     return(
-        <div>
+        <div >
             <Navbar/>
-            <div className='profile'>
-                <h1 className='img_label'>Benvenuto: {user?.username}</h1>
-                <h3 className='img_label'>{user?.email}</h3>
+            <div className='profileContainer'>
+                <div className='profile'>
+                    <h1 >Benvenuto: {user?.username}</h1>
+                    <h3>{user?.email}</h3>
+                </div>
+                <div>
+                    <p>{ruolo=="utente" ? "Info profilo" : "Pazienti"}</p>
+                    <Table/>
+                </div>
             </div>
-
-            <div className='card'>
-                <p>info Profile</p>
-                <Table/>
+            <div className="newButtonContainer">
+                <button className="newButton" onClick={()=> navigate("/addUtente")}>Nuovo Paziente</button>
             </div>
+            <div className="logOutButtonContainer">
+                <button className="logOutButton" onClick={()=> {
+                    localStorage.clear();
+                    navigate("/addUtente")
+                    }}>Logout</button>
+            </div>
+        
+            
         </div>
     )
 }

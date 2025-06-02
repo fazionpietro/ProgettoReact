@@ -2,7 +2,7 @@ import {useState} from "react";
 import "./stylesheets/LoginRegister.css";
 import axios, {AxiosError, AxiosResponse } from "axios";
 
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 
 function AggiungiUtente() {
     const navigate = useNavigate();
@@ -42,11 +42,13 @@ function AggiungiUtente() {
     }
 
     return (
-        <>
-            <h2>Crea Paziente</h2>
-            <form onSubmit={handleSubmit}>
+        <div className="inputPage">
+            
+            <form onSubmit={handleSubmit} className="inputForm">
                 <div>
+                    <h1>Crea Paziente</h1>
                     <input
+                    className="inputLoginRegister"
                         type="text"
                         placeholder="Email"
                         name="email"
@@ -59,6 +61,7 @@ function AggiungiUtente() {
                 </div>
                 <div>
                     <input
+                    className="inputLoginRegister"
                         type="text"
                         placeholder="Nome"
                         name="nome"
@@ -71,6 +74,7 @@ function AggiungiUtente() {
                 </div>
                 <div>
                     <input
+                    className="inputLoginRegister"
                         type="text"
                         placeholder="Cognome"
                         name="cognome"
@@ -83,6 +87,7 @@ function AggiungiUtente() {
                 </div>
                 <div>
                     <input
+                    className="inputLoginRegister"
                         type="text"
                         placeholder="Password"
                         name="password"
@@ -93,16 +98,20 @@ function AggiungiUtente() {
                         }}
                     />
                 </div>
+                
+                <div className="loginErrorDiv">
+                    <label className="loginError">{registerError}</label>
+                </div>
                 <div>
-                    <button className="loginButton" type="submit">
+                    <button className="buttonLoginRegister" type="submit">
                         invia
                     </button>
                 </div>
                 <div>
-                    <label className="loginError">{registerError}</label>
+                    <NavLink to="/Pazienti">Indietro</NavLink>
                 </div>
             </form>
-        </>
+        </div>
     );
 }
 export default AggiungiUtente;

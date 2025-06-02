@@ -1,0 +1,41 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: hsl(261deg 80% 48%);
+  color: rgba(255, 255, 255, 0.871)
+}
+
+.navbar h3 {
+    font-style: bold;
+  margin: 0;
+  font-size: 1.5rem;
+ 
+}
+
+.navbar ul{
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+
+}
+
+.navbar a{
+    font-size: medium;
+    padding: 15px;
+
+}
+.navbar a:visited{
+    color: rgba(255, 255, 255, 0.871)
+}
+
+.navbar a:hover{
+    text-decoration: underline;
+}
+
+.navbar li{
+  float: left;
+ 
+}

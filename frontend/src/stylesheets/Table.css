@@ -1,0 +1,66 @@
+table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+    max-width: 70%;
+    margin-bottom: 15px;
+    background-color: transparent;
+
+
+
+}
+
+th {
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    /* Change the border-color of heading here */
+    padding: 8px;
+}
+
+td {
+    border: 1px solid #cccccc;
+    /* Change the border-color of cells here */
+    padding: 8px;
+}
+
+table button {
+    background: white;
+    padding: 7px 13px;
+    border-radius: 10px;
+    border: 1px solid rgba(81, 81, 81, 0.293);
+}
+
+.delButton {
+    color: red
+}
+
+.delButton:hover {
+    background-color: rgba(255, 0, 0, 0.189);
+}
+
+
+.viewButton {
+    color: hsl(261deg 80% 48%)
+}
+
+.viewButton:hover {
+    color: rgba(255, 255, 255, 0.778);
+    background-color: hsl(261deg 80% 48%);
+}
+
+.tableContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.tableContainer table{
+    font-size: 0.8em;
+}
+.navLink{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

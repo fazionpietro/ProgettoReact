@@ -1,15 +1,22 @@
-import './stylesheets/LoginRegister.css';
+
 import Navbar from './Navbar';
-import ListaEsercizi from './ListaEsercizi';
+import ListaEsercizi from './Tabelle/ListaEsercizi';
+import "./stylesheets/Esercizi.css"
+import './stylesheets/newEntryButton.css'
+import { useNavigate } from "react-router";
 
 
 function Exercise(){
+    const navigate = useNavigate();
     return(
         <div>
             <Navbar/>
-            <div className='card'>
-                <p>Esercizi</p>
+            <div className='eserciziTable'>
+                <h1>Esercizi</h1>
                 <ListaEsercizi/>
+            </div>
+            <div className="newButtonContainer">
+                <button className="newButton" onClick={()=> navigate("/addEsercizio")}>Nuovo Esercizio</button>
             </div>
         </div>
     )

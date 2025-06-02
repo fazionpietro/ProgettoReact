@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router"
+import { NavLink, useNavigate, useParams } from "react-router"
+import "../stylesheets/Table.css"
+import Navbar from "../Navbar";
 
 interface exercise{
     id : number;
@@ -39,7 +41,7 @@ const TablePaziente: React.FC =()=>{
 
     useEffect(()=>{
         getUserSchede();
-    })
+    },[])
 
     const schedeFiltrate = Array.from(
         new Map(schede.map((sc)=>[sc.scheda_id,sc])).values()
@@ -54,9 +56,11 @@ const TablePaziente: React.FC =()=>{
     }
 
     return(
-        <div className="card">
+        <div >
+            <Navbar/>
+            <div className='tableContainer'>
             <h2>Email Paziente: {email}</h2>
-            <table id='patienttable'>
+            <table >
                 <thead>
                     <tr>
                         <th>id scheda</th>
@@ -71,11 +75,24 @@ const TablePaziente: React.FC =()=>{
                             <td>{sc.scheda_id}</td>
                             <td>{sc.nome_scheda}</td>
                             <td>{sc.note_scheda}</td>
-                            <td><button onClick={()=>handleClick(sc.scheda_id)}>visualizza</button></td>
+                            <td><button className='viewButton' onClick={()=>handleClick(sc.scheda_id)}>visualizza</button></td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            </div>
+            <div className="newButtonContainer">
+                <button
+                    className="newButton"
+                    onClick={() => navigate("/addScheda")}
+                >
+                    Nuova Scheda
+                </button>
+                <div>
+                        <NavLink to="/Pazienti">Indietro</NavLink>
+                </div>
+            </div>
+            
         </div>
     )
 }

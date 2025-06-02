@@ -159,7 +159,7 @@ function AddSchede() {
     }
 
     useEffect(() => {
-        console.log(listaEsercizi);
+       
         if (isInitialized.current) return;
 
         isInitialized.current = true;
