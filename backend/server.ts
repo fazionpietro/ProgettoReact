@@ -135,14 +135,15 @@ const authenticateToken = (req: any, res: any, next: any) => {
 
         if (bearerToken) {
             const token  = bearerToken.slice(7)
-            //console.log(token)
+            const decodedToken : any= jwt.decode(bearerToken.slice(7))
+            
             jwt.verify(token, secretKey, (err: any) => {
                 if (err) throw new Error('Invalid or expired token');
                 
             });
 
             
-            res.status(200).send("");
+            res.status(200).send({ruolo : decodedToken.ruolo});
 
         }else{
             res.status(401).send("Token Required");
@@ -291,7 +292,7 @@ app.post('/api/signup', async (req: express.Request<{},{},{}, userData>, res: ex
             
             const hashedPsw = await bcrypt.hash(query.password,8)
             await addUser(query.email, hashedPsw, query.ruolo, query.name, query.surname)
-            const token = jwt.sign({ id: query.email }, secretKey, { expiresIn: '1h' });
+            const token = jwt.sign({ id: query.email , ruolo: query.ruolo}, secretKey, { expiresIn: '1h' });
             res.status(200).json({"token": token})
     } catch (err: any) {
         res.status(400).json({"error":err.message});
@@ -307,17 +308,32 @@ app.post('/api/login', async (req: express.Request<{},{},{}, userData>, res: exp
     try {
         res.header("Access-Control-Allow-Origin", "*");
         if(!checkEmail(query.email)) throw new Error('invalid email');
-        const all: userData []= await getAllIdenty()
+        const all: userData[]= await getAllIdenty()
+        let user :userData= {
+            email: "",
+            password: "",
+            ruolo: "",
+            name: "",
+            surname: "",
+
+        }
+        
         for(let i = 0; i < all.length; i++){
             if((all[i].email === req.query.email) && (await bcrypt.compare(query.password, all[i].password))){
                 
+                user = all[i];
                 flag=true;
 
             }
         }
+
+
         if(flag){
-            const token = jwt.sign({ id: query.email }, secretKey, { expiresIn: '1h' });
-            res.status(200).json({'token':token})
+            const token = jwt.sign({ id: query.email , ruolo : user.ruolo}, secretKey, { expiresIn: '1h' });
+            res.status(200).json({
+                'token':token
+
+            })
         }else{
             res.status(400).json({"error":'Invalid credentials'});
         }
@@ -331,7 +347,7 @@ app.post('/api/login', async (req: express.Request<{},{},{}, userData>, res: exp
         
     }
     
-})
+})      
 
 
 
@@ -379,11 +395,22 @@ app.post('/api/addScheda',authenticateToken, async (req: express.Request<{},{},{
     
 })
 
-app.delete('/api/deleteEx/:idS/:id', authenticateToken, async (req, res) =>{
+app.delete('/api/deleteExSCheda/:idS/:id', authenticateToken, async (req, res) =>{
     try{
         const idS= parseInt(req.params.idS,10)
         const id= parseInt(req.params.id,10)
-        await deleteEx(idS, id);
+        await deleteExSCheda(idS, id);
+        res.status(200).json({success : true})
+
+    }catch (err:any){
+        res.status(500).json({"error": err.message})
+    }
+})
+app.delete('/api/deleteEsercizio/:id', authenticateToken, async (req, res) =>{
+    try{
+        
+        const id= parseInt(req.params.id,10)
+        await deleteEsercizio(id);
         res.status(200).json({success : true})
 
     }catch (err:any){
@@ -393,6 +420,7 @@ app.delete('/api/deleteEx/:idS/:id', authenticateToken, async (req, res) =>{
 
 app.delete('/api/deleteUtente/:email', authenticateToken, async (req, res) =>{
     try{
+
         await deleteUtente(req.params.email);
         res.status(200).json({success : true})
 
@@ -425,9 +453,22 @@ async function deleteUtente(email : string){
     })
 }
 
-async function deleteEx(idS: number, id: number){
+async function deleteExSCheda(idS: number, id: number){
     return new Promise<void>((resolve, reject)=>{
         db.run(`DELETE FROM schedaEsercizi where esercizio_id=? AND id=?`, [id,idS],function(err){
+            if(err){
+                reject(err);
+            }else if(this.changes === 0){
+                reject(new Error("non trovato"))
+            }else{
+                resolve();
+            }
+        })
+    })
+}
+async function deleteEsercizio( id: number){
+    return new Promise<void>((resolve, reject)=>{
+        db.run(`DELETE FROM Esercizi where id=?`, [id],function(err){
             if(err){
                 reject(err);
             }else if(this.changes === 0){

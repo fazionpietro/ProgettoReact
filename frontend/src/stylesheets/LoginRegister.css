@@ -1,143 +1,80 @@
-
-
-.loginButton{
-  margin: 0.5em;
-  font-size:20px;
-  width:530px;
-  padding:15px;
-  text-align:center;
-  background:white;
-}
-.card {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-  padding: 40px 0px 40px 0px;
-  border-radius: 25px;
-  background: #146cd8;
-  box-shadow:  10px 10px 20px #9e9a9a,
-             10px 10px 20px #9e9a9a;
+.inputForm {
+    
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    width: 30%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    box-shadow: 0px 1px 5px 4px rgba(0, 0, 0, 0.095);
+    border-radius: 25px;
+    min-width: 250px;
 }
 
-p{
-  text-align:center;
-  font-weight:bold;
-  font-size:20px;
+.loginError {
+    color: brown;
+    padding: 5px;
+
 }
 
-label{
-  padding: 1% 1% 1% 1%;
-  font-size: 1.5em ;
-  text-align: left;
+.loginErrorDiv {
+    margin: 0.5em;
+}
+
+.inputLoginRegister {
+    font-size: medium;
+    width: 60%;
+    height: 4em;
+    margin: 7px;
+    border-color: rgb(178, 178, 178);
+    border-width: 1px;
 }
 
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #ffffff;
-  cursor: pointer;
-  transition: border-color 0.25s;
+.inputPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
 }
 
-input{
-  margin: 0.5em;
-  font-size:20px;
-  width:500px;
-  padding:15px;
-  text-align:center;
-  background:white;
+body {
+    background-color: whitesmoke;
 }
 
-.container{
-  display: grid;
-  grid-template-columns: 2fr 1fr;   
+.buttonLoginRegister {
+    font-size: 1em;
+    font-weight: bold;
+    width: 60%;
+    height: 4em;
+    margin: 5px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    
 }
 
-.dashboard{
-  background-color: black;
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
+.buttonLoginRegister:hover {
+
+    background-color: hsl(261deg 80% 48%);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
 }
 
-.home{
-  display: grid;
-  grid-template-columns: 0.20fr 1fr;
+.Dropdown{
+    width: 60%;
+    height: 4em;
+    margin: 5px
 }
 
-.containerecord{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
 
-.item{
-  background-color: aliceblue;
-  box-shadow:  5px 5px 5px #9e9a9a,
-             5px 5px 5px #9e9a9a;
-  border-radius: 10px;
-  border: 1px solid;
+.addEsercizo h4{
+    padding-left: 20%;
+    text-align: left;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
-
-.item.hidden{
-  display: none;
-}
-
-.inputObbiettivo{
-  width: 50px;
-  height: 5px;
-}
-
-.navbar{
-  border-radius: 50px;
-  padding-bottom: 20px;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 0px;
-}
-
-.navbar ul{
-  list-style-type: none;
-  background-color:#146cd8;
-  padding: 0px;
-  margin: 0px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.navbar a{
-  color: white;
-  text-decoration: none;
-  padding: 15px;
-  display: block;
-  text-align: center;
-}
-
-.navbar a:hover{
-  background-color: #0e4d9b;
-}
-
-.navbar li{
-  float: left;
-  text-align: center;
-}
-
-.profile{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.profile img{
-  width: 150px;
-  height: auto;
-  border-radius: 50%;
-  margin: 10px;
+.addEsercizo textarea{
+    width: 60%;
+    margin-bottom: 15px;
 }

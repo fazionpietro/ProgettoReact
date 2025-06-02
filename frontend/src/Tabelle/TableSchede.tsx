@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-
+import '../stylesheets/Table.css'
 
 interface user{
     username: string;
@@ -82,8 +82,8 @@ const TableSchede: React.FC=() =>{
     );
 
     return(
-        <div>
-            <table id='patienttable'>
+        <div className="tableContainer">
+            <table >
                 <thead>
                     <tr>
                         <th>id scheda</th>
@@ -98,7 +98,7 @@ const TableSchede: React.FC=() =>{
                             <td>{sc.scheda_id}</td>
                             <td>{sc.nome_scheda}</td>
                             <td>{sc.note_scheda}</td>
-                            <td><button onClick={()=>handleClick(sc.scheda_id)}>visualizza</button></td>
+                            <td><button className='viewButton' onClick={()=>handleClick(sc.scheda_id)}>visualizza</button></td>
                         </tr>
                     ))}
                 </tbody>

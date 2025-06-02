@@ -1,5 +1,5 @@
 import {useState} from "react";
-import "./stylesheets/LoginRegister.css";
+import "./stylesheets/HomePage.css";
 import axios, {AxiosError, AxiosResponse } from "axios";
 
 import { useNavigate, NavLink } from "react-router";
@@ -56,10 +56,12 @@ function AppRegister() {
     }
 
     return (
-        <div className="card">
-            <form onSubmit={handleRegister}>
+        <div className="inputPage">
+            <form onSubmit={handleRegister} className="inputForm">
                  <div>
+                    <h1>Register</h1>
                     <input
+                        className="inputLoginRegister"
                         type="text"
                         placeholder="Email"
                         name="email"
@@ -72,6 +74,7 @@ function AppRegister() {
                 </div>
                 <div>
                     <input
+                        className="inputLoginRegister"
                         type="text"
                         placeholder="nome"
                         name="name"
@@ -84,6 +87,7 @@ function AppRegister() {
                 </div>
                 <div>
                     <input
+                        className="inputLoginRegister"
                         type="text"
                         placeholder="cognome"
                         name="surname"
@@ -101,6 +105,7 @@ function AppRegister() {
                 </div>
                 <div>
                     <input
+                        className="inputLoginRegister"
                         type="password"
                         placeholder="Password"
                         value={password}
@@ -111,9 +116,9 @@ function AppRegister() {
                     />
                 </div>
                 <div>
-                    <button className='loginButton' type="submit">invia</button>
+                    <button className='buttonLoginRegister' type="submit">invia</button>
                 </div>
-                <div>
+                <div className="loginErrorDiv">
                     <label className="loginError">{registerError}</label>
                 </div>
                 <div>

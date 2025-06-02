@@ -1,35 +1,42 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import NavbarItem from "./NavbarItem";
-import "./stylesheets/LoginRegister.css"
+import "./stylesheets/NavBar.css";
+import axios from "axios";
 
-const navbarElements = [
-    {label: 'Home', href: '/'},
-    {label: 'Pazienti', href: '/Patience'},
-    {label: 'Utente', href: '/Profile'},
-    {label: 'Lista Esercizi', href: '/Exercise'}
-]
 
 type NavbarProps = {
     children?: ReactNode;
-}
+};
+
+let navbarElements= [
+    { label: "Home", href: "/" },
+    { label: "Pazienti", href: "/Pazienti" },
+    { label: "Esercizi", href: "/Exercise" },
+    { label: "Profilo", href: "/Profile" },
+]
 
 function Navbar(props: NavbarProps) {
-    return(
-        <nav className="navbar">
-            <ul>
-                {navbarElements.map(element=>{
-                    return(
-                        <NavbarItem
-                            key={element.href}
-                            href={element.href}
-                            label={element.label}
-                        />
-                    )
-                })}
-            </ul>
-            {props.children}
-        </nav>
-    )
+    
+
+    return (
+        <div className="navbarContainer">
+            <nav className="navbar">
+                <h3>FITNESS APP</h3>
+                <ul>
+                    {navbarElements.map((element) => {
+                        return (
+                            <NavbarItem
+                                key={element.href}
+                                href={element.href}
+                                label={element.label}
+                            />
+                        );
+                    })}
+                </ul>
+                {props.children}
+            </nav>
+        </div>
+    );
 }
 
 export default Navbar;

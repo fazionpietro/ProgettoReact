@@ -1,0 +1,27 @@
+.newButton {
+    font-size: 1em;
+    font-weight: bold;
+    width: 15%;
+    height: 4em;
+    margin: 5px;
+    border-radius: 20px;
+    border: 1px solid rgb(93 24 220) ;
+
+
+
+}
+
+.newButton:hover {
+
+    background-color: hsl(261deg 80% 48%);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+    
+}
+
+.newButtonContainer {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+}

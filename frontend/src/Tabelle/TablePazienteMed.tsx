@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './stylesheets/table.css';
+import '../stylesheets/Table.css';
 import { useNavigate } from 'react-router';
 
 interface Paziente {
@@ -68,8 +68,8 @@ const TablePatient: React.FC=() => {
     }
 
     return(
-        <div>
-            <table id='patienttable'>
+        <div className='tableContainer'>
+            <table>
                 <thead>
                     <tr>
                         <th>nome</th>
@@ -85,8 +85,8 @@ const TablePatient: React.FC=() => {
                             <td>{p.name}</td>
                             <td>{p.surname}</td>
                             <td>{p.email}</td>
-                            <td><button onClick={()=>handleClick(p.email)}>elimina</button></td>
-                            <td><button onClick={()=>handleOnClick(p.email)}>visualizza</button></td>
+                            <td><button className='delButton' onClick={()=>handleClick(p.email)}>elimina</button></td>
+                            <td><button className='viewButton' onClick={()=>handleOnClick(p.email)}>visualizza</button></td>
                         </tr>
                     ))}
                 </tbody>

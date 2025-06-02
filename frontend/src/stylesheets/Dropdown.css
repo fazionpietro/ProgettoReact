@@ -1,15 +1,11 @@
-select{
-    border: 1px solid transparent;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #ffffff;
-    cursor: pointer;
-    transition: border-color 0.25s;
-    margin: 0.5em;
-    font-size:20px;
-    width:530px;
-    padding:15px;
-    text-align:center;
-    background:white;
+.dropDownSelect{
+    font-size: medium;
+    width: 60.5%;
+    height: 4em;
+    margin: 7px;
+    background-color: white;
+    border-style: solid;
+    border-color: rgb(178, 178, 178);
+    border-width: 1px;
+
 }

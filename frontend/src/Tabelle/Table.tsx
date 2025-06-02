@@ -1,7 +1,8 @@
-import TablePatient from "./TablePatient";
+import TablePatient from "./TablePazienteMed";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TableSchede from "./TableSchede";
+
 
 interface user{
     username: string;
