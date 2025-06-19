@@ -8,15 +8,42 @@ type NavbarProps = {
     children?: ReactNode;
 };
 
-let navbarElements= [
+function Navbar(props: NavbarProps) {
+
+    let navbarElements= [
     { label: "Home", href: "/" },
-    { label: "Pazienti", href: "/Pazienti" },
     { label: "Esercizi", href: "/Exercise" },
     { label: "Profilo", href: "/Profile" },
 ]
 
-function Navbar(props: NavbarProps) {
+    const [ruolo, setRuolo] = useState<string>();
+
+    if(ruolo === "medico" || ruolo === "personalTrainer"){
+    navbarElements.push({label: "Pazienti", href: "/Pazienti"});
+    }
     
+    const getUtente = async () =>{
+        try {
+            await axios.get(`${import.meta.env.VITE_API_KEY}/getDatiUtente`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                    "access_token"
+                    )}`,
+                },
+            })
+            .then((resp) => {
+                if (resp.status === 200){ 
+                    setRuolo(resp.data.ruolo);
+                }  
+            });
+        } catch (error) {
+            console.error(error);        
+        }
+    }
+
+    useEffect(()=>{
+        getUtente();
+    },[]);
 
     return (
         <div className="navbarContainer">
