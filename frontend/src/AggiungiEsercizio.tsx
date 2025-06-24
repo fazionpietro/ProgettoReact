@@ -145,7 +145,7 @@ function AggiungiEsercizio() {
                         </button>
                     </div>
                     <div>
-                        <NavLink to="/Pazienti">Indietro</NavLink>
+                        <NavLink to="/Profile">Indietro</NavLink>
                     </div>
                 </form>
             </div>

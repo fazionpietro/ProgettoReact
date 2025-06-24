@@ -25,6 +25,8 @@ interface user {
 const TableScheda: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const schedaId = id ? parseInt(id, 10) : null;
+    
+    const [email, setEmail] = useState()
 
     const navigate = useNavigate();
     const [ex, setEx] = useState<exercise[]>([]);
@@ -45,6 +47,7 @@ const TableScheda: React.FC = () => {
                 .then((resp) => {
                     if (resp.status === 200) {
                         setUser(resp.data);
+                        setEmail(resp.data.email)
                     }
                 });
         } catch (error) {
@@ -192,9 +195,9 @@ const TableScheda: React.FC = () => {
             <div className="newButtonContainer">
                 <button
                     className="newButton"
-                    onClick={() => navigate("/addUtente")}
+                    onClick={() => navigate(`/addAScheda/${id}/${email}`)}
                 >
-                    Aggiungi Esercizio (alla scheda corrente)
+                    Aggiorna Scheda
                 </button>
             </div>
         </div>

@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import PatientSelector from "./Dropdown/PatientSelectionComponent";
-
+import "./stylesheets/LoginRegister.css";
 import schedaEserciziData from "./types/schedaEserciziType";
+import { useParams, NavLink } from "react-router";
 
 type esercizioData = {
     esercizio_id: string;
@@ -11,8 +12,9 @@ type esercizioData = {
     [key: string]: string;
 };
 
-
 function AddSchede() {
+    const { id } = useParams<{ id: string | undefined}>();
+    const { emailParam } = useParams<{ emailParam: string | undefined}>();
     const [allSchedeName, setAlleSchedeName] = useState<{ nome: string }[]>();
     const [ruolo, setRuolo] = useState("");
     const [email, setEmail] = useState("");
@@ -106,11 +108,17 @@ function AddSchede() {
         }
     }
 
-    function createScheda() {
+    function createScheda(e: React.FormEvent) {
+        e.preventDefault();
         scheda.note = note
+        
 
-
-        if (allSchedeName?.some((item) => item.nome == scheda.nome_scheda)) {
+        if(id){
+            scheda.id = Number(id)
+            scheda.nome_scheda = id
+            
+        }
+        if (allSchedeName?.some((item) => item.nome == scheda.nome_scheda) && !id) {
             setSchedaError("scheda già presente");
             return;
         }
@@ -122,13 +130,22 @@ function AddSchede() {
             scheda.user_email_id = email;
         } else {
             if (selectedPatient) {
-                if (selectedPatient === "") {
+                if (selectedPatient === "" && id && emailParam) {
+                    scheda.user_email_id = emailParam;
+                    
+                } else if(selectedPatient === "" ){
                     setSchedaError("devi selezionare un paziente");
                     return;
                 } else scheda.user_email_id = selectedPatient;
             } else {
-                setSchedaError("devi selezionare un paziente");
-                return;
+                if (id && emailParam) {
+
+                    scheda.user_email_id = emailParam;
+                }else{
+                    setSchedaError("devi selezionare un paziente");
+                return; 
+                }
+                
             }
         }
 
@@ -159,7 +176,6 @@ function AddSchede() {
     }
 
     useEffect(() => {
-       
         if (isInitialized.current) return;
 
         isInitialized.current = true;
@@ -187,7 +203,7 @@ function AddSchede() {
     };
 
     const removeFields = (index: number) => {
-        if (index < 0 || index >= listaEsercizi.length) return; // Verifica l'indice
+        if (index < 0 || index >= listaEsercizi.length) return;
         const data = [...listaEsercizi];
         data.splice(index, 1);
         setListaEsercizi(data);
@@ -200,32 +216,42 @@ function AddSchede() {
 
     return (
         <>
-            <div>
-                <h2>Aggiungi Scheda</h2>
-                <input
-                    className="nameInput"
-                    type="text"
-                    placeholder="Nome scheda"
-                    onChange={(e) => {
-                        scheda.nome_scheda = e.target.value;
-                    }}
-                />
-                <div>
-                    <PatientSelector
-                        onDataFetch={handleRuoloFetch}
-                        setSelectedPatient={setSelectedPatient}
-                        currentSelectedPatient={selectedPatient}
-                    />
-                </div>
+            <div className="inputPage addEsercizo">
+                <form className="inputForm">
+                    {(id && emailParam) ? 
+                    
+                    <><h1>Aggiungi Esercizi</h1>
+                    </>
+                    
+                    
+                    
+                    : (
+                        <><div>
+                            <h1>Aggiungi Scheda</h1>
+                            <input
+                                className="inputLoginRegister"
+                                type="text"
+                                placeholder="Nome scheda"
+                                onChange={(e) => {
+                                    scheda.nome_scheda = e.target.value;
+                                } } />
+                        </div><div>
+                                
+                                <PatientSelector
+                                    onDataFetch={handleRuoloFetch}
+                                    setSelectedPatient={setSelectedPatient}
+                                    currentSelectedPatient={selectedPatient} />
+                            </div></>)}
+                    
 
-                <form>
                     {listaEsercizi.map((input, index) => {
                         return (
                             <div key={index}>
-                                <h4>Esercizio: {index + 1}</h4>
+                                <h4>Esercizio {index + 1}:</h4>
 
                                 {eserciziDisponibili ? (
                                     <select
+                                        className="Dropdown"
                                         value={
                                             esercizi?.find(
                                                 (item) =>
@@ -244,7 +270,7 @@ function AddSchede() {
                                             setListaEsercizi(data);
                                         }}
                                     >
-                                        <option value="">Select Option</option>
+                                        <option value="">Seleziona Esercizio</option>
                                         {eserciziDisponibili.map((option) => (
                                             <option key={option} value={option}>
                                                 {option}
@@ -254,7 +280,9 @@ function AddSchede() {
                                 ) : (
                                     ""
                                 )}
+                                
                                 <input
+                                    className="inputLoginRegister"
                                     value={input.serie}
                                     name="serie"
                                     placeholder="Serie"
@@ -264,54 +292,109 @@ function AddSchede() {
                                         handleFormChange(index, event)
                                     }
                                 />
-                                <input
-                                    value={input.ripetizioni}
-                                    name="ripetizioni"
-                                    placeholder="Ripetizioni"
-                                    type="number"
-                                    min="0"
-                                    onChange={(event) =>
-                                        handleFormChange(index, event)
-                                    }
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => removeFields(index)}
-                                >
-                                    X
-                                </button>
+                                
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '61.5%', margin: '7px auto' }}>
+                                    <input
+                                        className="inputLoginRegister"
+                                        value={input.ripetizioni}
+                                        name="ripetizioni"
+                                        placeholder="Ripetizioni"
+                                        type="number"
+                                        min="0"
+                                        onChange={(event) =>
+                                            handleFormChange(index, event)
+                                        }
+                                        style={{ marginRight: '10px', flex: 1 }}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeFields(index)}
+                                        style={{
+                                            backgroundColor: '#dc3545',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '50%',
+                                            width: '30px',
+                                            height: '30px',
+                                            cursor: 'pointer',
+                                            fontSize: '16px',
+                                            fontWeight: 'bold',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
                             </div>
                         );
                     })}
-                </form>
-            </div>
-            <div>
-                <button onClick={addFields}>Aggiungi Esercizio</button>
-            </div>
-            <div>
-                <h3>Note: </h3>
-                <label>
-                    <textarea 
-                        name="postContent" 
-                        rows={4} 
-                        cols={40} 
-                        onChange={
-                            (event) => {
+
+                    <div>
+                        <button 
+                            type="button"
+                            className="buttonLoginRegister"
+                            onClick={addFields}
+                        >
+                            Aggiungi Esercizio
+                        </button>
+                    </div>
+
+                    {(id && emailParam) ? <></>:
+                    <><div>
+                        <h4>Note:</h4>
+                        <textarea 
+                            name="postContent" 
+                            placeholder="Note per la scheda"
+                            rows={4} 
+                            cols={40} 
+                            value={note}
+                            onChange={(event) => {
                                 setNote(event.target.value);
-                            }
-                        }/>
-                </label>
-            </div>
-            
-            <div>
-                <button type="button" onClick={createScheda}>
-                    Crea
-                </button>
-            </div>
-            <div>
-                <h4 className="schedaError">{schedaError}</h4>
+                            }}
+                        />
+                    </div></> }
+                    
+                    
+                    <div className="loginErrorDiv">
+                        <label className="loginError">{schedaError}</label>
+                    </div>
+                    
+                    {(id && emailParam)? 
+                    
+                    <>
+                    <div>
+                        <button 
+                            type="button" 
+                            className="buttonLoginRegister"
+                            onClick={createScheda}
+                        >
+                           Aggiorna scheda
+                        </button>
+                    </div>
+                    </> : 
+                    <>
+                    <div>
+                        <button 
+                            type="button" 
+                            className="buttonLoginRegister"
+                            onClick={createScheda}
+                        >
+                            Crea Scheda
+                        </button>
+                    </div>
+                    </>}
+
+                   
+                    
+                    <div>
+                        <NavLink to="/Profile">Indietro</NavLink>
+                    </div>
+                </form>
             </div>
         </>
     );
 }
+
 export default AddSchede;

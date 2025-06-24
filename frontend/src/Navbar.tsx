@@ -17,9 +17,13 @@ function Navbar(props: NavbarProps) {
 ]
 
     const [ruolo, setRuolo] = useState<string>();
+    const [email, setEmail] = useState<string>("");
 
     if(ruolo === "medico" || ruolo === "personalTrainer"){
-    navbarElements.push({label: "Pazienti", href: "/Pazienti"});
+        
+        navbarElements.splice(1,0,{label: "Pazienti", href: "/Pazienti"})
+    }else{
+        navbarElements.splice(1,0,{label: "Routine", href: ``})
     }
     
     const getUtente = async () =>{
@@ -33,7 +37,9 @@ function Navbar(props: NavbarProps) {
             })
             .then((resp) => {
                 if (resp.status === 200){ 
+                    console.log(resp);
                     setRuolo(resp.data.ruolo);
+                    setEmail(resp.data.email);
                 }  
             });
         } catch (error) {

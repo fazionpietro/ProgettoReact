@@ -202,7 +202,7 @@ app.get("/api/schedeEsercizi",authenticateToken, async (req, res)=> {
         res.header("Access-Control-Allow-Origin", "*");
         res.set({'Content-type': 'application/json'})
         const all = await getAllSchedaEsercizi()
-        //console.log(all)
+        
         res.status(200).json(all)
         
     } catch (err: any) {
@@ -212,7 +212,7 @@ app.get("/api/schedeEsercizi",authenticateToken, async (req, res)=> {
          
 })
 
-type prova = {
+type eserciziUtente = {
     id: number;
     esercizio_id: number;
     user_email_id: string;
@@ -229,7 +229,7 @@ app.get('/api/schedeEserciziUtente',authenticateToken, async (req: express.Reque
 
         res.header("Access-Control-Allow-Origin", "*");
         res.set({'Content-type': 'application/json'})
-        const data : prova[]= await getUserSchedeEsercizi(req.query.email)
+        const data : eserciziUtente[]= await getUserSchedeEsercizi(req.query.email)
         console.log(data)
         res.status(200).json({data})
     } catch (err: any) {
@@ -358,7 +358,7 @@ app.post('/api/addSchedaEsercizi',authenticateToken, async (req: express.Request
     
     try {
         console.log(req.body);
-        console.log(await addEserciziScheda(req.body))
+        await addEserciziScheda(req.body)
         res.status(200).json()
     } catch (err: any) {
         res.status(400).json({"error":err.message});
@@ -535,8 +535,8 @@ function addUser(email: string,psw: string, ruolo: string, nome: string, cognome
     });
 }
 async function getUserSchedeEsercizi(email: string){
-    return new Promise<prova[]>((resolve, reject)=>{
-        console.log(email)
+    return new Promise<eserciziUtente[]>((resolve, reject)=>{
+        
         db.all(`SELECT 
                 SchedaEsercizi.id,
                 SchedaEsercizi.scheda_id,
@@ -548,7 +548,7 @@ async function getUserSchedeEsercizi(email: string){
                 Schede.Note AS note_scheda
                 FROM SchedaEsercizi
                 INNER JOIN Schede ON SchedaEsercizi.scheda_id = Schede.id
-                WHERE SchedaEsercizi.user_email = '${email}'`, (err, res: prova[])=>{
+                WHERE SchedaEsercizi.user_email = '${email}'`, (err, res: eserciziUtente[])=>{
             
             if(err) reject(err);
             else resolve(res);
@@ -588,11 +588,19 @@ async function getSchedeUtente(){
 async function addEserciziScheda(data : schedaEserciziData){
 
     return new Promise(async (resolve, reject)=>{
-        console.log("", data);
         
-        await db.run('INSERT INTO schede(nome, note) VALUES(?,?)', [data.nome_scheda, data.note])
-        let scheda_id = await getScheda(data.nome_scheda)
-        console.log("", scheda_id)
+        let scheda_id 
+       
+        
+        if(data.id){
+            scheda_id = data.id
+            console.log("", scheda_id)
+        }else{
+            await db.run('INSERT INTO schede(nome, note) VALUES(?,?)', [data.nome_scheda, data.note])
+            scheda_id = await getScheda(data.nome_scheda)
+            console.log("", scheda_id)
+        }
+        
         for (let index = 0; index < data.esercizio_id.length; index++) {
             console.log([   
                 scheda_id,

@@ -86,7 +86,7 @@ const TableSchede: React.FC=() =>{
             <table >
                 <thead>
                     <tr>
-                        <th>id scheda</th>
+                        
                         <th>nome</th>
                         <th>note</th>
                         <th>visualizza scheda</th>
@@ -95,7 +95,7 @@ const TableSchede: React.FC=() =>{
                 <tbody>
                     {schedeFiltrate.map((sc) => (
                         <tr key={sc.scheda_id}>
-                            <td>{sc.scheda_id}</td>
+                            
                             <td>{sc.nome_scheda}</td>
                             <td>{sc.note_scheda}</td>
                             <td><button className='viewButton' onClick={()=>handleClick(sc.scheda_id)}>visualizza</button></td>

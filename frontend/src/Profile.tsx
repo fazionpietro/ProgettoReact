@@ -54,9 +54,12 @@ function Profile(){
                     <Table/>
                 </div>
             </div>
-            <div className="newButtonContainer">
+           
+        ;   {(ruolo == "utente" ?  <></> : 
+            <><div className="newButtonContainer">
                 <button className="newButton" onClick={()=> navigate("/addUtente")}>Nuovo Paziente</button>
-            </div>
+            </div></>)}
+            
             <div className="logOutButtonContainer">
                 <button className="logOutButton" onClick={()=> {
                     localStorage.clear();

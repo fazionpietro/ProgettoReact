@@ -129,8 +129,8 @@ const TableSchedaDoc: React.FC = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th>schedaId</th>
-                            <th>esercizioId</th>
+                            
+                            <th>nome esercizio</th>
                             <th>serie</th>
                             <th>ripetizioni</th>
                             <th>elimina esercizio</th>
@@ -141,7 +141,7 @@ const TableSchedaDoc: React.FC = () => {
                             .filter((e) => e.scheda_id === schedaId)
                             .map((e, i) => (
                                 <tr key={e.id}>
-                                    <td>{e.scheda_id}</td>
+                                    
                                     <td>{ne[i]?.nome}</td>
                                     <td>{e.serie}</td>
                                     <td>{e.ripetizioni}</td>
@@ -163,7 +163,7 @@ const TableSchedaDoc: React.FC = () => {
                 </table>
             </div>
             <div className="newButtonContainer">
-                <button className="newButton" onClick={()=> navigate("/addUtente")}>Nuovo Paziente</button>
+                <button className="newButton" onClick={()=> navigate(`/addAScheda/${id}/${email}`)}>Aggiungi Esercizi</button>
             </div>
             <div className="navLink">
                 <NavLink to="/Pazienti">Indietro</NavLink>
