@@ -58,15 +58,7 @@ function Profile(){
         ;   {(ruolo == "utente" ?  <></> : 
             <><div className="newButtonContainer">
                 <button className="newButton" onClick={()=> navigate("/addUtente")}>Nuovo Paziente</button>
-            </div></>)}
-            
-            <div className="logOutButtonContainer">
-                <button className="logOutButton" onClick={()=> {
-                    localStorage.clear();
-                    navigate("/addUtente")
-                    }}>Logout</button>
-            </div>
-        
+            </div></>)}       
             
         </div>
     )
