@@ -6,7 +6,8 @@
     "dev": "npx tsc && nodemon ./dist/server.js",
     "build": "npx tsc",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "npx tsc && nodemon ./dist/server.js"
   },
   "dependencies": {
     "@types/express": "^5.0.0",

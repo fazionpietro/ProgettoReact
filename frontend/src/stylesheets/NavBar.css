@@ -23,19 +23,52 @@
 }
 
 .navbar a{
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.871);
     font-size: medium;
     padding: 15px;
 
 }
 .navbar a:visited{
-    color: rgba(255, 255, 255, 0.871)
+    color: rgba(255, 255, 255, 0.871);
+    text-decoration: none;
+  color: rgba(255, 255, 255, 0.871)
 }
 
-.navbar a:hover{
-    text-decoration: underline;
-}
+
 
 .navbar li{
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.871);
   float: left;
  
 }
+.logOutButton {
+    display: flex;
+  align-items: center;
+  padding: 0.8rem 0.8rem;
+  justify-content: space-between;
+  background-color: hsl(261, 94%, 57%);
+  color: rgba(255, 255, 255, 0.871);
+  border-radius: 10px;
+}
+
+.logOutButton li {
+  float: left;
+}
+
+.logOutButton:hover {
+
+    background-color: hsl(0, 80%, 48%);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(220, 24, 24) 0px 7px 29px 0px;
+    
+}
+
+.logOutButtonContainer {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+}
+

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useState, useEffect, ReactNode } from "react";
-import { Navigate, Outlet } from "react-router"; 
+import { useState, useEffect } from "react";
+import { Navigate, Outlet, useNavigate } from "react-router"; 
 
 
 
@@ -11,6 +11,7 @@ function PrivateMedRoute() {
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const token = localStorage.getItem("access_token");
   const [isAuthorized, setIsAuthorized] = useState(false);
+    const navigate = useNavigate();
 
   useEffect(() => {
     const validateToken = async () => {
@@ -38,6 +39,7 @@ function PrivateMedRoute() {
         }
       } catch (error) {
         console.log("Errore validazione token:");
+        navigate("/login");
         setIsValid(false);
       }
     };

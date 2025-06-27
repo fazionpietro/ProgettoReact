@@ -1,5 +1,5 @@
 type esercizioData = {
-    id?: number,
+    id: number,
     nome: string,
     descrizione: string,
     muscolo_targhet: string,

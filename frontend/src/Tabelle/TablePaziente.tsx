@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate, useParams } from "react-router"
+import {  useNavigate, useParams } from "react-router"
 import "../stylesheets/Table.css"
 import Navbar from "../Navbar";
 
@@ -88,9 +88,10 @@ const TablePaziente: React.FC =()=>{
                 >
                     Nuova Scheda
                 </button>
-                <div>
-                        <NavLink to="/Pazienti">Indietro</NavLink>
-                </div>
+                
+            </div>
+            <div className="navLink">
+                    <a  onClick={()=> navigate(-1)}>Indietro</a>
             </div>
             
         </div>

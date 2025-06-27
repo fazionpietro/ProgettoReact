@@ -63,4 +63,8 @@ table button {
     justify-content: center;
     align-items: center;
     text-align: center;
+    text-decoration: underline;
+}
+.navLink:hover{
+    cursor: pointer
 }
