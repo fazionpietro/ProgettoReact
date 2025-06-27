@@ -13,16 +13,17 @@
 } 
 
 .logOutButton {
-    font-size: 1em;
-    font-weight: bold;
-    width: 15%;
-    height: 4em;
-    margin: 5px;
-    border-radius: 20px;
-    border: 1px solid rgb(220, 24, 24) ;
+    display: flex;
+  align-items: center;
+  padding: 0.8rem 0.8rem;
+  justify-content: space-between;
+  background-color: hsl(261, 94%, 57%);
+  color: rgba(255, 255, 255, 0.871);
+  border-radius: 10px;
+}
 
-
-
+.logOutButton li {
+  float: left;
 }
 
 .logOutButton:hover {

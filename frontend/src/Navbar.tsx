@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import NavbarItem from "./NavbarItem";
 import "./stylesheets/NavBar.css";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 
 type NavbarProps = {
@@ -13,17 +14,17 @@ function Navbar(props: NavbarProps) {
     let navbarElements= [
     { label: "Home", href: "/" },
     { label: "Esercizi", href: "/Exercise" },
-    { label: "Profilo", href: "/Profile" },
 ]
 
     const [ruolo, setRuolo] = useState<string>();
     const [email, setEmail] = useState<string>("");
+    const navigate = useNavigate();
 
     if(ruolo === "medico" || ruolo === "personalTrainer"){
         
         navbarElements.splice(1,0,{label: "Pazienti", href: "/Pazienti"})
     }else{
-        navbarElements.splice(1,0,{label: "Routine", href: ``})
+        navbarElements.splice(1,0,{label: "Routine", href: `/Profile`})
     }
     
     const getUtente = async () =>{
@@ -65,6 +66,15 @@ function Navbar(props: NavbarProps) {
                             />
                         );
                     })}
+
+                    <li>
+                        <div className="logOutButtonContainer">
+                            <button className="logOutButton" onClick={()=> {
+                            localStorage.clear();
+                            navigate("/addUtente")
+                            }}>Esci</button>
+                            </div>
+                    </li>
                 </ul>
                 {props.children}
             </nav>
