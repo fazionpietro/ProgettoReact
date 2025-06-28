@@ -31,7 +31,7 @@ let isDbClosed = false;
 app.use(express.static(frontendDistPath));
 
 const server = app.listen(5000, () => {
-    console.log("Server started, can now view the \x1b[1mmproject\x1b[0m in the browser\n\n\t\x1b[1mLocal:\t\t\x1b[36mhttp://localhost:5000\x1b[0m\n");
+    console.log("Server started, can now view the \x1b[1mproject\x1b[0m in the browser\n\n\t\x1b[1mLocal:\t\t\x1b[36mhttp://localhost:5000\x1b[0m\n");
 });
 
 app.get("/", (req, res) => {

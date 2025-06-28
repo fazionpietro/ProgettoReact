@@ -105,7 +105,7 @@ function AddSchede() {
             console.log(error);
         } finally {
             console.log(JSON.stringify(scheda));
-            window.location.reload();
+            navigate(-1)
         }
     }
 

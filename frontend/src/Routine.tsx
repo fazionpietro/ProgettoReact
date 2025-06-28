@@ -1,67 +1,85 @@
-import './stylesheets/Table.css';
-import './stylesheets/Profile.css'
-import Navbar from './Navbar';
-import Table from './Tabelle/Table';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import "./stylesheets/Table.css";
+import "./stylesheets/Profile.css";
+import Navbar from "./Navbar";
+import Table from "./Tabelle/Table";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
-interface user{
+interface user {
     username: string;
-    email : string;
+    email: string;
     ruolo: string;
 }
 
-function Profile(){
+function Profile() {
     const [user, setUser] = useState<user>();
     const [ruolo, setRuolo] = useState<string>();
     const navigate = useNavigate();
 
-    const getUtente = async () =>{
+    const getUtente = async () => {
         try {
-            await axios.get(`${import.meta.env.VITE_API_KEY}/getDatiUtente`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem(
-                    "access_token"
-                    )}`,
-                },
-            })
-            .then((resp) => {
-                if (resp.status === 200){ 
-                    setUser(resp.data);
-                    setRuolo(resp.data.ruolo);
-                }  
-            });
+            await axios
+                .get(`${import.meta.env.VITE_API_KEY}/getDatiUtente`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "access_token"
+                        )}`,
+                    },
+                })
+                .then((resp) => {
+                    if (resp.status === 200) {
+                        setUser(resp.data);
+                        setRuolo(resp.data.ruolo);
+                    }
+                });
         } catch (error) {
-            console.error(error);        
+            console.error(error);
         }
-    }
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
         getUtente();
-    },[]);
+    }, []);
 
-    return(
-        <div >
-            <Navbar/>
-            <div className='profileContainer'>
-                <div className='profile'>
-                    <h1 >Benvenuto: {user?.username}</h1>
+    return (
+        <div>
+            <Navbar />
+            <div className="profileContainer">
+                <div className="profile">
+                    <h1>Benvenuto: {user?.username}</h1>
                     <h3>{user?.email}</h3>
                 </div>
                 <div>
-                    <p>{ruolo=="utente" ? "Routine" : "Pazienti"}</p>
-                    <Table/>
+                    <p>{ruolo == "utente" ? "Routine" : "Pazienti"}</p>
+                    <Table />
                 </div>
             </div>
-           
-        ;   {(ruolo == "utente" ?  <></> : 
-            <><div className="newButtonContainer">
-                <button className="newButton" onClick={()=> navigate("/addUtente")}>Nuovo Paziente</button>
-            </div></>)}       
-            
+            ;{" "}
+            {ruolo == "utente" ? (
+                <></>
+            ) : (
+                <>
+                    <div className="newButtonContainer">
+                        <button
+                            className="newButton"
+                            onClick={() => navigate("/addUtente")}
+                        >
+                            Nuovo Paziente
+                        </button>
+                    </div>
+                </>
+            )}
+            <div className="newButtonContainer">
+                <button
+                    className="newButton"
+                    onClick={() => navigate("/addScheda")}
+                >
+                    Nuova Scheda
+                </button>
+            </div>
         </div>
-    )
+    );
 }
 
 export default Profile;
