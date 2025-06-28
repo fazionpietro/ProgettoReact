@@ -35,9 +35,6 @@ const server = app.listen(5000, () => {
     console.log("Server started, can now view the \x1b[1mproject\x1b[0m in the browser\n\n\t\x1b[1mLocal:\t\t\x1b[36mhttp://localhost:5000\x1b[0m\n");
 });
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(frontendDistPath, "index.html"));
-});
 
 
 process.on('SIGINT', function(){
@@ -369,3 +366,7 @@ function checkEmail(email: string): boolean {
         .toLowerCase()
         .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) !== null;
 }
+app.get("/*", (req, res) => {
+    res.sendFile(path.join(frontendDistPath, "index.html"));
+});
+
