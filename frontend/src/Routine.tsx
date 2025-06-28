@@ -12,7 +12,7 @@ interface user {
     ruolo: string;
 }
 
-function Profile() {
+function Routine() {
     const [user, setUser] = useState<user>();
     const [ruolo, setRuolo] = useState<string>();
     const navigate = useNavigate();
@@ -82,4 +82,4 @@ function Profile() {
     );
 }
 
-export default Profile;
+export default Routine;
