@@ -8,7 +8,7 @@ import AppRegister from "./Register.tsx";
 import HomePage from "./HomePage.tsx";
 import Exercise from "./Exercise.tsx";
 import Pazienti from "./Pazienti.tsx"
-import Profile from "./Profile.tsx";
+import Profile from "./Routine.tsx";
 import AddSchede from "./AddSchede.tsx";
 import AggiungiUtente from "./AggiungiUtente.tsx";
 import AddEsercizio from "./AggiungiEsercizio.tsx";

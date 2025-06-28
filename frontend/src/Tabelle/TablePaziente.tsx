@@ -5,13 +5,14 @@ import "../stylesheets/Table.css"
 import Navbar from "../Navbar";
 
 interface exercise{
-    id : number;
-    scheda_id: number;
     esercizio_id: number;
-    serie: number;
-    ripetizioni: number;
+    id : number;
     nome_scheda: string;
-    note_scheda: string;
+    note: string;
+    ripetizioni: number;
+    scheda_id: number;
+    serie: number;
+
 }
 
 const TablePaziente: React.FC =()=>{
@@ -106,7 +107,7 @@ const TablePaziente: React.FC =()=>{
                         <tr key={sc.scheda_id}>
                             <td>{sc.scheda_id}</td>
                             <td>{sc.nome_scheda}</td>
-                            <td>{sc.note_scheda}</td>
+                            <td>{sc.note}</td>
                             <td><button className='viewButton' onClick={()=>handleClick(sc.scheda_id)}>visualizza</button></td>
                             <td><button className='delButton' onClick={()=>handleOnClick(sc.scheda_id)}>elimina</button></td>
                         </tr>

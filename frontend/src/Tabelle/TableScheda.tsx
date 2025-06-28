@@ -4,12 +4,15 @@ import axios from "axios";
 import "../stylesheets/Table.css";
 import Navbar from "../Navbar";
 
-interface exercise {
-    id: number;
-    scheda_id: number;
+interface exercise{
     esercizio_id: number;
-    serie: number;
+    id : number;
+    nome_scheda: string;
+    note: string;
     ripetizioni: number;
+    scheda_id: number;
+    serie: number;
+
 }
 
 interface nomeEsercizio {
@@ -199,6 +202,10 @@ const TableScheda: React.FC = () => {
                 >
                     Aggiorna Scheda
                 </button>
+                
+            </div>
+            <div className="navLink">
+                    <a  onClick={()=> navigate(-1)}>Indietro</a>
             </div>
         </div>
     );

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import '../stylesheets/Table.css'
-import { Prev } from "react-bootstrap/esm/PageItem";
+
 
 interface user{
     username: string;
@@ -11,13 +11,14 @@ interface user{
 }
 
 interface exercise{
-    id : number;
-    scheda_id: number;
     esercizio_id: number;
-    serie: number;
-    ripetizioni: number;
+    id : number;
     nome_scheda: string;
-    note_scheda: string;
+    note: string;
+    ripetizioni: number;
+    scheda_id: number;
+    serie: number;
+
 }
 
 const TableSchede: React.FC=() =>{
@@ -38,6 +39,7 @@ const TableSchede: React.FC=() =>{
         .then((resp) => {
             if (resp.status === 200){ 
                 setUser(resp.data);
+                
             }  
         });
         } catch (error) {
@@ -57,6 +59,7 @@ const TableSchede: React.FC=() =>{
         .then((resp) => {
             if (resp.status === 200){
                 setSchede(resp.data.data);
+                console.log(resp.data.data);
             }  
         });
         } catch (error) {
@@ -132,14 +135,16 @@ const TableSchede: React.FC=() =>{
                         <tr key={sc.scheda_id}>
                             
                             <td>{sc.nome_scheda}</td>
-                            <td>{sc.note_scheda}</td>
+                            <td>{sc.note}</td>
                             <td><button className='viewButton' onClick={()=>handleClick(sc.scheda_id)}>visualizza</button></td>
                             <td><button className='delButton' onClick={()=>handleOnClick(sc.scheda_id)}>elimina</button></td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            
         </div>
+        
     )
 };
 
