@@ -325,6 +325,16 @@ app.delete('/api/deleteExSCheda/:id', authenticateToken, async (req, res) => {
     }
 });
 
+app.delete('/api/deleteSCheda/:id', authenticateToken, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        await schede.deleteSCheda(id);
+        res.status(200).json({ success: true });
+    } catch (err: any) {
+        res.status(500).json({"error": err.message});
+    }
+});
+
 app.delete('/api/deleteEsercizio/:id', authenticateToken, async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);

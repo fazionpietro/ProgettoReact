@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import '../stylesheets/Table.css'
+import { Prev } from "react-bootstrap/esm/PageItem";
 
 interface user{
     username: string;
@@ -54,7 +55,7 @@ const TableSchede: React.FC=() =>{
             },
         })
         .then((resp) => {
-            if (resp.status === 200){ 
+            if (resp.status === 200){
                 setSchede(resp.data.data);
             }  
         });
@@ -62,6 +63,33 @@ const TableSchede: React.FC=() =>{
             console.error(error);        
         }
     }
+
+    const deleteSCheda = async (id: number) => {
+        try {
+            await axios
+                .delete(
+                    `${
+                        import.meta.env.VITE_API_KEY
+                    }/deleteScheda/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "access_token"
+                            )}`,
+                        },
+                    }
+                )
+                .then((resp) => {
+                    if (resp.status === 200) {
+                        console.log("eliminato");
+                        setSchede((prev)=>prev.filter((sched)=> sched.scheda_id !== id));
+                        getUserSchede();
+                    }
+                });
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(()=>{
         getUtente();
@@ -73,8 +101,14 @@ const TableSchede: React.FC=() =>{
         }
     },[user]);
 
+    
+
     const handleClick = (id: number) =>{
         navigate(`/scheda/${id}`);
+    }
+
+    const handleOnClick = (id: number) =>{
+        deleteSCheda(id);
     }
 
     const schedeFiltrate = Array.from(
@@ -90,6 +124,7 @@ const TableSchede: React.FC=() =>{
                         <th>nome</th>
                         <th>note</th>
                         <th>visualizza scheda</th>
+                        <th>elimina scheda</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,6 +134,7 @@ const TableSchede: React.FC=() =>{
                             <td>{sc.nome_scheda}</td>
                             <td>{sc.note_scheda}</td>
                             <td><button className='viewButton' onClick={()=>handleClick(sc.scheda_id)}>visualizza</button></td>
+                            <td><button className='delButton' onClick={()=>handleOnClick(sc.scheda_id)}>elimina</button></td>
                         </tr>
                     ))}
                 </tbody>

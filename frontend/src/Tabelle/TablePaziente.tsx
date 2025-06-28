@@ -39,6 +39,33 @@ const TablePaziente: React.FC =()=>{
         }
     }
 
+    const deleteSCheda = async (id: number) => {
+        try {
+            await axios
+                .delete(
+                    `${
+                        import.meta.env.VITE_API_KEY
+                    }/deleteScheda/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "access_token"
+                            )}`,
+                        },
+                    }
+                )
+                .then((resp) => {
+                    if (resp.status === 200) {
+                        console.log("eliminato");
+                        setSchede((prev)=>prev.filter((sched)=> sched.scheda_id !== id));
+                        getUserSchede();
+                    }
+                });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(()=>{
         getUserSchede();
     },[])
@@ -46,6 +73,10 @@ const TablePaziente: React.FC =()=>{
     const schedeFiltrate = Array.from(
         new Map(schede.map((sc)=>[sc.scheda_id,sc])).values()
     );
+
+    const handleOnClick = (id: number) =>{
+        deleteSCheda(id);
+    }
 
     const handleClick = (id: number) =>{
         console.log("bottone: ",id)
@@ -67,6 +98,7 @@ const TablePaziente: React.FC =()=>{
                         <th>nome</th>
                         <th>note</th>
                         <th>visualizza scheda</th>
+                        <th>elimina scheda</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,6 +108,7 @@ const TablePaziente: React.FC =()=>{
                             <td>{sc.nome_scheda}</td>
                             <td>{sc.note_scheda}</td>
                             <td><button className='viewButton' onClick={()=>handleClick(sc.scheda_id)}>visualizza</button></td>
+                            <td><button className='delButton' onClick={()=>handleOnClick(sc.scheda_id)}>elimina</button></td>
                         </tr>
                     ))}
                 </tbody>
