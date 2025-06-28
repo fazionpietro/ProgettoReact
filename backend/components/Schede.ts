@@ -140,3 +140,17 @@ export async function deleteExSCheda(id: number): Promise<void> {
         });
     });
 }
+
+export async function deleteSCheda(id: number): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        db.run(`DELETE FROM schedaEsercizi WHERE scheda_id=?`, [id], function(err) {
+            if (err) {
+                reject(err);
+            } else if (this.changes === 0) {
+                reject(new Error("Record SchedaEsercizi non trovato"));
+            } else {
+                resolve();
+            }
+        });
+    });
+}

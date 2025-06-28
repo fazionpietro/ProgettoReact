@@ -50,7 +50,7 @@ function Profile(){
                     <h3>{user?.email}</h3>
                 </div>
                 <div>
-                    <p>{ruolo=="utente" ? "Info profilo" : "Pazienti"}</p>
+                    <p>{ruolo=="utente" ? "Routine" : "Pazienti"}</p>
                     <Table/>
                 </div>
             </div>
