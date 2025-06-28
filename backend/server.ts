@@ -24,12 +24,15 @@ const databasePath = process.env.DATABASE || "";
 app.use(cors());
 app.use(express.json());
 const frontendDistPath = path.resolve('../frontend/dist');
-console.log(`Serving static files from: ${frontendDistPath}`);
+console.clear();
+
+
+let isDbClosed = false;
 
 app.use(express.static(frontendDistPath));
 
 const server = app.listen(5000, () => {
-    console.log("Server started at http://localhost:5000");
+    console.log("Server started, can now view the \x1b[1mproject\x1b[0m in the browser\n\n\t\x1b[1mLocal:\t\t\x1b[36mhttp://localhost:5000\x1b[0m\n");
 });
 
 app.get("/", (req, res) => {
@@ -38,15 +41,22 @@ app.get("/", (req, res) => {
 
 
 process.on('SIGINT', function(){
-    server.close(() => {
-        console.log("Server closed.");
+    if (!isDbClosed) {
         db.close((err) => {
             if (err) {
                 console.error("Error closing database:", err.message);
             } else {
                 console.log("Database connection closed.");
+                isDbClosed = true;
             }
         });
+    } else {
+        console.log("Database already closed, skipping further close attempt.");
+    }
+
+    server.close(async () => {
+        console.log("Server closed.");
+        process.exit(0); 
     });
 });
 
@@ -59,9 +69,9 @@ const db = new sqlite3.Database(databasePath, sqlite3.OPEN_READWRITE, (err) => {
 
     db.run("PRAGMA foreign_keys = ON;", (err) => {
         if (err) {
-            console.error("Errore nell'abilitazione delle chiavi esterne:", err.message);
+            console.error("Error enabling Foreign key:", err.message);
         } else {
-            console.log("Chiavi esterne abilitate.");
+            console.log("Foreign key Enabled.");
         }
     });
 });

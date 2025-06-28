@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "npx tsc && nodemon ./dist/server.js"
+    "start": "npx tsc && node ./dist/server.js"
   },
   "dependencies": {
     "@types/express": "^5.0.0",
