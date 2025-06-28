@@ -24,7 +24,8 @@ const databasePath = process.env.DATABASE || "";
 app.use(cors());
 app.use(express.json());
 const frontendDistPath = path.resolve('../frontend/dist');
-console.log(`Serving static files from: ${frontendDistPath}`);
+console.clear();
+
 
 let isDbClosed = false;
 
