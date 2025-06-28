@@ -15,7 +15,7 @@ import AddEsercizio from "./AggiungiEsercizio.tsx";
 import TableScheda from "./Tabelle/TableScheda.tsx";
 import TablePaziente from "./Tabelle/TablePaziente.tsx";
 import TableSchedaDoc from "./Tabelle/TableEserciziSchedaUtente.tsx";
-import TableSchede from "./Tabelle/TableSchede.tsx";
+
 
 
 
@@ -27,21 +27,22 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       
         <Route path='/login' element={<AppLogin />} />
         <Route path='/Register' element={<AppRegister />} />
-        <Route path='/addEsercizio' element={<AddEsercizio/>}/>
+        
         
         
         
         
 
         <Route element={<PrivateRoute/>}>
+          <Route path="/Profile" element={<Profile />}/>
+          <Route path='/addEsercizio' element={<AddEsercizio/>}/>
           <Route path='/' element={<HomePage />}></Route>
           <Route path='/addScheda' element={<AddSchede/>}></Route>
           <Route path='/addAScheda/:id/:emailParam' element={<AddSchede/>}></Route>
           <Route path='/Exercise' element={<Exercise />}></Route>
-          <Route path='/Profile' element={<Profile />}></Route>
           <Route path='/scheda/:id' element={<TableScheda />}></Route>
+          <Route path="*" element={<HomePage />} />
           
-
           <Route element={<PrivateMedRoute/>}>
             <Route path='/addUtente' element={<AggiungiUtente/>}/>
             <Route path='/paziente/:email' element={<TablePaziente/>}></Route>

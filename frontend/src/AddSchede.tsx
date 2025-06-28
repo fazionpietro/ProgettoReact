@@ -3,7 +3,7 @@ import axios from "axios";
 import PatientSelector from "./Dropdown/PatientSelectionComponent";
 import "./stylesheets/LoginRegister.css";
 import schedaEserciziData from "./types/schedaEserciziType";
-import { useParams, NavLink } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 type esercizioData = {
     esercizio_id: string;
@@ -13,6 +13,7 @@ type esercizioData = {
 };
 
 function AddSchede() {
+    const navigate = useNavigate();
     const { id } = useParams<{ id: string | undefined}>();
     const { emailParam } = useParams<{ emailParam: string | undefined}>();
     const [allSchedeName, setAlleSchedeName] = useState<{ nome: string }[]>();
@@ -159,19 +160,19 @@ function AddSchede() {
                 return false;
             }
 
-            if (!Number.isNaN(serie) && !Number.isNaN(ripetizioni)) {
+            if (!Number.isNaN(serie) && !Number.isNaN(ripetizioni) && (serie>0 && ripetizioni>0)) {
                 scheda.esercizio_id.push(esercizio_id);
                 scheda.serie.push(serie);
                 scheda.ripetizioni.push(ripetizioni);
                 setSchedaError("");
                 return true;
             } else {
-                setSchedaError(
-                    "le serie e le ripetizioni devono essere un numero"
-                );
+
+                setSchedaError("le serie e le ripetizioni devono essere un numero");
                 return false;
             }
         });
+        console.log(scheda);
         if (!flag.includes(false)) addScheda();
     }
 
@@ -388,8 +389,8 @@ function AddSchede() {
 
                    
                     
-                    <div>
-                        <NavLink to="/Profile">Indietro</NavLink>
+                    <div className="navLink">
+                        <a  onClick={()=> navigate(-1)}>Indietro</a>
                     </div>
                 </form>
             </div>

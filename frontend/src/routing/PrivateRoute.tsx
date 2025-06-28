@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useNavigate } from "react-router";
 
 function PrivateRoute() {
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const token = localStorage.getItem("access_token");
-
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -30,6 +30,7 @@ function PrivateRoute() {
         }
       } catch (error) {
         console.log("Errore validazione token:");
+        navigate("/login")
         setIsValid(false);
       }
     };

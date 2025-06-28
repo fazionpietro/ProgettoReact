@@ -3,7 +3,7 @@ import axios from "axios";
 import "./stylesheets/LoginRegister.css";
 import Dropdown from "./Dropdown/Dropdown";
 import esercizioData from "./types/esercizioType";
-import { NavLink } from "react-router";
+import { useNavigate } from "react-router";
 
 function AggiungiEsercizio() {
     const muscoliTarghet = [
@@ -16,6 +16,7 @@ function AggiungiEsercizio() {
         "Corpo intero",
         "Dorsali",
         "Glutei",
+        "Gambe",
         "Parte bassa della schiena",
         "Parte superiore della schiena",
         "Petto",
@@ -25,8 +26,10 @@ function AggiungiEsercizio() {
         "Femorali",
         "Trapezi",
         "Tricipiti",
-        "Alto",
+        "Altro",
     ];
+
+    const navigate = useNavigate();
     const difficolta = ["facile", "medio", "difficile"];
     const [nome, setNome] = useState<string>("");
     const [muscolo, setMuscolo] = useState<string>("");
@@ -56,8 +59,9 @@ function AggiungiEsercizio() {
             descrizione: descrizione,
             muscolo_targhet: muscolo,
             difficolta: difficoltaSelezionata,
+            id: 0
         };
-
+        
         await axios
             .post(
                 `${import.meta.env.VITE_API_KEY}/addEsercizi`,
@@ -141,11 +145,11 @@ function AggiungiEsercizio() {
                             className="buttonLoginRegister"
                             onClick={createExercise}
                         >
-                            invia
+                            Crea
                         </button>
                     </div>
-                    <div>
-                        <NavLink to="/Profile">Indietro</NavLink>
+                    <div className="navLink">
+                        <a  onClick={()=> navigate(-1)}>Indietro</a>
                     </div>
                 </form>
             </div>

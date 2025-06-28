@@ -1,22 +1,13 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "../stylesheets/Table.css";
-
-
-
-interface esercizio {
-    id: number;
-    nome: string;
-    descrizione: string;
-    muscolo_targhet: string;
-    difficolta: string;
-}
+import esercizioData from "../types/esercizioType";
 
 const ListaEsercizi = () => {
-    const [esercizi, setEsercizi] = useState<esercizio[]>([]);
-    const isInitialized = useRef(false);
+    const [esercizi, setEsercizi] = useState<esercizioData[]>([]);
+  
 
-    const getesercizi = async () => {
+    const getEsercizi = async () => {
         try {
             await axios
                 .get(`${import.meta.env.VITE_API_KEY}/esercizi`, {
@@ -29,6 +20,7 @@ const ListaEsercizi = () => {
                 .then((resp) => {
                     if (resp.status === 200) {
                         setEsercizi(resp.data);
+                        
                     }
                 });
         } catch (error) {
@@ -50,6 +42,7 @@ const ListaEsercizi = () => {
                 }
             );
             if (resp.status === 200) {
+               getEsercizi()
             }
         } catch (error) {
             console.error("errore", error);
@@ -57,14 +50,13 @@ const ListaEsercizi = () => {
     }
 
     useEffect(() => {
-        if (isInitialized.current) return;
-
-        isInitialized.current = true;
-        getesercizi();
-    }, [esercizi]);
+        getEsercizi();
+    }, []);
 
     const handleClick = (id: number) => {
         delEsercizio(id);
+        
+        
     };
 
     return (
@@ -84,7 +76,7 @@ const ListaEsercizi = () => {
                     </thead>
                     <tbody>
                         {esercizi.map((e) => (
-                            <tr key={e.nome}>
+                            <tr key={e.id}>
                                 <td>{e.id}</td>
                                 <td>{e.nome}</td>
                                 <td>{e.descrizione}</td>
@@ -95,7 +87,7 @@ const ListaEsercizi = () => {
                                         className="delButton"
                                         onClick={() => {
                                             handleClick(e.id);
-                                            getesercizi();
+                                            
                                         }}
                                     >
                                         elimina

@@ -1,6 +1,7 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import NavbarItem from "./NavbarItem";
 import "./stylesheets/NavBar.css";
+
 import axios from "axios";
 import { useNavigate } from "react-router";
 
@@ -11,13 +12,14 @@ type NavbarProps = {
 
 function Navbar(props: NavbarProps) {
 
+
     let navbarElements= [
     { label: "Home", href: "/" },
     { label: "Esercizi", href: "/Exercise" },
 ]
 
     const [ruolo, setRuolo] = useState<string>();
-    const [email, setEmail] = useState<string>("");
+   
     const navigate = useNavigate();
 
     if(ruolo === "medico" || ruolo === "personalTrainer"){
@@ -40,7 +42,7 @@ function Navbar(props: NavbarProps) {
                 if (resp.status === 200){ 
                     console.log(resp);
                     setRuolo(resp.data.ruolo);
-                    setEmail(resp.data.email);
+                    
                 }  
             });
         } catch (error) {

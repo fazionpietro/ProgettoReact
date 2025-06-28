@@ -140,9 +140,7 @@ function HomePage() {
                 {/* Mostra la grid solo se ci sono dati */}
                 {hasData && (
                     <div className="homeContainer parent">
-                        <div
-                            className={`item  div1`}
-                        >
+                        <div className="item div1">
                             <p>Grafico Storico dei Passi</p>
                             <button onClick={() => setGraficoAttivo(1)}>
                                 grafico giornaliero
@@ -159,9 +157,8 @@ function HomePage() {
                                 <p>nessun dato</p>
                             )}
                         </div>
-                        <div
-                            className={`item  div2`}
-                        >
+                        
+                        <div className="item div2">
                             <p>Tipologia di Cardio</p>
                             {stoData.length > 0 ? (
                                 <GraficoTorta dati={stoData} />
@@ -169,9 +166,8 @@ function HomePage() {
                                 <p>nessun dato</p>
                             )}
                         </div>
-                        <div
-                            className={`item  div3`}
-                        >
+                        
+                        <div className="item div3">
                             <p>Grafico Storico delle Calorie</p>
                             <button onClick={() => setGraficoCal(1)}>
                                 grafico giornaliero
@@ -189,9 +185,7 @@ function HomePage() {
                             )}
                         </div>
 
-                        <div
-                            className={`item  div4`}
-                        >
+                        <div className="item div4">
                             <p>Grafico Storico della Distanza</p>
                             <button onClick={() => setGraficoDistanza(1)}>
                                 grafico giornaliero
@@ -209,70 +203,26 @@ function HomePage() {
                             )}
                         </div>
 
-                        <div
-                            className={`item              ? "hidden"
-                                    : ""
-                            } div5 record`}
-                        >
-                            <p>Obbiettivo Calorie</p>
-                            <input
-                                type="number"
-                                placeholder="inserisci l'obbiettivo"
-                                className="inputObbiettivo"
-                            />
-                        </div>
-                        <div
-                            className={`item  div6 record`}
-                        >
+                        <div className="item div5 record">
                             <p>Record Passi</p>
                             <h4>
                                 {stoMaxSteps !== null ? stoMaxSteps : "nessun dato"}
                             </h4>
                         </div>
-                        <div
-                            className={`item              ? "hidden"
-                                    : ""
-                            } div7 record`}
-                        >
-                            <p>Obbiettivo Passi</p>
-                            <input
-                                type="number"
-                                placeholder="inserisci l'obbiettivo"
-                                className="inputObbiettivo"
-                            />
-                        </div>
-                        <div
-                            className={`item iv8 record`}
-                        >
+                        
+                        <div className="item div6 record">
                             <p>Record Passi Giornaliero</p>
                             <h4>{maxSteps !== null ? maxSteps : "nessun dato"}</h4>
                         </div>
 
-                        <div
-                            className={`item              ? "hidden"
-                                    : ""
-                            } div9 record`}
-                        >
-                            <p>Obbiettivo Distanza</p>
-                            <input
-                                type="number"
-                                placeholder="inserisci l'obbiettivo"
-                                className="inputObbiettivo"
-                            />
-                        </div>
-                        <div
-                            className={`item  div10 record`}
-                        >
+                        <div className="item div7 record">
                             <p>Record Distanza</p>
                             <h4>
                                 {totDistance !== null ? totDistance : "nessun dato"}
                             </h4>
                         </div>
-                        <div
-                            className={`item ${
-                                _data.length === 0 ? "hidden" : ""
-                            } div11 record`}
-                        >
+                        
+                        <div className="item div8 record">
                             <p>Record Distanza Giornaliero</p>
                             <h4>
                                 {gDistance !== null ? gDistance : "nessun dato"}

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate, useParams } from "react-router";
+import {  useNavigate, useParams } from "react-router";
 import axios from "axios";
 import "../stylesheets/Table.css";
 import Navbar from "../Navbar";
+import esercizioData from "../types/esercizioType";
+
+
 
 interface exercise {
     id: number;
@@ -12,26 +15,22 @@ interface exercise {
     ripetizioni: number;
 }
 
-interface nomeEsercizio {
-    nome: string;
-}
-
 const TableSchedaDoc: React.FC = () => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const schedaId = id ? parseInt(id, 10) : null;
     const { email } = useParams<{ email: string }>();
-    console.log("altra pagina: ", id);
+    
 
     const [ex, setEx] = useState<exercise[]>([]);
-    const [ne, setNE] = useState<nomeEsercizio[]>([]);
+    const [ne, setNE] = useState<esercizioData[]>([]);
 
-    //inserisci getdatiutente()
+
 
     const getNomeEsercizio = async () => {
         try {
             await axios
-                .get(`${import.meta.env.VITE_API_KEY}/getNomeEsercizio`, {
+                .get(`${import.meta.env.VITE_API_KEY}/esercizi`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem(
                             "access_token"
@@ -40,8 +39,8 @@ const TableSchedaDoc: React.FC = () => {
                 })
                 .then((resp) => {
                     if (resp.status === 200) {
-                        setNE(resp.data.data);
-                        console.log(resp.data.data);
+                        setNE(resp.data);
+                        console.log(resp.data);
                     }
                 });
         } catch (error) {
@@ -49,13 +48,13 @@ const TableSchedaDoc: React.FC = () => {
         }
     };
 
-    const deleteExSCheda = async (id: number, esercizio_id: number) => {
+    const deleteExSCheda = async (id: number) => {
         try {
             await axios
                 .delete(
                     `${
                         import.meta.env.VITE_API_KEY
-                    }/deleteExSCheda/${id}/${esercizio_id}`,
+                    }/deleteExSCheda/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem(
@@ -109,16 +108,18 @@ const TableSchedaDoc: React.FC = () => {
 
     useEffect(() => {
         getNomeEsercizio();
+        
     }, []);
 
     useEffect(() => {
         if (email) {
             getEsercizi();
+            
         }
     }, [email]);
 
-    const handleClick = (id: number, esercizio_id: number) => {
-        deleteExSCheda(id, esercizio_id);
+    const handleClick = (id: number) => {
+        deleteExSCheda(id);
     };
 
     return (
@@ -139,26 +140,26 @@ const TableSchedaDoc: React.FC = () => {
                     <tbody>
                         {ex
                             .filter((e) => e.scheda_id === schedaId)
-                            .map((e, i) => (
+                            .map((e) => {
+                                const nomeEsercizio = ne.find((el) => el.id === e.esercizio_id)?.nome || 'Nome non trovato';
+                                return(
                                 <tr key={e.id}>
                                     
-                                    <td>{ne[i]?.nome}</td>
+                                    
+                                    <td>{nomeEsercizio}</td>
                                     <td>{e.serie}</td>
                                     <td>{e.ripetizioni}</td>
                                     <td>
                                         <button className="delButton"
                                             onClick={() =>
-                                                handleClick(
-                                                    e.id,
-                                                    e.esercizio_id
-                                                )
+                                                handleClick(e.id)
                                             }
                                         >
                                             elimina
                                         </button>
                                     </td>
                                 </tr>
-                            ))}
+                            )})}
                     </tbody>
                 </table>
             </div>
@@ -166,10 +167,10 @@ const TableSchedaDoc: React.FC = () => {
                 <button className="newButton" onClick={()=> navigate(`/addAScheda/${id}/${email}`)}>Aggiungi Esercizi</button>
             </div>
             <div className="navLink">
-                <NavLink to="/Pazienti">Indietro</NavLink>
+                <a  onClick={()=> navigate(-1)}>Indietro</a>
             </div>
         </div>
     );
-};
+}; 
 
 export default TableSchedaDoc;

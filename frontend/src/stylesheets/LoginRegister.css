@@ -85,14 +85,14 @@ body {
     padding-bottom: 5vh;
 }
 
-/* Assicura che il form mantenga sempre il padding anche quando cresce */
+
 .addEsercizo .inputForm {
     margin-top: 0;
     max-height: 90vh;
     overflow-y: auto;
 }
 
-/* Stile per la textarea delle note (stesso stile di AggiungiEsercizio) */
+
 .addEsercizo textarea {
     width: 60%;
     margin-bottom: 15px;
