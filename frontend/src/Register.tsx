@@ -14,7 +14,7 @@ function AppRegister() {
     const [nome, setNome] = useState<string>();
     const [cognome, setCognome]= useState<string>();
     const [registerError, setRegisterError] = useState<any>("");
-    const roleList : string[]= ["Personal Trainer", "Medico"]
+    const roleList : string[]= ["utente","Personal Trainer", "Medico"]
 
 
 
@@ -24,8 +24,10 @@ function AppRegister() {
         let realRole;
         if(ruolo == "Personal Trainer")
             realRole = "personalTrainer"
-        else
+        else if(ruolo == "Medico")
             realRole = "medico"
+        else
+            realRole="utente"
 
 
         
