@@ -26,7 +26,7 @@ function Navbar(props: NavbarProps) {
         
         navbarElements.splice(1,0,{label: "Pazienti", href: "/Pazienti"})
     }else{
-        navbarElements.splice(1,0,{label: "Routine", href: `/Profile`})
+        navbarElements.splice(1,0,{label: "Routine", href: `/Routine`})
     }
     
     const getUtente = async () =>{
