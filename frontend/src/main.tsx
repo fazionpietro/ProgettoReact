@@ -8,7 +8,7 @@ import AppRegister from "./Register.tsx";
 import HomePage from "./HomePage.tsx";
 import Exercise from "./Exercise.tsx";
 import Pazienti from "./Pazienti.tsx"
-import Profile from "./Routine.tsx";
+import Routine from "./Routine.tsx";
 import AddSchede from "./AddSchede.tsx";
 import AggiungiUtente from "./AggiungiUtente.tsx";
 import AddEsercizio from "./AggiungiEsercizio.tsx";
@@ -34,7 +34,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         
 
         <Route element={<PrivateRoute/>}>
-          <Route path="/Profile" element={<Profile />}/>
+          <Route path="/Routine" element={<Routine />}/>
           <Route path='/addEsercizio' element={<AddEsercizio/>}/>
           <Route path='/' element={<HomePage />}></Route>
           <Route path='/addScheda' element={<AddSchede/>}></Route>
