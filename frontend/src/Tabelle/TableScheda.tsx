@@ -198,7 +198,7 @@ const TableScheda: React.FC = () => {
             <div className="newButtonContainer">
                 <button
                     className="newButton"
-                    onClick={() => navigate(`/addAScheda/${id}/${email}`)}
+                    onClick={() => navigate(`/AggiungiAScheda/${id}/${email}`)}
                 >
                     Aggiorna Scheda
                 </button>

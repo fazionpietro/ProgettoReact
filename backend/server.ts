@@ -293,7 +293,7 @@ app.post('/api/login', async (req: express.Request<{}, {}, {}, userData>, res: e
     }
 });
 
-app.post('/api/addSchedaEsercizi', authenticateToken, async (req: express.Request, res: express.Response) => {
+app.post('/api/AggiungiSchedaEsercizi', authenticateToken, async (req: express.Request, res: express.Response) => {
     try {
         await schede.addEserciziScheda(req.body);
         res.status(200).json({success: true});
@@ -312,7 +312,7 @@ app.post('/api/addEsercizi', authenticateToken, async (req: express.Request, res
     }
 });
 
-app.post('/api/addScheda', authenticateToken, async (req: express.Request<{}, {}, {}, schedaData>, res: express.Response) => {
+app.post('/api/AggiungiScheda', authenticateToken, async (req: express.Request<{}, {}, {}, schedaData>, res: express.Response) => {
     const query: schedaData = req.query; // Assumi che 'note' sia presente in schedaData
     try {
         const newD = await schede.addScheda(query);

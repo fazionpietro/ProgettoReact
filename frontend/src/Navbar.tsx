@@ -15,7 +15,7 @@ function Navbar(props: NavbarProps) {
 
     let navbarElements= [
     { label: "Home", href: "/" },
-    { label: "Esercizi", href: "/Exercise" },
+    { label: "Esercizi", href: "/Esercizi" },
 ]
 
     const [ruolo, setRuolo] = useState<string>();
@@ -73,7 +73,7 @@ function Navbar(props: NavbarProps) {
                         <div className="logOutButtonContainer">
                             <button className="logOutButton" onClick={()=> {
                             localStorage.clear();
-                            navigate("/addUtente")
+                            navigate("/AggiungiUtente")
                             }}>Esci</button>
                             </div>
                     </li>

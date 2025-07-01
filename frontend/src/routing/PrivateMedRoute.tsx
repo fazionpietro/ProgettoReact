@@ -39,7 +39,7 @@ function PrivateMedRoute() {
         }
       } catch (error) {
         console.log("Errore validazione token:");
-        navigate("/login");
+        navigate("/Login");
         setIsValid(false);
       }
     };
@@ -52,7 +52,7 @@ function PrivateMedRoute() {
   } 
 
   if (!isValid && !isAuthorized) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/Login" replace />;
   }else if (isValid && !isAuthorized){
     return <Navigate to="/" replace />;
   }

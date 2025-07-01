@@ -118,7 +118,7 @@ const TablePaziente: React.FC =()=>{
             <div className="newButtonContainer">
                 <button
                     className="newButton"
-                    onClick={() => navigate("/addScheda")}
+                    onClick={() => navigate("/AggiungiScheda")}
                 >
                     Nuova Scheda
                 </button>

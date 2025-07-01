@@ -14,7 +14,7 @@ function Patience(){
                 <Table/>
             </div>
             <div className="newButtonContainer">
-                <button className="newButton" onClick={()=> navigate("/addUtente")}>Nuovo Paziente</button>
+                <button className="newButton" onClick={()=> navigate("/AggiungiUtente")}>Nuovo Paziente</button>
             </div>
         </div>
     )

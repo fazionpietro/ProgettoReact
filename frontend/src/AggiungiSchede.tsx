@@ -90,7 +90,7 @@ function AddSchede() {
     async function addScheda() {
         try {
             await axios.post(
-                `${import.meta.env.VITE_API_KEY}/addSchedaEsercizi`,
+                `${import.meta.env.VITE_API_KEY}/AggiungiSchedaEsercizi`,
                 JSON.stringify(scheda),
                 {
                     headers: {

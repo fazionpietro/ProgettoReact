@@ -63,7 +63,7 @@ function Routine() {
                     <div className="newButtonContainer">
                         <button
                             className="newButton"
-                            onClick={() => navigate("/addUtente")}
+                            onClick={() => navigate("/AggiungiUtente")}
                         >
                             Nuovo Paziente
                         </button>
@@ -73,7 +73,7 @@ function Routine() {
             <div className="newButtonContainer">
                 <button
                     className="newButton"
-                    onClick={() => navigate("/addScheda")}
+                    onClick={() => navigate("/AggiungiScheda")}
                 >
                     Nuova Scheda
                 </button>

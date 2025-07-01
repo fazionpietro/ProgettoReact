@@ -164,7 +164,7 @@ const TableSchedaDoc: React.FC = () => {
                 </table>
             </div>
             <div className="newButtonContainer">
-                <button className="newButton" onClick={()=> navigate(`/addAScheda/${id}/${email}`)}>Aggiungi Esercizi</button>
+                <button className="newButton" onClick={()=> navigate(`/AggiungiAScheda/${id}/${email}`)}>Aggiungi Esercizi</button>
             </div>
             <div className="navLink">
                 <a  onClick={()=> navigate(-1)}>Indietro</a>

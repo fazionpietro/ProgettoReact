@@ -30,7 +30,7 @@ function PrivateRoute() {
         }
       } catch (error) {
         console.log("Errore validazione token:");
-        navigate("/login")
+        navigate("/Login")
         setIsValid(false);
       }
     };
@@ -45,7 +45,7 @@ function PrivateRoute() {
   
   if (!isValid) {
 
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/Login" replace />;
   }
 
   return <Outlet />;

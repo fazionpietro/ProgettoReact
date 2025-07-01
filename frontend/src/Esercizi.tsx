@@ -16,7 +16,7 @@ function Exercise(){
                 <ListaEsercizi/>
             </div>
             <div className="newButtonContainer">
-                <button className="newButton" onClick={()=> navigate("/addEsercizio")}>Nuovo Esercizio</button>
+                <button className="newButton" onClick={()=> navigate("/AggiungiEsercizio")}>Nuovo Esercizio</button>
             </div>
         </div>
     )

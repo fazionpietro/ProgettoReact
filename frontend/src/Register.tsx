@@ -124,7 +124,7 @@ function AppRegister() {
                     <label className="loginError">{registerError}</label>
                 </div>
                 <div>
-                    <NavLink to="/login" end>Login</NavLink>
+                    <NavLink to="/Login" end>Login</NavLink>
                 </div>
             </form>
         </div>
