@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import PatientSelector from "./Dropdown/PatientSelectionComponent";
+
 import "./stylesheets/LoginRegister.css";
 import schedaEserciziData from "./types/schedaEserciziType";
 import { useNavigate, useParams } from "react-router";
@@ -14,16 +14,15 @@ type esercizioData = {
 
 function AddSchede() {
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string | undefined}>();
-    const { emailParam } = useParams<{ emailParam: string | undefined}>();
+    const { id } = useParams<{ id: string | undefined }>();
+    const { emailParam } = useParams<{ emailParam: string | undefined }>();
     const [allSchedeName, setAlleSchedeName] = useState<{ nome: string }[]>();
-    const [ruolo, setRuolo] = useState("");
-    const [email, setEmail] = useState("");
+
     const [schedaError, setSchedaError] = useState("");
     const [esercizi, setEsercizi] = useState<esercizioData[]>();
     const isInitialized = useRef(false);
     const [eserciziDisponibili, setEserciziDisponibili] = useState<string[]>();
-    const [selectedPatient, setSelectedPatient] = useState<string>();
+
     const [note, setNote] = useState<string>("");
 
     const [scheda, _setScheda] = useState<schedaEserciziData>({
@@ -88,8 +87,8 @@ function AddSchede() {
     }
 
     async function addScheda() {
-        try {
-            await axios.post(
+        await axios
+            .post(
                 `${import.meta.env.VITE_API_KEY}/AggiungiSchedaEsercizi`,
                 JSON.stringify(scheda),
                 {
@@ -100,26 +99,28 @@ function AddSchede() {
                         "Content-Type": "application/json",
                     },
                 }
-            );
-        } catch (error) {
-            console.log(error);
-        } finally {
-            console.log(JSON.stringify(scheda));
-            navigate(-1)
-        }
+            )
+            .then(() => {
+                navigate(-1);
+            })
+            .catch((err) => {
+                console.error(err);
+                setSchedaError("l'utente non esiste");
+            });
     }
 
     function createScheda(e: React.FormEvent) {
         e.preventDefault();
-        scheda.note = note
-        
+        scheda.note = note;
 
-        if(id){
-            scheda.id = Number(id)
-            scheda.nome_scheda = id
-            
+        if (id) {
+            scheda.id = Number(id);
+            scheda.nome_scheda = id;
         }
-        if (allSchedeName?.some((item) => item.nome == scheda.nome_scheda) && !id) {
+        if (
+            allSchedeName?.some((item) => item.nome == scheda.nome_scheda) &&
+            !id
+        ) {
             setSchedaError("scheda già presente");
             return;
         }
@@ -127,27 +128,9 @@ function AddSchede() {
             setSchedaError("la scheda deve avere un nome");
             return;
         }
-        if (ruolo == "utente") {
-            scheda.user_email_id = email;
-        } else {
-            if (selectedPatient) {
-                if (selectedPatient === "" && id && emailParam) {
-                    scheda.user_email_id = emailParam;
-                    
-                } else if(selectedPatient === "" ){
-                    setSchedaError("devi selezionare un paziente");
-                    return;
-                } else scheda.user_email_id = selectedPatient;
-            } else {
-                if (id && emailParam) {
 
-                    scheda.user_email_id = emailParam;
-                }else{
-                    setSchedaError("devi selezionare un paziente");
-                return; 
-                }
-                
-            }
+        if (emailParam) {
+            scheda.user_email_id = emailParam;
         }
 
         const flag = listaEsercizi.map((eser) => {
@@ -160,15 +143,21 @@ function AddSchede() {
                 return false;
             }
 
-            if (!Number.isNaN(serie) && !Number.isNaN(ripetizioni) && (serie>0 && ripetizioni>0)) {
+            if (
+                !Number.isNaN(serie) &&
+                !Number.isNaN(ripetizioni) &&
+                serie > 0 &&
+                ripetizioni > 0
+            ) {
                 scheda.esercizio_id.push(esercizio_id);
                 scheda.serie.push(serie);
                 scheda.ripetizioni.push(ripetizioni);
                 setSchedaError("");
                 return true;
             } else {
-
-                setSchedaError("le serie e le ripetizioni devono essere un numero");
+                setSchedaError(
+                    "le serie e le ripetizioni devono essere un numero"
+                );
                 return false;
             }
         });
@@ -210,40 +199,32 @@ function AddSchede() {
         setListaEsercizi(data);
     };
 
-    const handleRuoloFetch = (ruolo: string, email: string) => {
-        setEmail(email);
-        setRuolo(ruolo);
-    };
-
     return (
         <>
             <div className="inputPage addEsercizo">
                 <form className="inputForm">
-                    {(id && emailParam) ? 
-                    
-                    <><h1>Aggiungi Esercizi</h1>
-                    </>
-                    
-                    
-                    
-                    : (
-                        <><div>
-                            <h1>Aggiungi Scheda</h1>
-                            <input
-                                className="inputLoginRegister"
-                                type="text"
-                                placeholder="Nome scheda"
-                                onChange={(e) => {
-                                    scheda.nome_scheda = e.target.value;
-                                } } />
-                        </div><div>
-                                
-                                <PatientSelector
-                                    onDataFetch={handleRuoloFetch}
-                                    setSelectedPatient={setSelectedPatient}
-                                    currentSelectedPatient={selectedPatient} />
-                            </div></>)}
-                    
+                    {id ? (
+                        <>
+                            <h1>Aggiungi Esercizi</h1>
+                        </>
+                    ) : (
+                        <>
+                            <div>
+                                <h1>Aggiungi Scheda</h1>
+                                <div>
+                                    <h4>Paziente: {emailParam}</h4>
+                                </div>
+                                <input
+                                    className="inputLoginRegister"
+                                    type="text"
+                                    placeholder="Nome scheda"
+                                    onChange={(e) => {
+                                        scheda.nome_scheda = e.target.value;
+                                    }}
+                                />
+                            </div>
+                        </>
+                    )}
 
                     {listaEsercizi.map((input, index) => {
                         return (
@@ -271,7 +252,9 @@ function AddSchede() {
                                             setListaEsercizi(data);
                                         }}
                                     >
-                                        <option value="">Seleziona Esercizio</option>
+                                        <option value="">
+                                            Seleziona Esercizio
+                                        </option>
                                         {eserciziDisponibili.map((option) => (
                                             <option key={option} value={option}>
                                                 {option}
@@ -281,7 +264,7 @@ function AddSchede() {
                                 ) : (
                                     ""
                                 )}
-                                
+
                                 <input
                                     className="inputLoginRegister"
                                     value={input.serie}
@@ -293,8 +276,16 @@ function AddSchede() {
                                         handleFormChange(index, event)
                                     }
                                 />
-                                
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '61.5%', margin: '7px auto' }}>
+
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        width: "61.5%",
+                                        margin: "7px auto",
+                                    }}
+                                >
                                     <input
                                         className="inputLoginRegister"
                                         value={input.ripetizioni}
@@ -305,24 +296,24 @@ function AddSchede() {
                                         onChange={(event) =>
                                             handleFormChange(index, event)
                                         }
-                                        style={{ marginRight: '10px', flex: 1 }}
+                                        style={{ marginRight: "10px", flex: 1 }}
                                     />
                                     <button
                                         type="button"
                                         onClick={() => removeFields(index)}
                                         style={{
-                                            backgroundColor: '#dc3545',
-                                            color: 'white',
-                                            border: 'none',
-                                            borderRadius: '50%',
-                                            width: '30px',
-                                            height: '30px',
-                                            cursor: 'pointer',
-                                            fontSize: '16px',
-                                            fontWeight: 'bold',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
+                                            backgroundColor: "#dc3545",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "50%",
+                                            width: "30px",
+                                            height: "30px",
+                                            cursor: "pointer",
+                                            fontSize: "16px",
+                                            fontWeight: "bold",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
                                         }}
                                     >
                                         ×
@@ -333,7 +324,7 @@ function AddSchede() {
                     })}
 
                     <div>
-                        <button 
+                        <button
                             type="button"
                             className="buttonLoginRegister"
                             onClick={addFields}
@@ -342,55 +333,58 @@ function AddSchede() {
                         </button>
                     </div>
 
-                    {(id && emailParam) ? <></>:
-                    <><div>
-                        <h4>Note:</h4>
-                        <textarea 
-                            name="postContent" 
-                            placeholder="Note per la scheda"
-                            rows={4} 
-                            cols={40} 
-                            value={note}
-                            onChange={(event) => {
-                                setNote(event.target.value);
-                            }}
-                        />
-                    </div></> }
-                    
-                    
+                    {id && emailParam ? (
+                        <></>
+                    ) : (
+                        <>
+                            <div>
+                                <h4>Note:</h4>
+                                <textarea
+                                    name="postContent"
+                                    placeholder="Note per la scheda"
+                                    rows={4}
+                                    cols={40}
+                                    value={note}
+                                    onChange={(event) => {
+                                        setNote(event.target.value);
+                                    }}
+                                />
+                            </div>
+                        </>
+                    )}
+
                     <div className="loginErrorDiv">
                         <label className="loginError">{schedaError}</label>
                     </div>
-                    
-                    {(id && emailParam)? 
-                    
-                    <>
-                    <div>
-                        <button 
-                            type="button" 
-                            className="buttonLoginRegister"
-                            onClick={createScheda}
-                        >
-                           Aggiorna scheda
-                        </button>
-                    </div>
-                    </> : 
-                    <>
-                    <div>
-                        <button 
-                            type="button" 
-                            className="buttonLoginRegister"
-                            onClick={createScheda}
-                        >
-                            Crea Scheda
-                        </button>
-                    </div>
-                    </>}
 
-                   
-                    
+                    {id && emailParam ? (
+                        <>
+                            <div>
+                                <button
+                                    type="button"
+                                    className="buttonLoginRegister"
+                                    onClick={createScheda}
+                                >
+                                    Aggiorna scheda
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div>
+                                <button
+                                    type="button"
+                                    className="buttonLoginRegister"
+                                    onClick={createScheda}
+                                >
+                                    Crea Scheda
+                                </button>
+                            </div>
+                        </>
+                    )}
+
                     <div className="navLink">
-                        <a  onClick={()=> navigate(-1)}>Indietro</a>
+                        <a onClick={() => navigate(-1)}>Indietro</a>
                     </div>
                 </form>
             </div>

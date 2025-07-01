@@ -37,7 +37,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/Routine" element={<Routine />}/>
           <Route path='/AggiungiEsercizio' element={<AggiungiEsercizio/>}/>
           <Route path='/' element={<HomePage />}></Route>
-          <Route path='/AggiungiScheda' element={<AggiungiSchede/>}></Route>
+          <Route path='/AggiungiScheda/:emailParam' element={<AggiungiSchede/>}></Route>
           <Route path='/AggiungiAScheda/:id/:emailParam' element={<AggiungiSchede/>}></Route>
           <Route path='/Esercizi' element={<Esercizi />}></Route>
           <Route path='/scheda/:id' element={<TableScheda />}></Route>

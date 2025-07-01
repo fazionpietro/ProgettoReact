@@ -298,6 +298,7 @@ app.post('/api/AggiungiSchedaEsercizi', authenticateToken, async (req: express.R
         await schede.addEserciziScheda(req.body);
         res.status(200).json({success: true});
     } catch (err: any) {
+        
         res.status(400).json({"error": err.message});
     }
 });
@@ -313,7 +314,7 @@ app.post('/api/addEsercizi', authenticateToken, async (req: express.Request, res
 });
 
 app.post('/api/AggiungiScheda', authenticateToken, async (req: express.Request<{}, {}, {}, schedaData>, res: express.Response) => {
-    const query: schedaData = req.query; // Assumi che 'note' sia presente in schedaData
+    const query: schedaData = req.query; 
     try {
         const newD = await schede.addScheda(query);
         res.status(200).json({'success': newD});

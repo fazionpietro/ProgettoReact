@@ -14,7 +14,7 @@ interface user {
 
 function Routine() {
     const [user, setUser] = useState<user>();
-    const [ruolo, setRuolo] = useState<string>();
+    
     const navigate = useNavigate();
 
     const getUtente = async () => {
@@ -30,7 +30,7 @@ function Routine() {
                 .then((resp) => {
                     if (resp.status === 200) {
                         setUser(resp.data);
-                        setRuolo(resp.data.ruolo);
+                        
                     }
                 });
         } catch (error) {
@@ -51,12 +51,12 @@ function Routine() {
                     <h3>{user?.email}</h3>
                 </div>
                 <div>
-                    <p>{ruolo == "utente" ? "Routine" : "Pazienti"}</p>
+                    <p>{user?.ruolo == "utente" ? "Routine" : "Pazienti"}</p>
                     <Table />
                 </div>
             </div>
             ;{" "}
-            {ruolo == "utente" ? (
+            {user?.ruolo == "utente" ? (
                 <></>
             ) : (
                 <>
@@ -73,7 +73,7 @@ function Routine() {
             <div className="newButtonContainer">
                 <button
                     className="newButton"
-                    onClick={() => navigate("/AggiungiScheda")}
+                    onClick={() => navigate(`/AggiungiScheda/${user?.email}`)}
                 >
                     Nuova Scheda
                 </button>

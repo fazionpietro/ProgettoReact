@@ -1,5 +1,5 @@
 import * as sqlite3 from 'sqlite3';
-import schedaData from '../types/schedaType'; 
+import schedaData from '../types/schedaType';
 import schedaEserciziData from '../types/schedaEserciziType';
 import { rejects } from 'assert';
 
@@ -17,7 +17,7 @@ type eserciziUtente = {
     nome_scheda: string;
     serie: number;
     ripetizioni: number;
-    note: string; 
+    note: string;
 }
 
 export async function getAllSchede(): Promise<schedaData[]> {
@@ -70,7 +70,7 @@ export async function getSchedaId(nome: string): Promise<number> {
 
 export async function getSchedeUtente(): Promise<schedaData[]> {
     return new Promise((resolve, rejects) => {
-        
+
         db.all(`SELECT * FROM schede`, (err, res: schedaData[]) => {
             if (err) rejects(err);
             else resolve(res);
@@ -79,47 +79,93 @@ export async function getSchedeUtente(): Promise<schedaData[]> {
 }
 
 export async function addEserciziScheda(data: schedaEserciziData): Promise<boolean> {
-    return new Promise(async (resolve, reject) => {
-        let scheda_id: number;
-
-        if (data.id) { 
-            scheda_id = data.id;
-        } else { 
-            try {
-                await db.run('INSERT INTO schede(nome, note) VALUES(?,?)', [data.nome_scheda, data.note]);
-                scheda_id = await getSchedaId(data.nome_scheda);
-            } catch (error) {
-                return reject(error); 
-            }
+  try {
+    
+    const userExists = await new Promise<boolean>((resolve, reject) => {
+      db.get(`SELECT 1 FROM Users WHERE email = ?`, [data.user_email_id], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(!!row);
         }
-
-        const stmt = db.prepare('INSERT INTO SchedaEsercizi(scheda_id, esercizio_id, user_email, serie, ripetizioni) VALUES(?,?,?,?,?)');
-        for (let i = 0; i < data.esercizio_id.length; i++) {
-            stmt.run(
-                scheda_id,
-                data.esercizio_id[i],
-                data.user_email_id,
-                data.serie[i],
-                data.ripetizioni[i],
-                function(err: any) {
-                    if (err) {
-                        stmt.finalize();
-                        return reject(err);
-                    }
-                }
-            );
-        }
-        stmt.finalize((err) => {
-            if (err) reject(err);
-            else resolve(true);
-        });
+      });
     });
+
+    if (!userExists) {
+      throw new Error("l'utente non esiste");
+    }
+
+    let scheda_id: number;
+
+    
+    if (data.id) {
+      scheda_id = data.id;
+    } else {
+      // Crea una nuova scheda
+      await new Promise<void>((resolve, reject) => {
+        db.run('INSERT INTO schede(nome, note) VALUES(?,?)', [data.nome_scheda, data.note], function(err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      });
+      
+      scheda_id = await getSchedaId(data.nome_scheda);
+    }
+
+   
+    await new Promise<void>((resolve, reject) => {
+      const stmt = db.prepare('INSERT INTO SchedaEsercizi(scheda_id, esercizio_id, user_email, serie, ripetizioni) VALUES(?,?,?,?,?)');
+      let completedInserts = 0;
+      let hasError = false;
+
+      if (data.esercizio_id.length === 0) {
+        stmt.finalize();
+        return resolve();
+      }
+
+      for (let i = 0; i < data.esercizio_id.length; i++) {
+        stmt.run(
+          scheda_id,
+          data.esercizio_id[i],
+          data.user_email_id,
+          data.serie[i],
+          data.ripetizioni[i],
+          function (err: any) {
+            if (err && !hasError) {
+              hasError = true;
+              stmt.finalize();
+              return reject(err);
+            }
+            
+            completedInserts++;
+            if (completedInserts === data.esercizio_id.length && !hasError) {
+              stmt.finalize((finalizeErr) => {
+                if (finalizeErr) {
+                  reject(finalizeErr);
+                } else {
+                  resolve();
+                }
+              });
+            }
+          }
+        );
+      }
+    });
+
+    return true;
+
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function addScheda(data: schedaData): Promise<boolean> {
     return new Promise((resolve, reject) => {
-        db.run('INSERT INTO schede(nome, note) VALUES(?,?)', 
-            [data.nome, data.note], 
+        db.run('INSERT INTO schede(nome, note) VALUES(?,?)',
+            [data.nome, data.note],
             (err: any) => {
                 if (err) reject(err);
                 resolve(true);
@@ -129,7 +175,7 @@ export async function addScheda(data: schedaData): Promise<boolean> {
 
 export async function deleteExSCheda(id: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        db.run(`DELETE FROM schedaEsercizi WHERE id=?`, [id], function(err) {
+        db.run(`DELETE FROM schedaEsercizi WHERE id=?`, [id], function (err) {
             if (err) {
                 reject(err);
             } else if (this.changes === 0) {
@@ -143,7 +189,7 @@ export async function deleteExSCheda(id: number): Promise<void> {
 
 export async function deleteSCheda(id: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        db.run(`DELETE FROM schedaEsercizi WHERE scheda_id=?`, [id], function(err) {
+        db.run(`DELETE FROM schedaEsercizi WHERE scheda_id=?`, [id], function (err) {
             if (err) {
                 reject(err);
             } else if (this.changes === 0) {
