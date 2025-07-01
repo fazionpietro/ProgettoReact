@@ -101,7 +101,7 @@ export async function addEserciziScheda(data: schedaEserciziData): Promise<boole
     if (data.id) {
       scheda_id = data.id;
     } else {
-      // Crea una nuova scheda
+      
       await new Promise<void>((resolve, reject) => {
         db.run('INSERT INTO schede(nome, note) VALUES(?,?)', [data.nome_scheda, data.note], function(err) {
           if (err) {
