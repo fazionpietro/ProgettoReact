@@ -229,7 +229,7 @@ Gli script eseguono automaticamente:
 
 #### Opzione 2: Build Manuale
 
-Se preferisci eseguire i comandi manualmente:
+Se si preferisce eseguire i comandi manualmente:
 
 ##### Frontend
 
@@ -251,4 +251,3 @@ npm run start      # o yarn start
 
 Una volta avviato il server, accedere alla pagina web seguendo l'URL: **http://localhost:5000**
 
-> **Nota**: Il server Express servirà automaticamente l'applicazione React dalla cartella `frontend/dist` sulla porta 5000.
