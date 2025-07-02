@@ -82,10 +82,10 @@ function AggiungiEsercizio() {
                 setDifficoltaSelezionata("");
                 setDescrizione("");
                 setCreationError("Esercizio creato con successo");
+                navigate(-1)
             })
             .catch((e: any) => {
                 console.error(e);
-
                 setCreationError("Errore nella creazione dell'Esercizio");
             });
     }
