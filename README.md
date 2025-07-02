@@ -158,19 +158,8 @@ Il server è strutturato in moduli separati per una migliore organizzazione:
 ProgettoReact/
 ├── backend/
 │   ├── components/
-│   │   ├── Esercizi.ts
-│   │   ├── Schede.ts
-│   │   ├── Users.ts
-│   │   └── index.ts
 │   ├── data/
-│   │   ├── Fitness.db
-│   │   ├── Fitness.db-shm
-│   │   └── Fitness.db-wal
 │   ├── types/
-│   │   ├── esercizioType.ts
-│   │   ├── schedaType.ts
-│   │   ├── schedaEserciziType.ts
-│   │   └── userType.ts
 │   ├── .env
 │   ├── package.json
 │   ├── server.ts
