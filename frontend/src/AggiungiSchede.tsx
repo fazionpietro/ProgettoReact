@@ -265,29 +265,25 @@ function AddSchede() {
                                     ""
                                 )}
 
-                                <input
-                                    className="inputLoginRegister"
-                                    value={input.serie}
-                                    name="serie"
-                                    placeholder="Serie"
-                                    type="number"
-                                    min="0"
-                                    onChange={(event) =>
-                                        handleFormChange(index, event)
-                                    }
-                                />
-
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        width: "61.5%",
-                                        margin: "7px auto",
-                                    }}
-                                >
+                                {/* Container per serie */}
+                                <div className="input-container">
                                     <input
                                         className="inputLoginRegister"
+                                        value={input.serie}
+                                        name="serie"
+                                        placeholder="Serie"
+                                        type="number"
+                                        min="0"
+                                        onChange={(event) =>
+                                            handleFormChange(index, event)
+                                        }
+                                    />
+                                </div>
+
+                                {/* Container per ripetizioni con bottone elimina */}
+                                <div className="input-container">
+                                    <input
+                                        className="inputLoginRegister with-button"
                                         value={input.ripetizioni}
                                         name="ripetizioni"
                                         placeholder="Ripetizioni"
@@ -296,25 +292,11 @@ function AddSchede() {
                                         onChange={(event) =>
                                             handleFormChange(index, event)
                                         }
-                                        style={{ marginRight: "10px", flex: 1 }}
                                     />
                                     <button
                                         type="button"
+                                        className="remove-button"
                                         onClick={() => removeFields(index)}
-                                        style={{
-                                            backgroundColor: "#dc3545",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "50%",
-                                            width: "30px",
-                                            height: "30px",
-                                            cursor: "pointer",
-                                            fontSize: "16px",
-                                            fontWeight: "bold",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                        }}
                                     >
                                         ×
                                     </button>

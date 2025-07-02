@@ -97,3 +97,43 @@ body {
     width: 60%;
     margin-bottom: 15px;
 }
+
+.addEsercizo .input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    margin: 7px auto;
+}
+
+
+.addEsercizo .input-container .inputLoginRegister {
+    flex: 1;
+    margin: 0;
+}
+
+
+.addEsercizo .input-container .inputLoginRegister.with-button {
+    margin-right: 10px;
+}
+
+.addEsercizo .remove-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+
+.addEsercizo .remove-button:hover {
+    background-color: #c82333;
+}
