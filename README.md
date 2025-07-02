@@ -203,6 +203,7 @@ git clone https://github.com/fazionpietro/ProgettoReact.git
 ### Build e Avvio
 
 Il progetto include script automatici per semplificare il processo di build e avvio.
+La versione di node utilizzata è la v20.18.1 mentre quella di React è la v19.0.0
 
 #### Opzione 1: Build Automatico con Script
 
