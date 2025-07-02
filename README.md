@@ -159,26 +159,17 @@ ProgettoReact/
 ├── backend/
 │   ├── components/
 │   ├── data/
-│   ├── types/
-│   ├── .env
-│   ├── package.json
-│   ├── server.ts
-│   └── tsconfig.json
+│   └── types/
 ├── frontend/
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
+│   │   ├── Dropdown/
+│   │   ├── Grafici/
+│   │   ├── routing/
 │   │   ├── stylesheets/
+│   │   ├── Tabelle/
 │   │   └── types/
 │   ├── public/
-│   ├── dist/
-│   ├── package.json
-│   ├── tsconfig.json
-│   ├── vite.config.ts
-│   └── index.html
-├── .gitignore
-├── README.md
-└── yarn.lock
+│   └── dist/
 ```
 
 ## Set-up del progetto
